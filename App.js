@@ -1,26 +1,48 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { createStackNavigator} from 'react-navigation';
+// In App.js in a new project
+
+import React from "react";
+import { View, Text, Button } from "react-native";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 class HomeScreen extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Home!</Text>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Home Screen</Text>
+          <Button
+          title="Go to Details"
+          onPress={() => this.props.navigation.navigate('Details')}
+          />
       </View>
     );
   }
 }
 
-class SettingsScreen extends React.Component {
+class DetailsScreen extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Details Screen</Text>
       </View>
     );
   }
 }
-const Routes1 = createStackNavigator();
 
-export default Routes1;
+
+const AppNavigator = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Details: DetailsScreen
+  },
+  {
+    initialRouteName: "Home"
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends React.Component {
+  render() {
+    return <AppContainer />;
+  }
+}
