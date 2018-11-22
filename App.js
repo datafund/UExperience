@@ -1,16 +1,18 @@
 import React from "react";
 import { View, Text, Button } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import HomeScreen from "./src/HomeScreen.js";
-import DetailsScreen from "./src/DetailsScreen.js"
+import Home from "./src/Home.js";
+import List from "./src/List.js";
+import Questions from "./src/Questions.js";
 
 const AppNavigator = createStackNavigator(
   {
-    Home: HomeScreen,
-    Details: DetailsScreen
+    Index: Home,
+    NewBeep: Questions,
+    Beeps: List,
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Index"
   }
 );
 
