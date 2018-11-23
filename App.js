@@ -12,7 +12,16 @@ const AppNavigator = createStackNavigator(
     Beeps: List,
   },
   {
-    initialRouteName: "Index"
+    initialRouteName: "Index",
+      defaultNavigationOptions: {
+          headerStyle: {
+              backgroundColor: 'darkgray',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+              fontWeight: 'bold',
+          },
+      },
   }
 );
 

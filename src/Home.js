@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import {View, TouchableHighlight, Text} from 'react-native';
 import styles from './Styles.js';
-import ImageHeader from './Header.js';
 
 class Home extends Component {
+    
+    static navigationOptions = {
+        title: 'Home',
+    };
     
     render() {
 	return (
 	    <View>
-            <ImageHeader />
             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('NewBeep', {
               itemId: 86,
               otherParam: 'Lets test this',

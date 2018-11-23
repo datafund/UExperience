@@ -3,24 +3,34 @@ import { Text, View, TouchableHighlight} from 'react-native'
 import styles from './Styles.js'
    
 class Questions extends Component {
+
+    static navigationOptions = {
+        title: 'Questions',
+    };
+
    state = {
       names: [
          {
             id: 0,
-            name: 'Ben',
+            name: 'Ali si sam?',
          },
          {
             id: 1,
-            name: 'Susan',
+            name: 'Ali si bil prisoten v trenutku?',
          },
          {
             id: 2,
-            name: 'Robert',
+            name: 'Ali si doživljal kaj pozitivnega?',
          },
          {
             id: 3,
-            name: 'Mary',
+            name: 'Ali si doživljal kaj negativnega?',
+         },
+         {
+            id: 4,
+            name: 'Ali si se zavedal svojega telesa?',
          }
+
       ]
    }
    alertItemName = (item) => {

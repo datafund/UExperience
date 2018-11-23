@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native'
 
 class List extends Component {
+
+    static navigationOptions = {
+        title: 'List of Beeps',
+    };
+
   state = {
     names: [
       {
