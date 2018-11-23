@@ -4,12 +4,16 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Home from "./src/Home.js";
 import List from "./src/List.js";
 import Questions from "./src/Questions.js";
+import QuestionBinary from "./src/QuestionBinary.js";
+import QuestionText from "./src/QuestionText.js";
 
 const AppNavigator = createStackNavigator(
   {
     Index: Home,
     NewBeep: Questions,
     Beeps: List,
+    QuestionBinary: QuestionBinary,
+    QuestionText: QuestionText,
   },
   {
     initialRouteName: "Index",

@@ -9,7 +9,7 @@ class Questions extends Component {
     };
 
    state = {
-      names: [
+      questionsbinary: [
          {
             id: 0,
             name: 'Ali si sam?',
@@ -20,18 +20,18 @@ class Questions extends Component {
          },
          {
             id: 2,
-            name: 'Ali si doživljal kaj pozitivnega?',
-         },
-         {
-            id: 3,
-            name: 'Ali si doživljal kaj negativnega?',
-         },
-         {
-            id: 4,
             name: 'Ali si se zavedal svojega telesa?',
          }
 
-      ]
+      ],
+      questionstext: [
+         {
+            id: 3,
+            name: 'Kaj trenutno doživljaš?',
+         },
+      ],
+
+
    }
    alertItemName = (item) => {
       alert(item.name)
@@ -42,28 +42,35 @@ class Questions extends Component {
 
    render() {
 
-        const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');
-        const otherParam = navigation.getParam('otherParam', 'some default value');
-
-      
       return (
          <View>
             {
-               this.state.names.map((item, index) => (
+             this.state.questionsbinary.map((item, index) => (
                   <TouchableHighlight
                      key = {item.id}
-                     onPress = {() => this.alertItemName(item)}>
+                     onPress = {() => this.props.navigation.navigate("QuestionBinary", item)}>
 		     <View style = {styles.button}>
 			<Text>
 			    {item.name}
 			</Text>
 		     </View>
                   </TouchableHighlight>
-               ))
+            ))
             }
-         <Text>{JSON.stringify(itemId)} </Text>
-         <Text>{JSON.stringify(otherParam)} </Text>
+
+            {
+             this.state.questionstext.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionText", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
          </View>
       )
    }
