@@ -26,7 +26,17 @@ class Questions extends Component {
    alertItemName = (item) => {
       alert(item.name)
    }
+
+
+   //this.state.names.push(test)
+
    render() {
+
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        const otherParam = navigation.getParam('otherParam', 'some default value');
+
+      
       return (
          <View>
             {
@@ -42,6 +52,8 @@ class Questions extends Component {
                   </TouchableHighlight>
                ))
             }
+         <Text>{JSON.stringify(itemId)} </Text>
+         <Text>{JSON.stringify(otherParam)} </Text>
          </View>
       )
    }

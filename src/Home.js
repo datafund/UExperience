@@ -9,10 +9,16 @@ class Home extends Component {
 	return (
 	    <View>
             <ImageHeader />
-            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('NewBeep')} >
+            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('NewBeep', {
+              itemId: 86,
+              otherParam: 'Lets test this',
+            })} >
 		        <Text>Začni nov beep</Text>
 		    </TouchableHighlight>
-		    <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Beeps')} >
+		    <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Beeps', {
+              itemId: 86,
+              otherParam: 'Let us test this as well',
+            })} >
 		        <Text>Preglej svoje beep-e</Text>
 		    </TouchableHighlight>
 	    </View>
