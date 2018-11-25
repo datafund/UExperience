@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableHighlight} from 'react-native'
+
 import styles from './Styles.js'
    
 class Questions extends Component {
-
+    
     static navigationOptions = {
         title: 'Questions',
     };
@@ -33,14 +34,11 @@ class Questions extends Component {
 
 
    }
-   alertItemName = (item) => {
-      alert(item.name)
-   }
-
-
-   //this.state.names.push(test)
 
    render() {
+       
+       const { navigation } = this.props;
+       const time = navigation.getParam('time', 'id-missing');
 
       return (
          <View>
@@ -71,6 +69,10 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+          <Text>
+            {JSON.stringify(time)}
+          </Text>
+
          </View>
       )
    }

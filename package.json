@@ -9,6 +9,7 @@
   "dependencies": {
     "@babel/core": "^7.0.0-0",
     "babel-core": "^6.0.0 || ^7.0.0-0",
+    "moments": "^0.0.2",
     "prop-types": "^15.0.0",
     "react": "16.6.1",
     "react-native": "0.57.5",

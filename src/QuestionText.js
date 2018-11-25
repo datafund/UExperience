@@ -1,18 +1,26 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput} from 'react-native'
+import { Text, View, TextInput, AsyncStorage} from 'react-native'
 import styles from './Styles.js'
    
 class QuestionText extends Component {
     
     static navigationOptions = {
         title: 'Question',
+    };    
+
+    state = {
+        'text': ''
     };
     
-    constructor(props) {
-        super(props);
-        this.state = {text: ''};
-    }
-    
+    componentDidMount = () => 
+        AsyncStorage.getItem("text").then((value) => 
+            this.setState({"text": value}))
+
+    setName = (value) => {
+        AsyncStorage.setItem("text", value);
+        this.setState({"text": value});
+    };
+
     render() {
         
         const { navigation } = this.props;
@@ -25,9 +33,12 @@ class QuestionText extends Component {
                     {JSON.stringify(question)}
                 </Text>
                 <TextInput
-                    style={{height: 300, borderColor: 'black', borderWidth: 1,}}
-                    onChangeText={(text) => this.setState({text})}
+                    style={{height: 50, borderColor: 'black', borderWidth: 1,}}
+                    onChangeText={(text) => this.setName(text)}
                 />
+                <Text>
+                    {this.state.text}
+                </Text>
             </View>
       )
    }
