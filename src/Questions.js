@@ -37,9 +37,6 @@ class Questions extends Component {
 
    render() {
        
-       const { navigation } = this.props;
-       const time = navigation.getParam('time', 'id-missing');
-
       return (
          <View>
             {
@@ -69,10 +66,6 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
-          <Text>
-            {JSON.stringify(time)}
-          </Text>
-
          </View>
       )
    }

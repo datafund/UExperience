@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput, AsyncStorage} from 'react-native'
+import { Text, View, TextInput} from 'react-native'
 import styles from './Styles.js'
    
 class QuestionText extends Component {
@@ -12,12 +12,7 @@ class QuestionText extends Component {
         'text': ''
     };
     
-    componentDidMount = () => 
-        AsyncStorage.getItem("text").then((value) => 
-            this.setState({"text": value}))
-
     setName = (value) => {
-        AsyncStorage.setItem("text", value);
         this.setState({"text": value});
     };
 
@@ -36,9 +31,6 @@ class QuestionText extends Component {
                     style={{height: 50, borderColor: 'black', borderWidth: 1,}}
                     onChangeText={(text) => this.setName(text)}
                 />
-                <Text>
-                    {this.state.text}
-                </Text>
             </View>
       )
    }
