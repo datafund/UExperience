@@ -15,7 +15,9 @@
     "react-native": "0.57.5",
     "react-native-gesture-handler": "^1.0.9",
     "react-native-screens": "^1.0.0 || ^1.0.0-alpha\n",
-    "react-navigation": "^3.0.0"
+    "react-navigation": "^3.0.0",
+    "react-redux": "^5.1.1",
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
