@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableHighlight} from 'react-native'
+import { connect } from 'react-redux';
 
 import styles from './Styles.js'
+import { createNewBeep } from './reducer.js';
    
 class Questions extends Component {
+
+    componentDidMount() {
+        this.props.createNewBeep();
+    }
     
     static navigationOptions = {
         title: 'Questions',
@@ -36,6 +42,8 @@ class Questions extends Component {
    }
 
    render() {
+
+       const { currenttime } = this.props;
        
       return (
          <View>
@@ -66,8 +74,23 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+
+        <Text>
+          Current beep is: {currenttime}
+        </Text>
          </View>
       )
    }
 }
-export default Questions;
+
+const mapStateToProps = state => {
+  return {
+    currenttime: state.currenttime
+  };
+};
+
+const mapDispatchToProps = {
+  createNewBeep
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Questions);
