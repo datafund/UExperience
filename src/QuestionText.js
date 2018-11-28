@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput, AsyncStorage} from 'react-native'
+import { Text, View, TextInput, TouchableHighlight, AsyncStorage} from 'react-native'
+
 import styles from './Styles.js'
    
 class QuestionText extends Component {
@@ -12,13 +13,29 @@ class QuestionText extends Component {
         'text': ''
     };
     
-    componentDidMount = () => 
-        AsyncStorage.getItem("text").then((value) => 
-            this.setState({"text": value}))
-
     setName = (value) => {
-        AsyncStorage.setItem("text", value);
         this.setState({"text": value});
+    };
+
+    saveAnswer = (id, question, type, value) => {
+        let newAnswer = {
+            id: id,
+            question: question,
+            type: type, 
+            answer: value,
+        }
+        AsyncStorage.getItem('answers').then((answers) => {
+            const a = answers ? JSON.parse(answers) : [];
+            aNew = [];
+            for (x in a) {
+                if (!(a[x].id == id)) {
+                    aNew.push(a[x]) 
+                } 
+            }
+            aNew.push(newAnswer);
+            AsyncStorage.setItem('answers', JSON.stringify(aNew));
+        });
+        this.props.navigation.goBack();
     };
 
     render() {
@@ -33,14 +50,18 @@ class QuestionText extends Component {
                     {JSON.stringify(question)}
                 </Text>
                 <TextInput
-                    style={{height: 50, borderColor: 'black', borderWidth: 1,}}
+                    style={{height: 200, borderColor: 'black', borderWidth: 1,}}
                     onChangeText={(text) => this.setName(text)}
                 />
+                <TouchableHighlight style={styles.button} onPress = {() => this.saveAnswer(itemId, question, "Text", this.state.text )}>
                 <Text>
-                    {this.state.text}
+                    Save
                 </Text>
+                </TouchableHighlight>
+
             </View>
       )
    }
 }
+
 export default QuestionText;

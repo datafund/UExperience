@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableHighlight} from 'react-native'
+import { Text, View, TouchableHighlight, AsyncStorage} from 'react-native'
+import moment from "moment";
 
 import styles from './Styles.js'
    
 class Questions extends Component {
-    
+
     static navigationOptions = {
         title: 'Questions',
     };
+
+    componentDidMount() {
+        AsyncStorage.setItem("currenttime", moment().utcOffset('+02').format('YYYY-MM-DD-HH-mm-ss') );
+    }
 
    state = {
       questionsbinary: [
@@ -31,14 +36,28 @@ class Questions extends Component {
             name: 'Kaj trenutno doživljaš?',
          },
       ],
-
+    'answers': "",
+    'currenttime': "",
 
    }
 
+    saveBeep = async() => {
+        let newBeep = {
+            time: await AsyncStorage.getItem("currenttime"),
+            questions: await AsyncStorage.getItem("answers"),
+        }
+        AsyncStorage.getItem('beeps').then((beeps) => {
+            const b = beeps ? JSON.parse(beeps) : [];
+            b.push(newBeep);
+            AsyncStorage.setItem('beeps', JSON.stringify(b));
+        });
+        AsyncStorage.setItem("currenttime", "");
+        AsyncStorage.setItem("answers", "");
+        this.props.navigation.goBack();
+    };
+
+
    render() {
-       
-       const { navigation } = this.props;
-       const time = navigation.getParam('time', 'id-missing');
 
       return (
          <View>
@@ -69,12 +88,15 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
-          <Text>
-            {JSON.stringify(time)}
-          </Text>
+          <TouchableHighlight style = {styles.button} onPress = {() => this.saveBeep()}>
+            <Text>
+            Save Beep
+            </Text>
+          </TouchableHighlight>
 
          </View>
       )
    }
 }
+
 export default Questions;
