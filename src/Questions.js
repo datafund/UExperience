@@ -1,19 +1,18 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableHighlight} from 'react-native'
-import { connect } from 'react-redux';
+import { Text, View, TouchableHighlight, AsyncStorage} from 'react-native'
+import moment from "moment";
 
 import styles from './Styles.js'
-import { createNewBeep } from './reducer.js';
    
 class Questions extends Component {
 
-    componentDidMount() {
-        this.props.createNewBeep();
-    }
-    
     static navigationOptions = {
         title: 'Questions',
     };
+
+    componentDidMount() {
+        AsyncStorage.setItem("currenttime", moment().utcOffset('+02').format('YYYY-MM-DD-HH-mm-ss') );
+    }
 
    state = {
       questionsbinary: [
@@ -37,14 +36,29 @@ class Questions extends Component {
             name: 'Kaj trenutno doživljaš?',
          },
       ],
-
+    'answers': "",
+    'currenttime': "",
 
    }
 
+    saveBeep = async() => {
+        let newBeep = {
+            time: await AsyncStorage.getItem("currenttime"),
+            questions: await AsyncStorage.getItem("answers"),
+        }
+        AsyncStorage.getItem('beeps').then((beeps) => {
+            const b = beeps ? JSON.parse(beeps) : [];
+            b.push(newBeep);
+            AsyncStorage.setItem('beeps', JSON.stringify(b));
+        });
+        AsyncStorage.setItem("currenttime", "");
+        AsyncStorage.setItem("answers", "");
+        this.props.navigation.goBack();
+    };
+
+
    render() {
 
-       const { currenttime } = this.props;
-       
       return (
          <View>
             {
@@ -74,23 +88,15 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+          <TouchableHighlight style = {styles.button} onPress = {() => this.saveBeep()}>
+            <Text>
+            Save Beep
+            </Text>
+          </TouchableHighlight>
 
-        <Text>
-          Current beep is: {currenttime}
-        </Text>
          </View>
       )
    }
 }
 
-const mapStateToProps = state => {
-  return {
-    currenttime: state.currenttime
-  };
-};
-
-const mapDispatchToProps = {
-  createNewBeep
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Questions);
+export default Questions;

@@ -1,22 +1,45 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableHighlight} from 'react-native'
-import { connect } from 'react-redux';
+import { Text, View, TouchableHighlight, AsyncStorage} from 'react-native'
 
 import styles from './Styles.js'
-import { saveAnswer } from './reducer.js';
-   
+ 
 class QuestionBinary extends Component {
     
     static navigationOptions = {
         title: 'Question',
     };
+
+    saveAnswer = (id, question, type, value) => {
+        let newAnswer = {
+            id: id,
+            question: question,
+            type: type, 
+            answer: value,
+        }
+        AsyncStorage.getItem('answers').then((answers) => {
+            const a = answers ? JSON.parse(answers) : [];
+            aNew = [];
+            for (x in a) {
+                if (!(a[x].id == id)) {
+                    aNew.push(a[x]) 
+                } 
+            }
+            aNew.push(newAnswer);
+            AsyncStorage.setItem('answers', JSON.stringify(aNew));
+        });
+        this.props.navigation.goBack();
+    };
+
+    componentDidMount = () => 
+        AsyncStorage.getItem("currenttime").then((value) => 
+            this.setState({"currenttime": value}))
+
     
     render() {
         
         const { navigation } = this.props;
         const itemId = navigation.getParam('id', 'NO-ID');
         const question = navigation.getParam('name', 'no question');
-        const { currenttime } = this.props;
         
         return (
             <View>
@@ -24,35 +47,22 @@ class QuestionBinary extends Component {
                     {JSON.stringify(question)}
                 </Text>
                 <TouchableHighlight style={styles.button} 
-                    onPress = {this.props.saveAnswer(itemId, "1", { currenttime })}
+                    onPress = {() => this.saveAnswer(itemId, question, "Binary", 1)}
                 >
                     <Text>
                         Yes
                     </Text>
                 </TouchableHighlight>
                 <TouchableHighlight style={styles.button} 
-                    //onPress = {this.props.saveAnswer(itemId, "0", { currenttime })}
+                    onPress = {() => this.saveAnswer(itemId, question, "Binary", 0)}
                 >
                     <Text>
                         No
                     </Text>
                 </TouchableHighlight>
-            <Text>
-                Current beep is: {currenttime}
-            </Text>
             </View>
       )
    }
 }
 
-const mapStateToProps = state => {
-  return {
-    currenttime: state.currenttime
-  };
-};
-
-const mapDispatchToProps = {
-    saveAnswer
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionBinary);
+export default QuestionBinary;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native'
 
 class List extends Component {
 
@@ -7,50 +7,58 @@ class List extends Component {
         title: 'List of Beeps',
     };
 
+    componentWillMount() {
+        AsyncStorage.getItem("beeps").then((value) => 
+            this.setState({beeps: value ? JSON.parse(value) : [], loading: false}));
+    }
+
   state = {
-    names: [
-      {
-        id: 0,
-        name: 'Ben',
-      },
-      {
-        id: 1,
-        name: 'Susan',
-      },
-      {
-        id: 2,
-        name: 'Robert',
-      },
-      {
-        id: 3,
-        name: 'Mary',
-      }
-   ]
+      beeps: "",
+      loading: true,
  }
 
-  alertItemName = (item) => {
-    alert(item.name)
-  }
+    alertItemName = (item) => {
+        text = "";
+        const questions = item.questions ? JSON.parse(item.questions) : [];
+        for (id in questions) {
+            text += questions[id].question
+            text += "\n"
+            text += questions[id].answer
+            text += "\n---\n"
+        }
+        alert(text)
+    }
 
   render() {
-    return (
-      <View>
-        {
-          this.state.names.map((item, index) => (
-            <TouchableOpacity
-              key = {item.id}
-              style = {styles.container}
-              onPress = {() => this.alertItemName(item)}>
-              <Text style = {styles.text}>
-                {item.name}
-              </Text>
-           </TouchableOpacity>
-           ))
-        }
-      </View>
-    )
-  }
+      if(this.state.loading){
+          return(
+            <View>
+                <Text>Please wait a bit</Text> 
+            </View>
+          )
+      }
+      else {
+          return (
+              <View>
+              {
+                  this.state.beeps.map((item, index) => (
+                      <TouchableOpacity
+                          key = {index}
+                          style = {styles.container}
+                          onPress = {() => this.alertItemName(item)}>
+                            <Text style = {styles.text}>
+                                {item.time}
+                            </Text>
+                      </TouchableOpacity>
+                  ))
+              }
+
+              </View>
+          )
+          }
+      }
 }
+
 
 export default List
 

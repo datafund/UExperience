@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput, TouchableHighlight} from 'react-native'
-import { connect } from 'react-redux';
+import { Text, View, TextInput, TouchableHighlight, AsyncStorage} from 'react-native'
 
 import styles from './Styles.js'
    
@@ -18,12 +17,32 @@ class QuestionText extends Component {
         this.setState({"text": value});
     };
 
+    saveAnswer = (id, question, type, value) => {
+        let newAnswer = {
+            id: id,
+            question: question,
+            type: type, 
+            answer: value,
+        }
+        AsyncStorage.getItem('answers').then((answers) => {
+            const a = answers ? JSON.parse(answers) : [];
+            aNew = [];
+            for (x in a) {
+                if (!(a[x].id == id)) {
+                    aNew.push(a[x]) 
+                } 
+            }
+            aNew.push(newAnswer);
+            AsyncStorage.setItem('answers', JSON.stringify(aNew));
+        });
+        this.props.navigation.goBack();
+    };
+
     render() {
         
         const { navigation } = this.props;
         const itemId = navigation.getParam('id', 'NO-ID');
         const question = navigation.getParam('name', 'no question');
-        const { currenttime } = this.props;
         
         return (
             <View>
@@ -31,13 +50,10 @@ class QuestionText extends Component {
                     {JSON.stringify(question)}
                 </Text>
                 <TextInput
-                    style={{height: 50, borderColor: 'black', borderWidth: 1,}}
+                    style={{height: 200, borderColor: 'black', borderWidth: 1,}}
                     onChangeText={(text) => this.setName(text)}
                 />
-                <Text>
-                    Current beep is: {currenttime}
-                </Text>
-                <TouchableHighlight style={styles.button}>
+                <TouchableHighlight style={styles.button} onPress = {() => this.saveAnswer(itemId, question, "Text", this.state.text )}>
                 <Text>
                     Save
                 </Text>
@@ -48,13 +64,4 @@ class QuestionText extends Component {
    }
 }
 
-const mapStateToProps = state2 => {
-  return {
-    currenttime: state2.currenttime
-  };
-};
-
-const mapDispatchToProps = {
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionText);
+export default QuestionText;
