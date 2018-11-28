@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableHighlight, AsyncStorage} from 'react-native'
+import { Text, View, TouchableHighlight, AsyncStorage, List, FlatList} from 'react-native'
 
 import styles from './Styles.js'
    
-class QuestionText extends Component {
+class QuestionTags extends Component {
     
     static navigationOptions = {
         title: 'Question',
     };    
 
     state = {
-        tagsOld: ""
-        tagsChosen: "",
-
+        tagsOld: [
+            {tag: "Eobard Thawne"},
+            {tag: "Barry Allen"},
+            {tag: "Cisco Ramon"},
+            {tag: "Catlin Snow"},
+            {tag: "Harrison Wells"},
+            {tag: "Hartley Rataway"},
+        ],
+        tagsChosen: [],
     };
     
     saveAnswer = (id, question, type, value) => {
@@ -47,6 +53,20 @@ class QuestionText extends Component {
                 <Text style={styles.button}>
                     {JSON.stringify(question)}
                 </Text>
+                {
+                    this.state.tagsOld.map((item, index) => (
+                        <TouchableHighlight
+                            key = {index}
+                        >
+		                    <View style = {styles.container}>
+			                    <Text>
+			                        {item.tag}
+			                    </Text>
+		                    </View>
+                        </TouchableHighlight>
+            ))
+            }
+
                 <TouchableHighlight style={styles.button} onPress = {() => this.saveAnswer(itemId, question, "Tags", this.state.tagsChosen )}>
                 <Text>
                     Save
@@ -58,4 +78,4 @@ class QuestionText extends Component {
    }
 }
 
-export default QuestionText;
+export default QuestionTags;

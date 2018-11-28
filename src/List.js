@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native'
 
+import styles from './Styles.js'
+
 class List extends Component {
 
     static navigationOptions = {
@@ -46,7 +48,7 @@ class List extends Component {
                           key = {index}
                           style = {styles.container}
                           onPress = {() => this.alertItemName(item)}>
-                            <Text style = {styles.text}>
+                            <Text>
                                 {item.time}
                             </Text>
                       </TouchableOpacity>
@@ -60,16 +62,4 @@ class List extends Component {
 }
 
 
-export default List
-
-const styles = StyleSheet.create ({
-    container: {
-        padding: 10,
-        marginTop: 3,
-        backgroundColor: '#d9f9b1',
-        alignItems: 'center',
-    },
-    text: {
-        color: '#4f603c'
-    }
-})
+export default List;

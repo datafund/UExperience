@@ -10,7 +10,13 @@ export default StyleSheet.create({
     borderColor: '#2a4944',
     borderWidth: 1,
     backgroundColor: '#d2f7f1'
-  }
+  },
+  container: {
+      padding: 10,
+      marginTop: 3,
+      backgroundColor: '#d9f9b1',
+      alignItems: 'center',
+  },
 
 });
 

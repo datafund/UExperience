@@ -36,6 +36,12 @@ class Questions extends Component {
             name: 'Kaj trenutno doživljaš?',
          },
       ],
+      questionstags: [
+         {
+            id: 4,
+            name: 'Kakšna so tvoja trenutna čustva?',
+         },        
+      ],
     'answers': "",
     'currenttime': "",
 
@@ -76,6 +82,20 @@ class Questions extends Component {
             }
 
             {
+             this.state.questionstags.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionTags", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
+            {
              this.state.questionstext.map((item, index) => (
                   <TouchableHighlight
                      key = {item.id}
@@ -88,6 +108,7 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+
           <TouchableHighlight style = {styles.button} onPress = {() => this.saveBeep()}>
             <Text>
             Save Beep
