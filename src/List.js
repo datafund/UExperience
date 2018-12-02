@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, AsyncStorage, ScrollView } from 'react-native'
+
+import styles from './Styles.js'
 
 class List extends Component {
 
@@ -40,36 +42,26 @@ class List extends Component {
       else {
           return (
               <View>
+              <ScrollView>
               {
                   this.state.beeps.map((item, index) => (
                       <TouchableOpacity
                           key = {index}
                           style = {styles.container}
                           onPress = {() => this.alertItemName(item)}>
-                            <Text style = {styles.text}>
+                            <Text>
                                 {item.time}
                             </Text>
                       </TouchableOpacity>
                   ))
               }
-
+                </ScrollView>
               </View>
+
           )
           }
       }
 }
 
 
-export default List
-
-const styles = StyleSheet.create ({
-    container: {
-        padding: 10,
-        marginTop: 3,
-        backgroundColor: '#d9f9b1',
-        alignItems: 'center',
-    },
-    text: {
-        color: '#4f603c'
-    }
-})
+export default List;

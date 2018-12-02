@@ -36,6 +36,41 @@ class Questions extends Component {
             name: 'Kaj trenutno doživljaš?',
          },
       ],
+      questionstags: [
+         {
+            id: 4,
+            name: 'Kakšna so tvoja trenutna čustva?',
+         },        
+      ],
+      questionstags2: [
+         {
+            id: 5,
+            name: 'Kakšna so tvoja trenutna temeljna čustva?',
+         },        
+      ],
+      questionsmultiplechoice: [
+         {
+            id: 6,
+            name: 'Kje si trenutno?',
+            possibleAnswers: [
+                "Doma",
+                "Služba/Šola",
+                "Zunaj",
+                "Ostalo",
+            ]
+         },        
+      ],
+      questionsslider: [
+         {
+            id: 6,
+            name: 'Kako ekstrovertno se počutiš?',
+            possibleAnswers: [
+                "ekstrovertno",
+                "introvertno",
+            ],
+         },        
+      ],
+
     'answers': "",
     'currenttime': "",
 
@@ -76,6 +111,35 @@ class Questions extends Component {
             }
 
             {
+             this.state.questionstags.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionTags", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
+            {
+             this.state.questionstags2.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionTagsNoAdd", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
+
+            {
              this.state.questionstext.map((item, index) => (
                   <TouchableHighlight
                      key = {item.id}
@@ -88,6 +152,37 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+
+            {
+             this.state.questionsmultiplechoice.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionMultipleChoice", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
+            {
+             this.state.questionsslider.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionSlider", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
+
+
           <TouchableHighlight style = {styles.button} onPress = {() => this.saveBeep()}>
             <Text>
             Save Beep
