@@ -48,6 +48,18 @@ class Questions extends Component {
             name: 'Kakšna so tvoja trenutna temeljna čustva?',
          },        
       ],
+      questionsmultiplechoice: [
+         {
+            id: 6,
+            name: 'Kje si trenutno?',
+            possibleAnswers: [
+                "Doma",
+                "Služba/Šola",
+                "Zunaj",
+                "Ostalo",
+            ]
+         },        
+      ],
     'answers': "",
     'currenttime': "",
 
@@ -129,6 +141,21 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+
+            {
+             this.state.questionsmultiplechoice.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionMultipleChoice", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
 
           <TouchableHighlight style = {styles.button} onPress = {() => this.saveBeep()}>
             <Text>
