@@ -3,7 +3,7 @@ import { Text, View, TouchableHighlight, AsyncStorage, TextInput} from 'react-na
 
 import styles from './Styles.js'
    
-class QuestionTags extends Component {
+class QuestionTagsNoAdd extends Component {
     
     static navigationOptions = {
         title: 'Question',
@@ -14,34 +14,22 @@ class QuestionTags extends Component {
         this.setState({"itemId" : this.props.navigation.getParam("id", "NO-ID")});
         this.setState({"question" : this.props.navigation.getParam("name", "no-question")});
 
-        AsyncStorage.getItem("beeps").then((value) => {
-            const allBeeps = value ? JSON.parse(value) : [];
-            let allTags = [];
-            for (beepIndex in allBeeps) {
-                var currentBeep = allBeeps[beepIndex];
-                var allQuestions = JSON.parse(currentBeep.questions);
-                for (questionIndex in allQuestions) {
-                    var currentQuestion = allQuestions[questionIndex];
-                    if (currentQuestion.id === this.state.itemId) {
-                        for (tagIndex in currentQuestion.answer) {
-                            allTags.findIndex(x => x.tag === currentQuestion.answer[tagIndex]) === -1 ? allTags.push({tag: currentQuestion.answer[tagIndex], chosen: 0}) : null;
-                        }
-                    } 
-                }
-            }
-            this.setState({tags: allTags, loading: false});
-        }
-        );
         };
 
     state = {
-        tags: [],
+        tags: [
+            {tag: "Anger", chosen: 0},
+            {tag: "Fear", chosen: 0},
+            {tag: "Disgust", chosen: 0},
+            {tag: "Happiness", chosen: 0},
+            {tag: "Sadness", chosen: 0},
+            {tag: "Surprise", chosen: 0},
+        ],
         currentTag: "",
-        loading: true,
         itemId: "",
 
     };
-    
+
     saveAnswer = (id, question, type, value) => {
         let newAnswer = {
             id: id,
@@ -61,13 +49,6 @@ class QuestionTags extends Component {
             AsyncStorage.setItem('answers', JSON.stringify(aNew));
         });
         this.props.navigation.goBack();
-    };
-
-    updateTags = (addedTag) => {
-        const newTag = {"tag": addedTag, "chosen": 1};
-        const newTags = [...this.state.tags, newTag];
-        this.setState({"tags": newTags});
-        this.textInput.clear();
     };
 
     changeChosenStatus = (index) => {
@@ -110,15 +91,6 @@ class QuestionTags extends Component {
 
     render() {
 
-         if(this.state.loading){
-          return(
-            <View>
-                <Text>Please wait a bit</Text> 
-            </View>
-          )
-      }
-      else {
-
         
         
         return (
@@ -126,11 +98,6 @@ class QuestionTags extends Component {
                 <Text style={styles.button}>
                     {this.state.question}
                 </Text>
-                <TextInput
-                    style={{height: 40, borderColor: 'black', borderWidth: 1,}}
-                    onSubmitEditing={(event) => this.updateTags(event.nativeEvent.text)}
-                    ref={input => { this.textInput = input }}
-                />
 
             {
              this.state.tags.map((item, index) => (
@@ -158,7 +125,6 @@ class QuestionTags extends Component {
             </View>
       )
    }
-        }
 }
 
-export default QuestionTags;
+export default QuestionTagsNoAdd;

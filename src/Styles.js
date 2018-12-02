@@ -17,6 +17,12 @@ export default StyleSheet.create({
       backgroundColor: '#d9f9b1',
       alignItems: 'center',
   },
+  container2: {
+      padding: 10,
+      marginTop: 3,
+      backgroundColor: 'red',
+      alignItems: 'center',
+  },
 
 });
 

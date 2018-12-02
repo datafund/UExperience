@@ -42,6 +42,12 @@ class Questions extends Component {
             name: 'Kakšna so tvoja trenutna čustva?',
          },        
       ],
+      questionstags2: [
+         {
+            id: 5,
+            name: 'Kakšna so tvoja trenutna temeljna čustva?',
+         },        
+      ],
     'answers': "",
     'currenttime': "",
 
@@ -94,6 +100,21 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+
+            {
+             this.state.questionstags2.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionTagsNoAdd", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
 
             {
              this.state.questionstext.map((item, index) => (
