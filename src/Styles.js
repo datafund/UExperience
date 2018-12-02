@@ -23,6 +23,5 @@ export default StyleSheet.create({
       backgroundColor: 'red',
       alignItems: 'center',
   },
-
 });
 

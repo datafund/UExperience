@@ -9,7 +9,8 @@ import QuestionBinary from "./src/QuestionBinary.js";
 import QuestionText from "./src/QuestionText.js";
 import QuestionTags from "./src/QuestionTags.js";
 import QuestionTagsNoAdd from "./src/QuestionTagsNoAdd.js";
-import QuestionMultipleChoice from "./src/QuestionMultipleChoice";
+import QuestionMultipleChoice from "./src/QuestionMultipleChoice.js";
+import QuestionSlider from "./src/QuestionSlider.js"
 
 const AppNavigator = createStackNavigator(
   {
@@ -21,6 +22,7 @@ const AppNavigator = createStackNavigator(
     QuestionTags: QuestionTags,
     QuestionTagsNoAdd: QuestionTagsNoAdd,
     QuestionMultipleChoice: QuestionMultipleChoice,
+    QuestionSlider: QuestionSlider,
   },
   {
     initialRouteName: "Index",

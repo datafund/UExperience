@@ -60,6 +60,17 @@ class Questions extends Component {
             ]
          },        
       ],
+      questionsslider: [
+         {
+            id: 6,
+            name: 'Kako ekstrovertno se počutiš?',
+            possibleAnswers: [
+                "ekstrovertno",
+                "introvertno",
+            ],
+         },        
+      ],
+
     'answers': "",
     'currenttime': "",
 
@@ -155,6 +166,21 @@ class Questions extends Component {
                   </TouchableHighlight>
             ))
             }
+
+            {
+             this.state.questionsslider.map((item, index) => (
+                  <TouchableHighlight
+                     key = {item.id}
+                     onPress = {() => this.props.navigation.navigate("QuestionSlider", item)}>
+		     <View style = {styles.button}>
+			<Text>
+			    {item.name}
+			</Text>
+		     </View>
+                  </TouchableHighlight>
+            ))
+            }
+
 
 
           <TouchableHighlight style = {styles.button} onPress = {() => this.saveBeep()}>
