@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, AsyncStorage, ScrollView } from 'react-native'
 
 import styles from './Styles.js'
 
@@ -42,6 +42,7 @@ class List extends Component {
       else {
           return (
               <View>
+              <ScrollView>
               {
                   this.state.beeps.map((item, index) => (
                       <TouchableOpacity
@@ -54,8 +55,9 @@ class List extends Component {
                       </TouchableOpacity>
                   ))
               }
-
+                </ScrollView>
               </View>
+
           )
           }
       }
