@@ -10,6 +10,12 @@ class Questions extends Component {
         title: 'Questions',
     };
 
+    componentWillMount(){
+        AsyncStorage.getItem("questions").then((value) => this.setState({questions: value}));
+        AsyncStorage.getItem("currentIdQuestion").then((value) => this.setState({id: value}));
+    }
+
+
     componentDidMount() {
         AsyncStorage.setItem("currenttime", moment().utcOffset('+02').format('YYYY-MM-DD-HH-mm-ss') );
     }
@@ -62,7 +68,7 @@ class Questions extends Component {
       ],
       questionsslider: [
          {
-            id: 6,
+            id: 7,
             name: 'Kako ekstrovertno se počutiš?',
             possibleAnswers: [
                 "ekstrovertno",
@@ -73,6 +79,8 @@ class Questions extends Component {
 
     'answers': "",
     'currenttime': "",
+    "questions": "",
+    "id": "",
 
    }
 
@@ -188,6 +196,8 @@ class Questions extends Component {
             Save Beep
             </Text>
           </TouchableHighlight>
+
+          {!(this.state.questions === "") ? <Text>{this.state.questions }</Text> : <Text>Still loading</Text>}
 
          </View>
       )

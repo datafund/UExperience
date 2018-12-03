@@ -19,6 +19,16 @@ class Home extends Component {
 		    <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Beeps')} >
 		        <Text>Preglej svoje beep-e</Text>
 		    </TouchableHighlight>
+		    <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('AddResearch')} >
+		        <Text>Dodaj vprašanja za Beepe</Text>
+		    </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={() => AsyncStorage.clear()} >
+		        <Text>Izbriši AsyncStorage</Text>
+		    </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={() => AsyncStorage.setItem("currentIdQuestion", "0")} >
+		        <Text>Dodaj id 0 v AsyncStorage</Text>
+		    </TouchableHighlight>
+
 	    </View>
 	);
     }
