@@ -11,18 +11,24 @@ import QuestionTags from "./src/QuestionTags.js";
 import QuestionTagsNoAdd from "./src/QuestionTagsNoAdd.js";
 import QuestionMultipleChoice from "./src/QuestionMultipleChoice.js";
 import QuestionSlider from "./src/QuestionSlider.js"
+import AddResearch from "./src/AddResearch.js"
+import AddQuestion from "./src/AddQuestion.js"
+import RemoveQuestion from "./src/RemoveQuestion.js"
 
 const AppNavigator = createStackNavigator(
   {
     Index: Home,
     NewBeep: Questions,
     Beeps: List,
-    QuestionBinary: QuestionBinary,
-    QuestionText: QuestionText,
-    QuestionTags: QuestionTags,
-    QuestionTagsNoAdd: QuestionTagsNoAdd,
-    QuestionMultipleChoice: QuestionMultipleChoice,
-    QuestionSlider: QuestionSlider,
+    Binary: QuestionBinary,
+    Text: QuestionText,
+    Tags: QuestionTags,
+    TagsNoAdd: QuestionTagsNoAdd,
+    MultipleChoice: QuestionMultipleChoice,
+    Slider: QuestionSlider,
+    AddResearch: AddResearch,
+    AddQuestion: AddQuestion,
+    RemoveQuestion: RemoveQuestion,
   },
   {
     initialRouteName: "Index",

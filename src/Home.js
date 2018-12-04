@@ -19,6 +19,9 @@ class Home extends Component {
 		    <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Beeps')} >
 		        <Text>Preglej svoje beep-e</Text>
 		    </TouchableHighlight>
+		    <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('AddResearch')} >
+		        <Text>Dodaj vprašanja za Beepe</Text>
+		    </TouchableHighlight>
 	    </View>
 	);
     }
