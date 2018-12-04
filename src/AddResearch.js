@@ -14,10 +14,16 @@ class AddResearch extends Component {
       return (
          <View>
             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('AddQuestion')} >
-		        <Text>Dodaj vprašanje</Text>
+		        <Text>Dodaj novo vprašanje</Text>
 		    </TouchableHighlight>
             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('RemoveQuestion')} >
-		        <Text>Odstrani Vprašanja</Text>
+		        <Text>Določi vprašanja, ki se prikažejo</Text>
+		    </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={() => AsyncStorage.clear()} >
+		        <Text>Izbriši AsyncStorage</Text>
+		    </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={() => AsyncStorage.setItem("currentIdQuestion", "0")} >
+		        <Text>Dodaj id 0 v AsyncStorage</Text>
 		    </TouchableHighlight>
          </View>
       )

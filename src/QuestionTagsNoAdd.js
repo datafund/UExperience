@@ -13,42 +13,19 @@ class QuestionTagsNoAdd extends Component {
        
         this.setState({"itemId" : this.props.navigation.getParam("id", "NO-ID")});
         this.setState({"question" : this.props.navigation.getParam("name", "no-question")});
-
+        let possibleAnswers = this.props.navigation.getParam("possibleAnswers", []);
+        let allTags = [];
+        for (tag in possibleAnswers) {
+            allTags.push({tag: possibleAnswers[tag], chosen: 0})
+        };
+        this.setState({"tags" : allTags});
         };
 
     state = {
-        tags: [
-            {tag: "Anger", chosen: 0},
-            {tag: "Fear", chosen: 0},
-            {tag: "Disgust", chosen: 0},
-            {tag: "Happiness", chosen: 0},
-            {tag: "Sadness", chosen: 0},
-            {tag: "Surprise", chosen: 0},
-        ],
+        tags: [],
         currentTag: "",
         itemId: "",
 
-    };
-
-    saveAnswer = (id, question, type, value) => {
-        let newAnswer = {
-            id: id,
-            question: question,
-            type: type, 
-            answer: value,
-        }
-        AsyncStorage.getItem('answers').then((answers) => {
-            const a = answers ? JSON.parse(answers) : [];
-            aNew = [];
-            for (x in a) {
-                if (!(a[x].id == id)) {
-                    aNew.push(a[x]) 
-                } 
-            }
-            aNew.push(newAnswer);
-            AsyncStorage.setItem('answers', JSON.stringify(aNew));
-        });
-        this.props.navigation.goBack();
     };
 
     changeChosenStatus = (index) => {

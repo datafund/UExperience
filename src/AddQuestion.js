@@ -29,7 +29,7 @@ class AddQuestion extends Component {
         };
         let newId = Number(this.state.currentId) + 1;
         AsyncStorage.setItem("currentIdQuestion", String(newId))
-        if (["TagsNoAdd", "MultipleChoice", "Slider"].includes(this.state.type)) {
+        if (["TagsNoAdd", "MultipleChoice"].includes(this.state.type)) {
             newQuestion["possibleAnswers"] = this.state.possibleAnswers
         }
         AsyncStorage.getItem('questions').then((questions) => {
@@ -67,7 +67,7 @@ class AddQuestion extends Component {
                   style={{height: 50, borderColor: 'black', borderWidth: 1,}}
                   onChangeText={(text) => this.setState({vprašanje: text })}            
            />
-            {["TagsNoAdd", "MultipleChoice", "Slider"].includes(this.state.type) ? <TextInput style={{height: 50, borderColor: 'black', borderWidth: 1,}} onChangeText={(text) => this.seperateTags(text)} ></TextInput> : null}
+            {["TagsNoAdd", "MultipleChoice"].includes(this.state.type) ? <TextInput style={{height: 50, borderColor: 'black', borderWidth: 1,}} onChangeText={(text) => this.seperateTags(text)} ></TextInput> : null}
             <TouchableHighlight style={styles.button} onPress={() => this.saveQuestion()} >
 		        <Text>Shrani</Text>
 		    </TouchableHighlight>
