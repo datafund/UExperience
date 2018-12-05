@@ -21,7 +21,7 @@ class List extends Component {
 
     alertItemName = (item) => {
         text = "";
-        const questions = item.questions ? JSON.parse(item.questions) : [];
+        const questions = item.questions;
         for (id in questions) {
             text += questions[id].question
             text += "\n"

@@ -33,9 +33,11 @@ class Questions extends Component {
    }
 
     saveBeep = async() => {
+        let questions = await AsyncStorage.getItem("answers");
+        questions = questions ? JSON.parse(questions) : [];
         let newBeep = {
             time: await AsyncStorage.getItem("currenttime"),
-            questions: await AsyncStorage.getItem("answers"),
+            questions: questions,
         }
         AsyncStorage.getItem('beeps').then((beeps) => {
             const b = beeps ? JSON.parse(beeps) : [];

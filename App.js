@@ -14,6 +14,9 @@ import QuestionSlider from "./src/QuestionSlider.js"
 import AddResearch from "./src/AddResearch.js"
 import AddQuestion from "./src/AddQuestion.js"
 import RemoveQuestion from "./src/RemoveQuestion.js"
+import SaveToFile from "./src/SaveToFile.js"
+import ReadFromFile from "./src/ReadFromFile.js"
+import DeleteFile from "./src/DeleteFile.js"
 
 const AppNavigator = createStackNavigator(
   {
@@ -29,6 +32,9 @@ const AppNavigator = createStackNavigator(
     AddResearch: AddResearch,
     AddQuestion: AddQuestion,
     RemoveQuestion: RemoveQuestion,
+    SaveToFile: SaveToFile,
+    ReadFromFile: ReadFromFile,
+    DeleteFile: DeleteFile,
   },
   {
     initialRouteName: "Index",

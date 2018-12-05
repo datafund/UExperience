@@ -19,7 +19,7 @@ class QuestionTags extends Component {
             let allTags = [];
             for (beepIndex in allBeeps) {
                 var currentBeep = allBeeps[beepIndex];
-                var allQuestions = JSON.parse(currentBeep.questions);
+                var allQuestions = currentBeep.questions;
                 for (questionIndex in allQuestions) {
                     var currentQuestion = allQuestions[questionIndex];
                     if (currentQuestion.id === this.state.itemId) {
