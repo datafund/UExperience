@@ -17,6 +17,7 @@ import RemoveQuestion from "./src/RemoveQuestion.js"
 import SaveToFile from "./src/SaveToFile.js"
 import ReadFromFile from "./src/ReadFromFile.js"
 import DeleteFile from "./src/DeleteFile.js"
+import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js"
 
 const AppNavigator = createStackNavigator(
   {
@@ -35,6 +36,7 @@ const AppNavigator = createStackNavigator(
     SaveToFile: SaveToFile,
     ReadFromFile: ReadFromFile,
     DeleteFile: DeleteFile,
+    LoadQuestionsFromNet: LoadQuestionsFromNet,
   },
   {
     initialRouteName: "Index",

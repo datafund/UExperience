@@ -28,6 +28,9 @@ class AddResearch extends Component {
             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate("DeleteFile")} >
 		        <Text>Izbriši datoteko</Text>
 		    </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate("LoadQuestionsFromNet")} >
+		        <Text>Naloži vprašanja iz interneta</Text>
+		    </TouchableHighlight>
             <TouchableHighlight style={styles.button} onPress={() => AsyncStorage.clear()} >
 		        <Text>Izbriši AsyncStorage</Text>
 		    </TouchableHighlight>
