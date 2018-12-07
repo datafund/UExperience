@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import {View, TouchableHighlight, Text, AsyncStorage} from "react-native";
+import {View, TouchableHighlight, Text, AsyncStorage, TextInput} from "react-native";
 
 import styles from "./Styles.js";
 
 const RNFS = require('react-native-fs');
+const CryptoJS = require("crypto-js");
 
 class SaveToFile extends Component {
 
@@ -23,6 +24,7 @@ class SaveToFile extends Component {
     state = {
       beeps: [],
       success: "You did not try it yet",
+      password: "",
     };
 
     saveAnswerToFile = (beeps) => {
@@ -43,6 +45,9 @@ class SaveToFile extends Component {
                 };
             };
         };
+        if (this.state.password) {
+            finalFileContent = CryptoJS.AES.encrypt(finalFileContent, this.state.password).toString()
+        };
         RNFS.writeFile(path, finalFileContent, 'utf8').then((success) => this.setState({success: "It worked"})).catch((err) => this.setState({success: "It did not work"}))
     };
 
@@ -50,6 +55,11 @@ class SaveToFile extends Component {
         
 	return (
 	    <View>
+        <Text>Če želite zaščititi svojo datoteko z enkripcijo, prosim da spodaj napišete geslo</Text>
+        <TextInput
+            style={{height: 50, borderColor: 'black', borderWidth: 1,}}
+            onChangeText={(text) => this.setState({password: text})}
+        />
         <TouchableHighlight style={styles.button} 
             onPress = {() => this.saveAnswerToFile(this.state.beeps)}
         >

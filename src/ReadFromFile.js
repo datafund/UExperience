@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import {View, TouchableHighlight, Text, AsyncStorage} from "react-native";
+import {View, TouchableHighlight, Text, AsyncStorage, TextInput} from "react-native";
 
 import styles from "./Styles.js";
 
 const RNFS = require('react-native-fs');
+const CryptoJS = require("crypto-js");
 
 class ReadFromFile extends Component {
 
@@ -13,21 +14,41 @@ class ReadFromFile extends Component {
 
     state = {
       beeps: [],
-      files: [],
       fileContent: "You did not read the file yet",
+      password: "",
     };
 
-    readFromFile = () => {
+    readFromFile = async() => {
 
         const path = RNFS.DocumentDirectoryPath + '/test.txt';
         RNFS.readdir(RNFS.DocumentDirectoryPath).then((result) => this.setState({files: result}));
-        RNFS.readFile(path, "utf8").then((result) => this.setState({fileContent: result})).catch((error) => this.setState({fileContent: "This file does not exist"}));
-    };
+        try {
+            var result = await RNFS.readFile(path, "utf8");
+            this.setState({fileContent: result});
+        } catch (error)  {
+            this.setState({fileContent: "This file does not exist"});
+        } finally {
+            if (this.state.password) {
+                try {
+                    result = CryptoJS.AES.decrypt(result, this.state.password).toString(CryptoJS.enc.Utf8);
+                    this.setState({fileContent: result});
+                } catch(error) {
+                    this.setState({fileContent: "Wrong password"})
+                }
+            }
+         }
+    }
+
 
     render() {
         
 	return (
 	    <View>
+        <Text>Če je bila datoteka zaščitena z enkripcijo, prosim da tukaj napišete svoje geslo:</Text>
+        <TextInput
+            style={{height: 50, borderColor: 'black', borderWidth: 1,}}
+            onChangeText={(text) => this.setState({password: text})}
+        />
         <TouchableHighlight style={styles.button} 
             onPress = {() => this.readFromFile()}
         >
@@ -37,7 +58,7 @@ class ReadFromFile extends Component {
         </TouchableHighlight>
         <Text>{this.state.success}</Text>
         <Text>
-        {this.state.fileContent}
+        {JSON.stringify(this.state.fileContent)}
         </Text>
 	    </View>
 	);
