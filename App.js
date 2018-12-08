@@ -10,14 +10,15 @@ import QuestionText from "./src/QuestionText.js";
 import QuestionTags from "./src/QuestionTags.js";
 import QuestionTagsNoAdd from "./src/QuestionTagsNoAdd.js";
 import QuestionMultipleChoice from "./src/QuestionMultipleChoice.js";
-import QuestionSlider from "./src/QuestionSlider.js"
-import AddResearch from "./src/AddResearch.js"
-import AddQuestion from "./src/AddQuestion.js"
-import RemoveQuestion from "./src/RemoveQuestion.js"
-import SaveToFile from "./src/SaveToFile.js"
-import ReadFromFile from "./src/ReadFromFile.js"
-import DeleteFile from "./src/DeleteFile.js"
-import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js"
+import QuestionSlider from "./src/QuestionSlider.js";
+import AddResearch from "./src/AddResearch.js";
+import AddQuestion from "./src/AddQuestion.js";
+import RemoveQuestion from "./src/RemoveQuestion.js";
+import SaveToFile from "./src/SaveToFile.js";
+import ReadFromFile from "./src/ReadFromFile.js";
+import DeleteFile from "./src/DeleteFile.js";
+import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js";
+import LogIn from "./src/LogIn.js";
 
 const AppNavigator = createStackNavigator(
   {
@@ -37,9 +38,10 @@ const AppNavigator = createStackNavigator(
     ReadFromFile: ReadFromFile,
     DeleteFile: DeleteFile,
     LoadQuestionsFromNet: LoadQuestionsFromNet,
+    LogIn: LogIn,
   },
   {
-    initialRouteName: "Index",
+    initialRouteName: "LogIn",
       defaultNavigationOptions: {
           headerStyle: {
               backgroundColor: 'darkgray',
