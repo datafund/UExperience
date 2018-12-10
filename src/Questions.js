@@ -1,5 +1,11 @@
 import React, {Component} from "react";
-import {Text, View, TouchableHighlight, AsyncStorage} from "react-native";
+import {
+    Text,
+    View,
+    TouchableHighlight,
+    AsyncStorage,
+    ScrollView,
+} from "react-native";
 import moment from "moment";
 
 import styles from "./Styles.js";
@@ -114,15 +120,17 @@ class Questions extends Component {
     render() {
         return (
             <View>
-                {this.state.questions.map((item, index) =>
-                    this.createQuestionButton(item, index),
-                )}
+                <ScrollView>
+                    {this.state.questions.map((item, index) =>
+                        this.createQuestionButton(item, index),
+                    )}
 
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() => this.props.navigation.goBack()}>
-                    <Text>Save Beep</Text>
-                </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() => this.props.navigation.goBack()}>
+                        <Text>Save Beep</Text>
+                    </TouchableHighlight>
+                </ScrollView>
             </View>
         );
     }

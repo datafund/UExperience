@@ -1,5 +1,11 @@
 import React, {Component} from "react";
-import {Text, View, TouchableHighlight, AsyncStorage} from "react-native";
+import {
+    Text,
+    View,
+    TouchableHighlight,
+    AsyncStorage,
+    ScrollView,
+} from "react-native";
 import {
     QuestionBinary,
     QuestionMultipleChoice,
@@ -56,57 +62,59 @@ class Question extends Component {
     render() {
         return (
             <View>
-                <Text style={styles.button}>
-                    {JSON.stringify(this.state.question)}
-                </Text>
+                <ScrollView>
+                    <Text style={styles.button}>
+                        {JSON.stringify(this.state.question)}
+                    </Text>
 
-                {this.state.type === "Binary" ? (
-                    <QuestionBinary
-                        question={this.state.question}
-                        id={this.state.id}
-                        saveAnswer={this.saveAnswer}
-                        possibleAnswers={this.state.possibleAnswers}
-                        type={this.state.type}
-                    />
-                ) : null}
-                {this.state.type === "MultipleChoice" ? (
-                    <QuestionMultipleChoice
-                        question={this.state.question}
-                        id={this.state.id}
-                        saveAnswer={this.saveAnswer}
-                        possibleAnswers={this.state.possibleAnswers}
-                        type={this.state.type}
-                    />
-                ) : null}
-                {this.state.type === "Slider" ? (
-                    <QuestionSlider
-                        question={this.state.question}
-                        id={this.state.id}
-                        saveAnswer={this.saveAnswer}
-                        possibleAnswers={this.state.possibleAnswers}
-                        type={this.state.type}
-                    />
-                ) : null}
-                {this.state.type === "Tags" ||
-                this.state.type === "TagsNoAdd" ? (
-                    <QuestionTags
-                        question={this.state.question}
-                        id={this.state.id}
-                        saveAnswer={this.saveAnswer}
-                        possibleAnswers={this.state.possibleAnswers}
-                        type={this.state.type}
-                        password={this.state.password}
-                    />
-                ) : null}
-                {this.state.type === "Text" ? (
-                    <QuestionText
-                        question={this.state.question}
-                        id={this.state.id}
-                        saveAnswer={this.saveAnswer}
-                        possibleAnswers={this.state.possibleAnswers}
-                        type={this.state.type}
-                    />
-                ) : null}
+                    {this.state.type === "Binary" ? (
+                        <QuestionBinary
+                            question={this.state.question}
+                            id={this.state.id}
+                            saveAnswer={this.saveAnswer}
+                            possibleAnswers={this.state.possibleAnswers}
+                            type={this.state.type}
+                        />
+                    ) : null}
+                    {this.state.type === "MultipleChoice" ? (
+                        <QuestionMultipleChoice
+                            question={this.state.question}
+                            id={this.state.id}
+                            saveAnswer={this.saveAnswer}
+                            possibleAnswers={this.state.possibleAnswers}
+                            type={this.state.type}
+                        />
+                    ) : null}
+                    {this.state.type === "Slider" ? (
+                        <QuestionSlider
+                            question={this.state.question}
+                            id={this.state.id}
+                            saveAnswer={this.saveAnswer}
+                            possibleAnswers={this.state.possibleAnswers}
+                            type={this.state.type}
+                        />
+                    ) : null}
+                    {this.state.type === "Tags" ||
+                    this.state.type === "TagsNoAdd" ? (
+                        <QuestionTags
+                            question={this.state.question}
+                            id={this.state.id}
+                            saveAnswer={this.saveAnswer}
+                            possibleAnswers={this.state.possibleAnswers}
+                            type={this.state.type}
+                            password={this.state.password}
+                        />
+                    ) : null}
+                    {this.state.type === "Text" ? (
+                        <QuestionText
+                            question={this.state.question}
+                            id={this.state.id}
+                            saveAnswer={this.saveAnswer}
+                            possibleAnswers={this.state.possibleAnswers}
+                            type={this.state.type}
+                        />
+                    ) : null}
+                </ScrollView>
             </View>
         );
     }

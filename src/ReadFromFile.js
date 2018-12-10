@@ -5,6 +5,7 @@ import {
     Text,
     AsyncStorage,
     TextInput,
+    ScrollView,
 } from "react-native";
 
 import styles from "./Styles.js";
@@ -51,21 +52,27 @@ class ReadFromFile extends Component {
     render() {
         return (
             <View>
-                <Text>
-                    Če je bila datoteka zaščitena z enkripcijo, prosim da tukaj
-                    napišete svoje geslo:
-                </Text>
-                <TextInput
-                    style={{height: 50, borderColor: "black", borderWidth: 1}}
-                    onChangeText={text => this.setState({password: text})}
-                />
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() => this.readFromFile()}>
-                    <Text>Read File</Text>
-                </TouchableHighlight>
-                <Text>{this.state.success}</Text>
-                <Text>{JSON.stringify(this.state.fileContent)}</Text>
+                <ScrollView>
+                    <Text>
+                        Če je bila datoteka zaščitena z enkripcijo, prosim da
+                        tukaj napišete svoje geslo:
+                    </Text>
+                    <TextInput
+                        style={{
+                            height: 50,
+                            borderColor: "black",
+                            borderWidth: 1,
+                        }}
+                        onChangeText={text => this.setState({password: text})}
+                    />
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() => this.readFromFile()}>
+                        <Text>Read File</Text>
+                    </TouchableHighlight>
+                    <Text>{this.state.success}</Text>
+                    <Text>{JSON.stringify(this.state.fileContent)}</Text>
+                </ScrollView>
             </View>
         );
     }
