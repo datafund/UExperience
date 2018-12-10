@@ -30,10 +30,24 @@ class LoadQuestionsFromNet extends Component {
     };
 
     getQuestions = async url => {
-        this.setState({success: "No problems"});
-        let questions = await fetch(url);
+        try {
+            var questions = await fetch(url);
+        } catch (err) {
+            this.setState({
+                success:
+                    "Something went wrong. Is the internet connection working?",
+            });
+            return;
+        }
         questions = questions._bodyInit;
-        questions = JSON.parse(questions);
+        try {
+            questions = JSON.parse(questions);
+        } catch {
+            this.setState({
+                success: "Something went wrong. Is you put in the right url?",
+            });
+            return;
+        }
         questions = questions.questions;
         questions = JSON.stringify(questions);
         if (!(this.state.password === "")) {
@@ -43,6 +57,7 @@ class LoadQuestionsFromNet extends Component {
             ).toString();
         }
         AsyncStorage.setItem("questions", questions);
+        this.setState({success: "No problems"});
     };
 
     render() {
