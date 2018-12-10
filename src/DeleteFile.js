@@ -10,11 +10,28 @@ class ReadFromFile extends Component {
         title: "Delete File",
     };
 
-    state = {};
+    state = {
+        currentStatus: "",
+    };
 
     deleteFile = () => {
         const path = RNFS.DocumentDirectoryPath + "/test.txt";
-        RNFS.unlink(path);
+
+        RNFS.exists(path).then(result => {
+            if (result) {
+                RNFS.unlink(path)
+                    .then(value =>
+                        this.setState({
+                            currentStatus: "Datoteka je bila izbrisana",
+                        }),
+                    )
+                    .catch(err =>
+                        this.setState({
+                            currentStatus: "Ta datoteka ne obstaja",
+                        }),
+                    );
+            }
+        });
     };
 
     render() {
@@ -25,6 +42,7 @@ class ReadFromFile extends Component {
                     onPress={() => this.deleteFile()}>
                     <Text>Delete File</Text>
                 </TouchableHighlight>
+                <Text>{JSON.stringify(this.state.currentStatus)}</Text>
             </View>
         );
     }

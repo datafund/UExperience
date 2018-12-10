@@ -10,18 +10,36 @@ import {
 
 import styles from "./Styles.js";
 
+const CryptoJS = require("crypto-js");
+
 class List extends Component {
     static navigationOptions = {
         title: "List of Beeps",
     };
 
-    componentWillMount() {
-        AsyncStorage.getItem("beeps").then(value =>
-            this.setState({
-                beeps: value ? JSON.parse(value) : [],
-                loading: false,
-            }),
-        );
+    componentDidMount() {
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
+        AsyncStorage.getItem("beeps")
+            .then(value => {
+                if (!(this.state.password === "")) {
+                    value = CryptoJS.AES.decrypt(
+                        value,
+                        this.state.password,
+                    ).toString(CryptoJS.enc.Utf8);
+                }
+                this.setState({
+                    beeps: value ? JSON.parse(value) : [],
+                    loading: false,
+                });
+            })
+            .catch(err =>
+                this.setState({
+                    beeps: [],
+                    loading: false,
+                }),
+            );
     }
 
     state = {
@@ -33,10 +51,12 @@ class List extends Component {
         text = "";
         const questions = item.questions;
         for (id in questions) {
-            text += questions[id].question;
-            text += "\n";
-            text += questions[id].answer;
-            text += "\n---\n";
+            if (!(questions[id] === null)) {
+                text += questions[id].question;
+                text += "\n";
+                text += questions[id].answer;
+                text += "\n---\n";
+            }
         }
         alert(text);
     };

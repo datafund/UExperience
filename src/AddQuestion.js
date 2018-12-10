@@ -10,15 +10,20 @@ import {
 
 import styles from "./Styles.js";
 
+const CryptoJS = require("crypto-js");
+
 class AddQuestion extends Component {
     static navigationOptions = {
         title: "Dodaj Vprašanje",
     };
 
-    componentWillMount() {
+    componentDidMount() {
         AsyncStorage.getItem("currentIdQuestion").then(value =>
             this.setState({currentId: value}),
         );
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
     }
 
     state = {
@@ -40,11 +45,25 @@ class AddQuestion extends Component {
         if (["TagsNoAdd", "MultipleChoice"].includes(this.state.type)) {
             newQuestion["possibleAnswers"] = this.state.possibleAnswers;
         }
-        AsyncStorage.getItem("questions").then(questions => {
-            const q = questions ? JSON.parse(questions) : [];
-            q.push(newQuestion);
-            AsyncStorage.setItem("questions", JSON.stringify(q));
-        });
+        try {
+            questions = await AsyncStorage.getItem("questions");
+
+            if (!(this.state.password === "")) {
+                questions = CryptoJS.AES.decrypt(
+                    questions,
+                    this.state.password,
+                ).toString(CryptoJS.enc.Utf8);
+            }
+        } catch (err) {
+            questions = "";
+        }
+        q = questions ? JSON.parse(questions) : [];
+        q.push(newQuestion);
+        q = JSON.stringify(q);
+        if (!(this.state.password === "")) {
+            q = CryptoJS.AES.encrypt(q, this.state.password).toString();
+        }
+        AsyncStorage.setItem("questions", q);
         this.props.navigation.goBack();
     };
 

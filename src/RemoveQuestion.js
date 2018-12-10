@@ -4,18 +4,32 @@ import moment from "moment";
 
 import styles from "./Styles.js";
 
+const CryptoJS = require("crypto-js");
+
 class RemoveQuestion extends Component {
     static navigationOptions = {
         title: "Odstrani Vprašanje",
     };
 
-    componentWillMount() {
-        AsyncStorage.getItem("questions").then(value =>
-            this.parseJSONString(value),
-        );
+    componentDidMount() {
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
+        this.parseJSONString();
     }
 
-    parseJSONString = value => {
+    parseJSONString = async () => {
+        try {
+            value = await AsyncStorage.getItem("questions");
+            if (!(this.state.password === "")) {
+                value = CryptoJS.AES.decrypt(
+                    value,
+                    this.state.password,
+                ).toString(CryptoJS.enc.Utf8);
+            }
+        } catch {
+            value = "";
+        }
         const questions = value ? JSON.parse(value) : [];
         this.setState({questions: questions});
     };
@@ -35,7 +49,14 @@ class RemoveQuestion extends Component {
     };
 
     saveQuestions = questions => {
-        AsyncStorage.setItem("questions", JSON.stringify(questions));
+        questions = JSON.stringify(questions);
+        if (!(this.state.password === "")) {
+            questions = CryptoJS.AES.encrypt(
+                questions,
+                this.state.password,
+            ).toString();
+        }
+        AsyncStorage.setItem("questions", questions);
         this.props.navigation.goBack();
     };
 

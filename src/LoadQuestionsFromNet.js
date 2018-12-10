@@ -9,15 +9,24 @@ import {
 
 import styles from "./Styles.js";
 
+const CryptoJS = require("crypto-js");
+
 class LoadQuestionsFromNet extends Component {
     static navigationOptions = {
         title: "Get Questions",
     };
 
+    componentDidMount() {
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
+    }
+
     state = {
         beeps: [],
         success: "You did not try it yet",
         url: "",
+        password: "",
     };
 
     getQuestions = async url => {
@@ -26,7 +35,14 @@ class LoadQuestionsFromNet extends Component {
         questions = questions._bodyInit;
         questions = JSON.parse(questions);
         questions = questions.questions;
-        AsyncStorage.setItem("questions", JSON.stringify(questions));
+        questions = JSON.stringify(questions);
+        if (!(this.state.password === "")) {
+            questions = CryptoJS.AES.encrypt(
+                questions,
+                this.state.password,
+            ).toString();
+        }
+        AsyncStorage.setItem("questions", questions);
     };
 
     render() {

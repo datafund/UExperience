@@ -16,14 +16,14 @@ class LogIn extends Component {
         title: "Home",
     };
 
-    componentWillMount() {
+    componentDidMount() {
         AsyncStorage.getItem("password").then(value =>
-            this.setState({password: value}),
+            this.setState({passwordHash: value}),
         );
     }
 
     state = {
-        password: "",
+        passwordHash: "",
         inputPassword: "",
         message: "",
     };
@@ -33,7 +33,16 @@ class LogIn extends Component {
             CryptoJS.enc.Base64,
         );
         AsyncStorage.setItem("password", passwordHash);
-        this.props.navigation.navigate("Index");
+        this.props.navigation.navigate("Index", {
+            password: this.state.inputPassword,
+        });
+    };
+
+    noEncryption = () => {
+        AsyncStorage.setItem("password", "None");
+        this.props.navigation.navigate("Index", {
+            password: "",
+        });
     };
 
     checkPassword = (inputedPassword, savedPassword) => {
@@ -41,7 +50,9 @@ class LogIn extends Component {
             CryptoJS.enc.Base64,
         );
         if (passwordHash === savedPassword) {
-            this.props.navigation.navigate("Index");
+            this.props.navigation.navigate("Index", {
+                password: inputedPassword,
+            });
         } else {
             this.setState({message: "To ni pravilno geslo"});
         }
@@ -50,13 +61,13 @@ class LogIn extends Component {
     deletePassword = (inputedPassword, savedPassword) => {
         AsyncStorage.clear();
         AsyncStorage.setItem("currentIdQuestion", "0");
-        this.setState({password: ""});
+        this.setState({passwordHash: ""});
         this.setState({inputPassword: ""});
         this.setState({message: ""});
     };
 
     render() {
-        if (!this.state.password) {
+        if (!this.state.passwordHash) {
             return (
                 <View>
                     <Text>
@@ -81,7 +92,22 @@ class LogIn extends Component {
                         }>
                         <Text>Shrani geslo</Text>
                     </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() => this.noEncryption()}>
+                        <Text>Želim nadeljevati brez enkripcije</Text>
+                    </TouchableHighlight>
                 </View>
+            );
+        } else if (this.state.passwordHash === "None") {
+            return (
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() =>
+                        this.props.navigation.navigate("Index", {password: ""})
+                    }>
+                    <Text>Pa Začnimo</Text>
+                </TouchableHighlight>
             );
         } else {
             return (
@@ -102,7 +128,7 @@ class LogIn extends Component {
                         onPress={() =>
                             this.checkPassword(
                                 this.state.inputPassword,
-                                this.state.password,
+                                this.state.passwordHash,
                             )
                         }>
                         <Text>Vpiši se</Text>

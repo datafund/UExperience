@@ -4,60 +4,97 @@ import moment from "moment";
 
 import styles from "./Styles.js";
 
+const CryptoJS = require("crypto-js");
+
 class Questions extends Component {
     static navigationOptions = {
         title: "Questions",
     };
 
-    componentWillMount() {
-        AsyncStorage.getItem("questions").then(value =>
-            this.parseJSONString(value),
-        );
-        AsyncStorage.getItem("currentIdQuestion").then(value =>
-            this.setState({id: value}),
-        );
+    componentDidMount() {
+        this.subs = [
+            this.props.navigation.addListener("didFocus", () => {
+                this.componentDidFocus();
+            }),
+        ];
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
+        AsyncStorage.getItem("questions")
+            .then(value => this.parseJSONString(value))
+            .catch(err => this.setState({questions: []}));
+        this.setState({
+            time: moment()
+                .utcOffset("+02")
+                .format("YYYY-MM-DD-HH-mm-ss"),
+        });
+    }
+    componentDidFocus = () => {
+        AsyncStorage.getItem("answer").then(newAnswer => {
+            if (!(newAnswer === null || newAnswer === "")) {
+                newAnswer = JSON.parse(newAnswer);
+                allAnswers = this.state.answers;
+                allAnswers[newAnswer.id] = newAnswer;
+                this.setState({answers: allAnswers});
+                this.setState({newAnswer: newAnswer});
+                AsyncStorage.setItem("answer", "");
+            }
+        });
+    };
+    componentWillUnmount() {
+        this.subs.forEach(sub => sub.remove());
+        this.saveBeep();
     }
 
     parseJSONString = value => {
+        if (!(this.state.password === "")) {
+            value = CryptoJS.AES.decrypt(value, this.state.password).toString(
+                CryptoJS.enc.Utf8,
+            );
+        }
         const questions = value ? JSON.parse(value) : [];
         this.setState({questions: questions});
     };
 
-    componentDidMount() {
-        AsyncStorage.setItem(
-            "currenttime",
-            moment()
-                .utcOffset("+02")
-                .format("YYYY-MM-DD-HH-mm-ss"),
-        );
-    }
-
     state = {
-        answers: "",
-        currenttime: "",
+        answers: [],
+        time: "",
         questions: [],
-        id: "",
+        newAnswer: "",
     };
 
     saveBeep = async () => {
-        let questions = await AsyncStorage.getItem("answers");
-        questions = questions ? JSON.parse(questions) : [];
-        let newBeep = {
-            time: await AsyncStorage.getItem("currenttime"),
-            questions: questions,
-        };
-        AsyncStorage.getItem("beeps").then(beeps => {
-            const b = beeps ? JSON.parse(beeps) : [];
+        if (!(this.state.answers.length === 0)) {
+            let newBeep = {
+                time: this.state.time,
+                questions: this.state.answers,
+            };
+            try {
+                beeps = await AsyncStorage.getItem("beeps");
+                if (!(this.state.password === "")) {
+                    beeps = CryptoJS.AES.decrypt(
+                        beeps,
+                        this.state.password,
+                    ).toString(CryptoJS.enc.Utf8);
+                }
+            } catch (err) {
+                beeps = "";
+            }
+            let b = beeps ? JSON.parse(beeps) : [];
             b.push(newBeep);
-            AsyncStorage.setItem("beeps", JSON.stringify(b));
-        });
+            b = JSON.stringify(b);
+            if (!(this.state.password === "")) {
+                b = CryptoJS.AES.encrypt(b, this.state.password).toString();
+            }
+            AsyncStorage.setItem("beeps", b);
+        }
         AsyncStorage.setItem("currenttime", "");
         AsyncStorage.setItem("answers", "");
-        this.props.navigation.goBack();
     };
 
     createQuestionButton = (item, index) => {
         if (item.current === 1) {
+            item["password"] = this.state.password;
             return (
                 <TouchableHighlight
                     key={item.id}
@@ -83,7 +120,7 @@ class Questions extends Component {
 
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={() => this.saveBeep()}>
+                    onPress={() => this.props.navigation.goBack()}>
                     <Text>Save Beep</Text>
                 </TouchableHighlight>
             </View>

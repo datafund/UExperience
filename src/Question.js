@@ -22,17 +22,7 @@ class Question extends Component {
             type: type,
             answer: value,
         };
-        AsyncStorage.getItem("answers").then(answers => {
-            const a = answers ? JSON.parse(answers) : [];
-            aNew = [];
-            for (x in a) {
-                if (!(a[x].id == id)) {
-                    aNew.push(a[x]);
-                }
-            }
-            aNew.push(newAnswer);
-            AsyncStorage.setItem("answers", JSON.stringify(aNew));
-        });
+        AsyncStorage.setItem("answer", JSON.stringify(newAnswer));
         this.props.navigation.goBack();
     };
 
@@ -42,12 +32,16 @@ class Question extends Component {
         possibleAnswers: [],
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({id: this.props.navigation.getParam("id", "NO-ID")});
         this.setState({
             question: this.props.navigation.getParam("name", "no question"),
         });
         this.setState({type: this.props.navigation.getParam("type", null)});
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
+
         this.setState({
             possibleAnswers: this.props.navigation.getParam(
                 "possibleAnswers",
@@ -101,6 +95,7 @@ class Question extends Component {
                         saveAnswer={this.saveAnswer}
                         possibleAnswers={this.state.possibleAnswers}
                         type={this.state.type}
+                        password={this.state.password}
                     />
                 ) : null}
                 {this.state.type === "Text" ? (

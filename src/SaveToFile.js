@@ -13,13 +13,21 @@ const RNFS = require("react-native-fs");
 const CryptoJS = require("crypto-js");
 
 class SaveToFile extends Component {
-    componentWillMount() {
-        AsyncStorage.getItem("beeps").then(value =>
-            this.parseJSONString(value),
-        );
+    componentDidMount() {
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
+        AsyncStorage.getItem("beeps")
+            .then(value => this.parseJSONString(value))
+            .catch(err => this.setState({beeps: []}));
     }
 
     parseJSONString = value => {
+        if (!(this.state.password === "")) {
+            value = CryptoJS.AES.decrypt(value, this.state.password).toString(
+                CryptoJS.enc.Utf8,
+            );
+        }
         const questions = value ? JSON.parse(value) : [];
         this.setState({beeps: questions});
     };
@@ -32,6 +40,7 @@ class SaveToFile extends Component {
         beeps: [],
         success: "You did not try it yet",
         password: "",
+        filePassowrd: "",
     };
 
     saveAnswerToFile = beeps => {
@@ -45,18 +54,20 @@ class SaveToFile extends Component {
             if (!(beep.questions === "null")) {
                 for (questionIndex in beep.questions) {
                     let question = beep.questions[questionIndex];
-                    finalFileContent += question.id + "\t";
-                    finalFileContent += question.question + "\t";
-                    finalFileContent += question.type + "\t";
-                    finalFileContent += question.answer + "\t";
-                    finalFileContent += "\n";
+                    if (!(question === null)) {
+                        finalFileContent += question.id + "\t";
+                        finalFileContent += question.question + "\t";
+                        finalFileContent += question.type + "\t";
+                        finalFileContent += question.answer + "\t";
+                        finalFileContent += "\n";
+                    }
                 }
             }
         }
-        if (this.state.password) {
+        if (this.state.filePassword) {
             finalFileContent = CryptoJS.AES.encrypt(
                 finalFileContent,
-                this.state.password,
+                this.state.filePassword,
             ).toString();
         }
         RNFS.writeFile(path, finalFileContent, "utf8")
@@ -73,7 +84,7 @@ class SaveToFile extends Component {
                 </Text>
                 <TextInput
                     style={{height: 50, borderColor: "black", borderWidth: 1}}
-                    onChangeText={text => this.setState({password: text})}
+                    onChangeText={text => this.setState({filePassword: text})}
                 />
                 <TouchableHighlight
                     style={styles.button}

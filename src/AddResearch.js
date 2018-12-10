@@ -8,27 +8,39 @@ class AddResearch extends Component {
         title: "Določi Beep",
     };
 
+    componentDidMount() {
+        this.setState({
+            password: this.props.navigation.getParam("password", ""),
+        });
+    }
+
     render() {
         return (
             <View>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        this.props.navigation.navigate("AddQuestion")
+                        this.props.navigation.navigate("AddQuestion", {
+                            password: this.state.password,
+                        })
                     }>
                     <Text>Dodaj novo vprašanje</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        this.props.navigation.navigate("RemoveQuestion")
+                        this.props.navigation.navigate("RemoveQuestion", {
+                            password: this.state.password,
+                        })
                     }>
                     <Text>Določi vprašanja, ki se prikažejo</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        this.props.navigation.navigate("SaveToFile")
+                        this.props.navigation.navigate("SaveToFile", {
+                            password: this.state.password,
+                        })
                     }>
                     <Text>Shrani Datoteko</Text>
                 </TouchableHighlight>
@@ -49,7 +61,9 @@ class AddResearch extends Component {
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        this.props.navigation.navigate("LoadQuestionsFromNet")
+                        this.props.navigation.navigate("LoadQuestionsFromNet", {
+                            password: this.state.password,
+                        })
                     }>
                     <Text>Naloži vprašanja iz interneta</Text>
                 </TouchableHighlight>
@@ -61,7 +75,7 @@ class AddResearch extends Component {
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        AsyncStorage.setItem("currentIdQuestion", "0")
+                        AsyncStorage.setItem("currentIdQuestion", "1000")
                     }>
                     <Text>Dodaj id 0 v AsyncStorage</Text>
                 </TouchableHighlight>
