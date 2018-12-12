@@ -13,6 +13,7 @@ import ReadFromFile from "./src/ReadFromFile.js";
 import DeleteFile from "./src/DeleteFile.js";
 import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js";
 import LogIn from "./src/LogIn.js";
+import Notification from "./src/CreateNotifications.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -33,6 +34,7 @@ const AppNavigator = createStackNavigator(
         DeleteFile: DeleteFile,
         LoadQuestionsFromNet: LoadQuestionsFromNet,
         LogIn: LogIn,
+        Notification: Notification,
     },
     {
         initialRouteName: "LogIn",
