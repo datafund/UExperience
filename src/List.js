@@ -54,7 +54,7 @@ class List extends Component {
             if (!(questions[id] === null)) {
                 text += questions[id].question;
                 text += "\n";
-                text += questions[id].answer;
+                text += JSON.stringify(questions[id].answer);
                 text += "\n---\n";
             }
         }

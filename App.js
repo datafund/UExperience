@@ -14,6 +14,7 @@ import DeleteFile from "./src/DeleteFile.js";
 import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js";
 import LogIn from "./src/LogIn.js";
 import Notification from "./src/CreateNotifications.js";
+import Premissions from "./src/Premissions.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -24,6 +25,7 @@ const AppNavigator = createStackNavigator(
         Text: Question,
         Tags: Question,
         TagsNoAdd: Question,
+        Location: Question,
         MultipleChoice: Question,
         Slider: Question,
         AddResearch: AddResearch,
@@ -35,6 +37,7 @@ const AppNavigator = createStackNavigator(
         LoadQuestionsFromNet: LoadQuestionsFromNet,
         LogIn: LogIn,
         Notification: Notification,
+        Premissions: Premissions,
     },
     {
         initialRouteName: "LogIn",

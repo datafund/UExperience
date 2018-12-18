@@ -12,6 +12,7 @@ import {
     QuestionSlider,
     QuestionTags,
     QuestionText,
+    QuestionLocation,
 } from "./QuestionTypes.js";
 
 import styles from "./Styles.js";
@@ -111,6 +112,14 @@ class Question extends Component {
                             id={this.state.id}
                             saveAnswer={this.saveAnswer}
                             possibleAnswers={this.state.possibleAnswers}
+                            type={this.state.type}
+                        />
+                    ) : null}
+                    {this.state.type === "Location" ? (
+                        <QuestionLocation
+                            question={this.state.question}
+                            id={this.state.id}
+                            saveAnswer={this.saveAnswer}
                             type={this.state.type}
                         />
                     ) : null}

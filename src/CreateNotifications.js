@@ -82,27 +82,74 @@ class Notification extends Component {
         this.setState({konec: newDate.toLocalDateString()});
     }
 
-    createNotifications = (number, time, platform) => {
+    createNotificationsBasedOnTime = (number, time, platform) => {
         const currentDate = new Date();
         max = time.getTime();
         min = currentDate.getTime();
         for (i = 0; i < number; i++) {
             let time = Math.floor(Math.random() * (max - min + 1)) + min;
             let date = new Date(time);
-            if (platform === "ios") {
-                PushNotificationIOS.scheduleLocalNotification({
-                    fireDate: date,
-                    alertBody: "Prosim shrani si novi bip",
-                    alertTitle: "Nov bip",
-                    silent: false,
-                });
-            } else if (platform === "android") {
-                PushNotification.localNotificationSchedule({
-                    date: date,
-                    title: "Nov bip",
-                    message: "Prosim shrani si nov bip",
-                    sound: "default",
-                });
+            this.createNotification(platform, date);
+        }
+    };
+
+    createNotification = (platform, time = new Date()) => {
+        if (platform === "ios") {
+            PushNotificationIOS.scheduleLocalNotification({
+                fireDate: date,
+                alertBody: "Prosim shrani si novi bip",
+                alertTitle: "Nov bip",
+                silent: false,
+            });
+        } else if (platform === "android") {
+            PushNotification.localNotificationSchedule({
+                date: date,
+                title: "Nov bip",
+                message: "Prosim shrani si nov bip",
+                sound: "default",
+            });
+        }
+    };
+
+    degreesToRadians = degrees => {
+        return (degrees * Math.PI) / 180;
+    };
+
+    distanceInKmBetweenEarthCoordinates = (lat1, lon1, lat2, lon2) => {
+        var earthRadiusKm = 6371;
+
+        var dLat = degreesToRadians(lat2 - lat1);
+        var dLon = degreesToRadians(lon2 - lon1);
+
+        lat1 = degreesToRadians(lat1);
+        lat2 = degreesToRadians(lat2);
+
+        var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) *
+                Math.sin(dLon / 2) *
+                Math.cos(lat1) *
+                Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadiusKm * c;
+    };
+
+    createNotificationBasedOnLocation = (
+        lan,
+        log,
+        currentPosition,
+        maxDistance,
+        propability,
+    ) => {
+        let currentDistance = distanceInKmBetweenEarthCoordinates(
+            lan,
+            log,
+            currentPosition.latitude,
+            currentPosition.longitude,
+        );
+        if (currentDistance < distance) {
+            if (Math.random() < propability) {
+                this.createNotification(Platform.OS);
             }
         }
     };
@@ -173,7 +220,7 @@ class Notification extends Component {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() =>
-                        this.createNotifications(
+                        this.createNotificationsBasedOnTime(
                             this.state.numberOfNotifications,
                             this.state.konec,
                             Platform.OS,
@@ -191,6 +238,40 @@ class Notification extends Component {
                         })
                     }>
                     <Text>Pokaži notifikacijo</Text>
+                </TouchableOpacity>
+                <Text>Latitude</Text>
+                <TextInput
+                    style={{height: 50, borderColor: "black", borderWidth: 1}}
+                    onChangeText={text => this.setState({lan: text})}
+                />
+                <Text>Longitude</Text>
+                <TextInput
+                    style={{height: 50, borderColor: "black", borderWidth: 1}}
+                    onChangeText={text => this.setState({log: text})}
+                />
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        watchId = navigator.geolocation.watchPosition(
+                            position =>
+                                this.createNotificationBasedOnLocation(
+                                    this.state.lan,
+                                    this.state.log,
+                                    position,
+                                    0.2,
+                                    0.5,
+                                ),
+                        );
+                    }}>
+                    <Text>Notifikacije glede na pozicijo</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        navigator.geolocation.clearWatch(watchId);
+                        navigator.geolocation.stopObserving();
+                    }}>
+                    <Text>Ustavi notifikacije glede na pozicijo</Text>
                 </TouchableOpacity>
             </View>
         );

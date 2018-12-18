@@ -76,6 +76,13 @@ class AddResearch extends Component {
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
+                    onPress={() =>
+                        this.props.navigation.navigate("Premissions")
+                    }>
+                    <Text>Dovoljenja</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.button}
                     onPress={() => AsyncStorage.clear()}>
                     <Text>Izbriši AsyncStorage</Text>
                 </TouchableHighlight>

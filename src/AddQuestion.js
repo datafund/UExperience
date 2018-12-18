@@ -97,6 +97,7 @@ class AddQuestion extends Component {
                         label="Vprašanja z tagi brez možnosti dodajanja novih tagov"
                         value="TagsNoAdd"
                     />
+                    <Picker.Item label="Lokacija" value="Location" />
                     <Picker.Item label="Prosto besedilo" value="Text" />
                 </Picker>
                 <TextInput
