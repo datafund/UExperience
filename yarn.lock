@@ -5354,6 +5354,11 @@ react-native-gesture-handler@^1.0.0, react-native-gesture-handler@^1.0.9:
     invariant "^2.2.2"
     prop-types "^15.5.10"
 
+react-native-image-picker@^0.27.2:
+  version "0.27.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.27.2.tgz#c44195feb1a4855eead36fadacc8b82828329b2a"
+  integrity sha512-1GuPIuQHjnLxmzUkmOHbI6cllETVRhJyrf8UoJXotD38+eX4JdcUSHGqV48XPc3e1u7b4HU7drFgyJcKFfQKRA==
+
 react-native-push-notification@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-3.1.2.tgz#a6129fb2897773a19c7b42bba1b51a9a4aac7df3"

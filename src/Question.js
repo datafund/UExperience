@@ -14,6 +14,7 @@ import {
     QuestionText,
     QuestionLocation,
 } from "./QuestionTypes.js";
+import ImagePicker from "react-native-image-picker";
 
 import styles from "./Styles.js";
 
@@ -122,6 +123,23 @@ class Question extends Component {
                             saveAnswer={this.saveAnswer}
                             type={this.state.type}
                         />
+                    ) : null}
+                    {this.state.type === "Camera" ? (
+                        <TouchableHighlight
+                            style={styles.button}
+                            onPress={() =>
+                                ImagePicker.launchCamera(options, response => {
+                                    const source = response.uri;
+                                    this.saveAnswer(
+                                        this.state.id,
+                                        this.state.question,
+                                        this.state.type,
+                                        source,
+                                    );
+                                })
+                            }>
+                            <Text>{this.state.question}</Text>
+                        </TouchableHighlight>
                     ) : null}
                 </ScrollView>
             </View>

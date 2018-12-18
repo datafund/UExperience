@@ -3,6 +3,7 @@ package com.uexperience;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.rnfs.RNFSPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImagePickerPackage(),
             new ReactNativePushNotificationPackage(),
             new RNFSPackage(),
             new RNScreensPackage(),

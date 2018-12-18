@@ -99,6 +99,7 @@ class AddQuestion extends Component {
                     />
                     <Picker.Item label="Lokacija" value="Location" />
                     <Picker.Item label="Prosto besedilo" value="Text" />
+                    <Picker.Item label="Naredi sliko" value="Camera" />
                 </Picker>
                 <TextInput
                     style={{height: 50, borderColor: "black", borderWidth: 1}}
