@@ -10,6 +10,7 @@ import {
     TimePickerAndroid,
     TouchableOpacity,
     PushNotificationIOS,
+    AsyncStorage,
 } from "react-native";
 import PushNotification from "react-native-push-notification";
 
@@ -93,7 +94,7 @@ class Notification extends Component {
         }
     };
 
-    createNotification = (platform, time = new Date()) => {
+    createNotification = (platform, date = new Date()) => {
         if (platform === "ios") {
             PushNotificationIOS.scheduleLocalNotification({
                 fireDate: date,
@@ -118,11 +119,11 @@ class Notification extends Component {
     distanceInKmBetweenEarthCoordinates = (lat1, lon1, lat2, lon2) => {
         var earthRadiusKm = 6371;
 
-        var dLat = degreesToRadians(lat2 - lat1);
-        var dLon = degreesToRadians(lon2 - lon1);
+        var dLat = this.degreesToRadians(lat2 - lat1);
+        var dLon = this.degreesToRadians(lon2 - lon1);
 
-        lat1 = degreesToRadians(lat1);
-        lat2 = degreesToRadians(lat2);
+        lat1 = this.degreesToRadians(lat1);
+        lat2 = this.degreesToRadians(lat2);
 
         var a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -141,13 +142,13 @@ class Notification extends Component {
         maxDistance,
         propability,
     ) => {
-        let currentDistance = distanceInKmBetweenEarthCoordinates(
+        let currentDistance = this.distanceInKmBetweenEarthCoordinates(
             lan,
             log,
             currentPosition.latitude,
             currentPosition.longitude,
         );
-        if (currentDistance < distance) {
+        if (currentDistance < maxDistance) {
             if (Math.random() < propability) {
                 this.createNotification(Platform.OS);
             }
@@ -252,22 +253,31 @@ class Notification extends Component {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        watchId = navigator.geolocation.watchPosition(
-                            position =>
+                        let watchId = navigator.geolocation.watchPosition(
+                            position => {
                                 this.createNotificationBasedOnLocation(
                                     this.state.lan,
                                     this.state.log,
                                     position,
                                     0.2,
                                     0.5,
-                                ),
+                                );
+                            },
+                            error => error,
+                            {
+                                maximumAge: 60000,
+                                distanceFilter: 0,
+                            },
                         );
+                        AsyncStorage.setItem("positionID", String(watchId));
                     }}>
                     <Text>Notifikacije glede na pozicijo</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {
+                    onPress={async () => {
+                        let watchId = await AsyncStorage.getItem("positionID");
+                        watchId = Number(watchId);
                         navigator.geolocation.clearWatch(watchId);
                         navigator.geolocation.stopObserving();
                     }}>

@@ -282,28 +282,3 @@ export class QuestionText extends Component {
         );
     }
 }
-
-export class QuestionLocation extends Component {
-    static navigationOptions = {
-        title: "Question",
-    };
-
-    state = {
-        place: "",
-    };
-
-    componentDidMount = async () => {
-        navigator.geolocation.getCurrentPosition(position =>
-            this.props.saveAnswer(
-                this.props.id,
-                this.props.question,
-                this.props.type,
-                position,
-            ),
-        );
-    };
-
-    render() {
-        return null;
-    }
-}

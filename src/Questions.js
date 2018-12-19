@@ -34,6 +34,22 @@ class Questions extends Component {
                 .utcOffset("+02")
                 .format("YYYY-MM-DD-HH-mm-ss"),
         });
+        navigator.geolocation.getCurrentPosition(
+            position =>
+                this.setState({
+                    longitude: position.coords.longitude,
+                    latitude: position.coords.latitude,
+                }),
+            error =>
+                this.setState({
+                    longitude: "None",
+                    latitude: "None",
+                }),
+            {
+                maximumAge: 60000,
+                distanceFilter: 0,
+            },
+        );
     }
     componentDidFocus = () => {
         AsyncStorage.getItem("answer").then(newAnswer => {
@@ -73,6 +89,8 @@ class Questions extends Component {
         if (!(this.state.answers.length === 0)) {
             let newBeep = {
                 time: this.state.time,
+                longitude: this.state.longitude,
+                latitude: this.state.latitude,
                 questions: this.state.answers,
             };
             try {
@@ -94,7 +112,6 @@ class Questions extends Component {
             }
             AsyncStorage.setItem("beeps", b);
         }
-        AsyncStorage.setItem("currenttime", "");
         AsyncStorage.setItem("answers", "");
     };
 
