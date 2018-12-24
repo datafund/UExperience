@@ -59,7 +59,7 @@ class Question extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <ScrollView>
                     <Text style={styles.button}>
                         {JSON.stringify(this.state.question)}

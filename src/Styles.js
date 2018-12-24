@@ -23,4 +23,8 @@ export default StyleSheet.create({
         backgroundColor: "red",
         alignItems: "center",
     },
+    background: {
+        flex: 1,
+        backgroundColor: "#eaeaea",
+    },
 });

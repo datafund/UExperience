@@ -19,7 +19,7 @@ class Home extends Component {
     state = {password: ""};
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>

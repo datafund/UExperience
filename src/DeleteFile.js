@@ -32,7 +32,7 @@ class ReadFromFile extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() => this.deleteFile()}>

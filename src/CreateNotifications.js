@@ -189,7 +189,7 @@ class Notification extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <Text>
                     Tukaj lahko določite, koliko notifikacij se vam bo pokazalo
                     v kolikšnem obdobju. Najprej na sliderju določite, koliko

@@ -58,7 +58,7 @@ class LoadQuestionsFromNet extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <TextInput
                     style={{height: 50, borderColor: "black", borderWidth: 1}}
                     onChangeText={text => this.setState({url: text})}

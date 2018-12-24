@@ -73,7 +73,7 @@ class SaveToFile extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <Text>
                     Če želite zaščititi svojo datoteko z enkripcijo, prosim da
                     spodaj napišete geslo

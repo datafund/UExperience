@@ -132,7 +132,7 @@ class Questions extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <ScrollView>
                     {this.state.questions.map((item, index) =>
                         this.createQuestionButton(item, index),

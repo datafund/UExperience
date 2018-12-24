@@ -71,7 +71,7 @@ class AddQuestion extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <Picker
                     selectedValue={this.state.type}
                     style={{height: 50}}

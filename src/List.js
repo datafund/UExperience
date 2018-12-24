@@ -60,13 +60,13 @@ class List extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <View>
+                <View style={styles.background}>
                     <Text>Please wait a bit</Text>
                 </View>
             );
         } else {
             return (
-                <View>
+                <View style={styles.background}>
                     <ScrollView>
                         {this.state.beeps.map((item, index) => (
                             <TouchableOpacity

@@ -58,7 +58,7 @@ class RemoveQuestion extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 {this.state.questions.map((item, index) => (
                     <TouchableHighlight
                         key={index}

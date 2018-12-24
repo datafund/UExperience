@@ -65,7 +65,7 @@ class LogIn extends Component {
     render() {
         if (!this.state.passwordHash) {
             return (
-                <View>
+                <View style={styles.background}>
                     <Text>
                         Zaradi potencialne zlorabe zbranih podatkov (pomisli
                         Cambridge Analyitica) prosim, da si spodaj izberete
@@ -97,17 +97,21 @@ class LogIn extends Component {
             );
         } else if (this.state.passwordHash === "None") {
             return (
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("Index", {password: ""})
-                    }>
-                    <Text>Pa Začnimo</Text>
-                </TouchableHighlight>
+                <View style={styles.background}>
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() =>
+                            this.props.navigation.navigate("Index", {
+                                password: "",
+                            })
+                        }>
+                        <Text>Pa Začnimo</Text>
+                    </TouchableHighlight>
+                </View>
             );
         } else {
             return (
-                <View>
+                <View style={styles.background}>
                     <Text>Prosim, da vpišete svoje geslo</Text>
                     <TextInput
                         style={{

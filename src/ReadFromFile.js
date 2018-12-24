@@ -47,7 +47,7 @@ class ReadFromFile extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <ScrollView>
                     <Text>
                         Če je bila datoteka zaščitena z enkripcijo, prosim da
