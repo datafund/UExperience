@@ -22,9 +22,8 @@ class ReadFromFile extends Component {
 
     readFromFile = async () => {
         const path = RNFS.DocumentDirectoryPath + "/test.txt";
-        RNFS.readdir(RNFS.DocumentDirectoryPath).then(result =>
-            this.setState({files: result}),
-        );
+        let files = await RNFS.readdir(RNFS.DocumentDirectoryPath);
+        this.setState({files: files});
         try {
             var result = await RNFS.readFile(path, "utf8");
             this.setState({fileContent: result});

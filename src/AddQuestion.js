@@ -13,14 +13,13 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class AddQuestion extends Component {
-    componentDidMount() {
-        AsyncStorage.getItem("currentIdQuestion").then(value =>
-            this.setState({currentId: value}),
-        );
-        this.setState({
-            password: this.props.navigation.getParam("password", ""),
-        });
-    }
+    componentDidMount = async () => {
+        let currentId = await AsyncStorage.getItem("currentIdQuestion");
+        this.setState({currentId: currentId}),
+            this.setState({
+                password: this.props.navigation.getParam("password", ""),
+            });
+    };
 
     state = {
         vprašanje: "",

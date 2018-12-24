@@ -12,11 +12,10 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class LogIn extends Component {
-    componentDidMount() {
-        AsyncStorage.getItem("password").then(value =>
-            this.setState({passwordHash: value}),
-        );
-    }
+    componentDidMount = async () => {
+        let passwordHash = await AsyncStorage.getItem("password");
+        this.setState({passwordHash: passwordHash});
+    };
 
     state = {
         passwordHash: "",

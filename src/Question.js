@@ -52,9 +52,6 @@ class Question extends Component {
                 "",
             ),
         });
-        AsyncStorage.getItem("currenttime").then(value =>
-            this.setState({currenttime: value}),
-        );
     }
 
     render() {

@@ -6,28 +6,12 @@ import styles from "./Styles.js";
 const RNFS = require("react-native-fs");
 
 class ReadFromFile extends Component {
-    state = {
-        currentStatus: "",
-    };
-
-    deleteFile = () => {
+    deleteFile = async () => {
         const path = RNFS.DocumentDirectoryPath + "/test.txt";
-
-        RNFS.exists(path).then(result => {
-            if (result) {
-                RNFS.unlink(path)
-                    .then(value =>
-                        this.setState({
-                            currentStatus: "Datoteka je bila izbrisana",
-                        }),
-                    )
-                    .catch(err =>
-                        this.setState({
-                            currentStatus: "Ta datoteka ne obstaja",
-                        }),
-                    );
-            }
-        });
+        let result = await RNFS.exists(path);
+        if (result) {
+            RNFS.unlink(path);
+        }
     };
 
     render() {
@@ -38,7 +22,6 @@ class ReadFromFile extends Component {
                     onPress={() => this.deleteFile()}>
                     <Text>Delete File</Text>
                 </TouchableHighlight>
-                <Text>{JSON.stringify(this.state.currentStatus)}</Text>
             </View>
         );
     }

@@ -13,7 +13,7 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class Questions extends Component {
-    componentDidMount() {
+    componentDidMount = async () => {
         this.subs = [
             this.props.navigation.addListener("didFocus", () => {
                 this.componentDidFocus();
@@ -22,9 +22,12 @@ class Questions extends Component {
         this.setState({
             password: this.props.navigation.getParam("password", ""),
         });
-        AsyncStorage.getItem("questions")
-            .then(value => this.parseJSONString(value))
-            .catch(err => this.setState({questions: []}));
+        try {
+            let value = await AsyncStorage.getItem("questions");
+            this.parseJSONString(value);
+        } catch (err) {
+            this.setState({questions: []});
+        }
         this.setState({
             time: moment()
                 .utcOffset("+02")
@@ -46,18 +49,17 @@ class Questions extends Component {
                 distanceFilter: 0,
             },
         );
-    }
-    componentDidFocus = () => {
-        AsyncStorage.getItem("answer").then(newAnswer => {
-            if (!(newAnswer === null || newAnswer === "")) {
-                newAnswer = JSON.parse(newAnswer);
-                allAnswers = this.state.answers;
-                allAnswers[newAnswer.id] = newAnswer;
-                this.setState({answers: allAnswers});
-                this.setState({newAnswer: newAnswer});
-                AsyncStorage.setItem("answer", "");
-            }
-        });
+    };
+    componentDidFocus = async () => {
+        let newAnswer = await AsyncStorage.getItem("answer");
+        if (!(newAnswer === null || newAnswer === "")) {
+            newAnswer = JSON.parse(newAnswer);
+            allAnswers = this.state.answers;
+            allAnswers[newAnswer.id] = newAnswer;
+            this.setState({answers: allAnswers});
+            this.setState({newAnswer: newAnswer});
+            AsyncStorage.setItem("answer", "");
+        }
     };
     componentWillUnmount() {
         this.subs.forEach(sub => sub.remove());

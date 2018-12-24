@@ -13,30 +13,22 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class List extends Component {
-    componentDidMount() {
+    componentDidMount = async () => {
         this.setState({
             password: this.props.navigation.getParam("password", ""),
         });
-        AsyncStorage.getItem("beeps")
-            .then(value => {
-                if (!(this.state.password === "")) {
-                    value = CryptoJS.AES.decrypt(
-                        value,
-                        this.state.password,
-                    ).toString(CryptoJS.enc.Utf8);
-                }
-                this.setState({
-                    beeps: value ? JSON.parse(value) : [],
-                    loading: false,
-                });
-            })
-            .catch(err =>
-                this.setState({
-                    beeps: [],
-                    loading: false,
-                }),
+        try {
+            var beeps = await AsyncStorage.getItem("beeps");
+        } catch (err) {
+            var beeps = [];
+        }
+        if (!(this.state.password === "")) {
+            beeps = CryptoJS.AES.decrypt(beeps, this.state.password).toString(
+                CryptoJS.enc.Utf8,
             );
-    }
+        }
+        this.setState({beeps: beeps ? JSON.parse(beeps) : [], loading: false});
+    };
 
     state = {
         beeps: "",

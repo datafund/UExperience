@@ -13,14 +13,17 @@ const RNFS = require("react-native-fs");
 const CryptoJS = require("crypto-js");
 
 class SaveToFile extends Component {
-    componentDidMount() {
+    componentDidMount = async () => {
         this.setState({
             password: this.props.navigation.getParam("password", ""),
         });
-        AsyncStorage.getItem("beeps")
-            .then(value => this.parseJSONString(value))
-            .catch(err => this.setState({beeps: []}));
-    }
+        try {
+            let beeps = await AsyncStorage.getItem("beeps");
+            this.parseJSONString(beeps);
+        } catch (err) {
+            this.setState({beeps: []});
+        }
+    };
 
     parseJSONString = value => {
         if (!(this.state.password === "")) {
@@ -34,12 +37,11 @@ class SaveToFile extends Component {
 
     state = {
         beeps: [],
-        success: "You did not try it yet",
         password: "",
         filePassowrd: "",
     };
 
-    saveAnswerToFile = beeps => {
+    saveAnswerToFile = async beeps => {
         const path = RNFS.DocumentDirectoryPath + "/test.txt";
         let finalFileContent = "";
         finalFileContent +=
@@ -66,9 +68,7 @@ class SaveToFile extends Component {
                 this.state.filePassword,
             ).toString();
         }
-        RNFS.writeFile(path, finalFileContent, "utf8")
-            .then(success => this.setState({success: "It worked"}))
-            .catch(err => this.setState({success: "It did not work"}));
+        let worked = await RNFS.writeFile(path, finalFileContent, "utf8");
     };
 
     render() {
@@ -87,7 +87,6 @@ class SaveToFile extends Component {
                     onPress={() => this.saveAnswerToFile(this.state.beeps)}>
                     <Text>Save File</Text>
                 </TouchableHighlight>
-                <Text>{this.state.success}</Text>
             </View>
         );
     }
