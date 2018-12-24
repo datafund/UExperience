@@ -13,10 +13,6 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class List extends Component {
-    static navigationOptions = {
-        title: "List of Beeps",
-    };
-
     componentDidMount() {
         this.setState({
             password: this.props.navigation.getParam("password", ""),

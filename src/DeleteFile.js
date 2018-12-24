@@ -6,10 +6,6 @@ import styles from "./Styles.js";
 const RNFS = require("react-native-fs");
 
 class ReadFromFile extends Component {
-    static navigationOptions = {
-        title: "Delete File",
-    };
-
     state = {
         currentStatus: "",
     };

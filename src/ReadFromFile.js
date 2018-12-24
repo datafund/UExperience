@@ -14,10 +14,6 @@ const RNFS = require("react-native-fs");
 const CryptoJS = require("crypto-js");
 
 class ReadFromFile extends Component {
-    static navigationOptions = {
-        title: "Reading From File",
-    };
-
     state = {
         beeps: [],
         fileContent: "You did not read the file yet",

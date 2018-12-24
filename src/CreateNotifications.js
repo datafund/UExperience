@@ -17,10 +17,6 @@ import PushNotification from "react-native-push-notification";
 import styles from "./Styles.js";
 
 class Notification extends Component {
-    static navigationOptions = {
-        title: "Notifikacije",
-    };
-
     showAndroidDatePicker = async () => {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({

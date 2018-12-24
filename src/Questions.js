@@ -13,10 +13,6 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class Questions extends Component {
-    static navigationOptions = {
-        title: "Questions",
-    };
-
     componentDidMount() {
         this.subs = [
             this.props.navigation.addListener("didFocus", () => {

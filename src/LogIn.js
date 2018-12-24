@@ -12,10 +12,6 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class LogIn extends Component {
-    static navigationOptions = {
-        title: "Home",
-    };
-
     componentDidMount() {
         AsyncStorage.getItem("password").then(value =>
             this.setState({passwordHash: value}),

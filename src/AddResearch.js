@@ -4,10 +4,6 @@ import {Text, View, TouchableHighlight, AsyncStorage} from "react-native";
 import styles from "./Styles.js";
 
 class AddResearch extends Component {
-    static navigationOptions = {
-        title: "Določi Beep",
-    };
-
     componentDidMount() {
         this.setState({
             password: this.props.navigation.getParam("password", ""),
@@ -73,13 +69,6 @@ class AddResearch extends Component {
                         this.props.navigation.navigate("Notification")
                     }>
                     <Text>Notifikacije</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("Premissions")
-                    }>
-                    <Text>Dovoljenja</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}

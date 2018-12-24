@@ -1,13 +1,15 @@
 import React, {Component} from "react";
-import {View, TouchableHighlight, Text, AsyncStorage} from "react-native";
+import {
+    View,
+    TouchableHighlight,
+    Text,
+    AsyncStorage,
+    Image,
+} from "react-native";
 
 import styles from "./Styles.js";
 
 class Home extends Component {
-    static navigationOptions = {
-        title: "Home",
-    };
-
     componentDidMount() {
         this.setState({
             password: this.props.navigation.getParam("password", ""),

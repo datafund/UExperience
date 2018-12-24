@@ -19,10 +19,6 @@ import ImagePicker from "react-native-image-picker";
 import styles from "./Styles.js";
 
 class Question extends Component {
-    static navigationOptions = {
-        title: "Question",
-    };
-
     saveAnswer = (id, question, type, value) => {
         let newAnswer = {
             id: id,

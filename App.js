@@ -1,4 +1,5 @@
-import React from "react";
+import React, {Component} from "react";
+import {Image, StyleSheet, View, Header} from "react-native";
 import {createStackNavigator, createAppContainer} from "react-navigation";
 
 import Home from "./src/Home.js";
@@ -14,7 +15,6 @@ import DeleteFile from "./src/DeleteFile.js";
 import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js";
 import LogIn from "./src/LogIn.js";
 import Notification from "./src/CreateNotifications.js";
-import Premissions from "./src/Premissions.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -37,18 +37,23 @@ const AppNavigator = createStackNavigator(
         LoadQuestionsFromNet: LoadQuestionsFromNet,
         LogIn: LogIn,
         Notification: Notification,
-        Premissions: Premissions,
     },
     {
         initialRouteName: "LogIn",
         defaultNavigationOptions: {
-            headerStyle: {
-                backgroundColor: "darkgray",
-            },
+            headerStyle: {backgroundColor: "black", color: "white"},
             headerTintColor: "white",
-            headerTitleStyle: {
-                fontWeight: "bold",
-            },
+            headerBackground: (
+                <Image
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        botton: 0,
+                        alignSelf: "center",
+                    }}
+                    source={require("./src/ui/header.png")}
+                />
+            ),
         },
     },
 );

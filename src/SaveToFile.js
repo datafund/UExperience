@@ -32,10 +32,6 @@ class SaveToFile extends Component {
         this.setState({beeps: questions});
     };
 
-    static navigationOptions = {
-        title: "Saving to File",
-    };
-
     state = {
         beeps: [],
         success: "You did not try it yet",

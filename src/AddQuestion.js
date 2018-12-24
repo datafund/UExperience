@@ -13,10 +13,6 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class AddQuestion extends Component {
-    static navigationOptions = {
-        title: "Dodaj Vprašanje",
-    };
-
     componentDidMount() {
         AsyncStorage.getItem("currentIdQuestion").then(value =>
             this.setState({currentId: value}),

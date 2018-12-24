@@ -7,10 +7,6 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class RemoveQuestion extends Component {
-    static navigationOptions = {
-        title: "Odstrani Vprašanje",
-    };
-
     componentDidMount() {
         this.setState({
             password: this.props.navigation.getParam("password", ""),

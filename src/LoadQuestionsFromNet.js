@@ -12,10 +12,6 @@ import styles from "./Styles.js";
 const CryptoJS = require("crypto-js");
 
 class LoadQuestionsFromNet extends Component {
-    static navigationOptions = {
-        title: "Get Questions",
-    };
-
     componentDidMount() {
         this.setState({
             password: this.props.navigation.getParam("password", ""),
