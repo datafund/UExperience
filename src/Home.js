@@ -19,34 +19,51 @@ class Home extends Component {
     state = {password: ""};
     render() {
         return (
-            <View style={styles.background}>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("NewBeep", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text>Začni nov beep</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("Beeps", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text>Preglej svoje beep-e</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("AddResearch", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text>Dodaj vprašanja za Beepe</Text>
-                </TouchableHighlight>
+            <View style={{flex: 1}}>
+                <View style={styles.background}>
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() =>
+                            this.props.navigation.navigate("NewBeep", {
+                                password: this.state.password,
+                            })
+                        }>
+                        <Text>Začni nov beep</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() =>
+                            this.props.navigation.navigate("Beeps", {
+                                password: this.state.password,
+                            })
+                        }>
+                        <Text>Preglej svoje beep-e</Text>
+                    </TouchableHighlight>
+                </View>
+                <View
+                    style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        height: 50,
+                        backgroundColor: "black",
+                    }}>
+                    <TouchableHighlight
+                        style={{
+                            alignSelf: "flex-end",
+                        }}
+                        onPress={() =>
+                            this.props.navigation.navigate("Settings", {
+                                password: this.state.password,
+                            })
+                        }>
+                        <Image
+                            source={require("./ui/Basic-Settings-icon.png")}
+                            style={{height: 40, width: 40}}
+                        />
+                    </TouchableHighlight>
+                </View>
             </View>
         );
     }

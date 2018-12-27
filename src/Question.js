@@ -58,7 +58,7 @@ class Question extends Component {
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <Text style={styles.button}>
+                    <Text style={styles.question}>
                         {JSON.stringify(this.state.question)}
                     </Text>
 

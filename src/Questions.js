@@ -54,10 +54,7 @@ class Questions extends Component {
         let newAnswer = await AsyncStorage.getItem("answer");
         if (!(newAnswer === null || newAnswer === "")) {
             newAnswer = JSON.parse(newAnswer);
-            allAnswers = this.state.answers;
-            allAnswers[newAnswer.id] = newAnswer;
-            this.setState({answers: allAnswers});
-            this.setState({newAnswer: newAnswer});
+            this.state.answers.push(newAnswer);
             AsyncStorage.setItem("answer", "");
         }
     };
@@ -80,7 +77,6 @@ class Questions extends Component {
         answers: [],
         time: "",
         questions: [],
-        newAnswer: "",
     };
 
     saveBeep = async () => {
@@ -89,7 +85,7 @@ class Questions extends Component {
                 time: this.state.time,
                 longitude: this.state.longitude,
                 latitude: this.state.latitude,
-                questions: this.state.answers,
+                questions: this.state.answers.filter(x => x),
             };
             try {
                 beeps = await AsyncStorage.getItem("beeps");
@@ -139,12 +135,6 @@ class Questions extends Component {
                     {this.state.questions.map((item, index) =>
                         this.createQuestionButton(item, index),
                     )}
-
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() => this.props.navigation.goBack()}>
-                        <Text>Save Beep</Text>
-                    </TouchableHighlight>
                 </ScrollView>
             </View>
         );

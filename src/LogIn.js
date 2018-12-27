@@ -14,6 +14,11 @@ const CryptoJS = require("crypto-js");
 class LogIn extends Component {
     componentDidMount = async () => {
         let passwordHash = await AsyncStorage.getItem("password");
+        if (passwordHash === "None") {
+            this.props.navigation.navigate("Index", {
+                password: "",
+            });
+        }
         this.setState({passwordHash: passwordHash});
     };
 
@@ -61,7 +66,7 @@ class LogIn extends Component {
         this.setState({message: ""});
     };
 
-    render() {
+    renderLogInScreen = () => {
         if (!this.state.passwordHash) {
             return (
                 <View style={styles.background}>
@@ -75,6 +80,7 @@ class LogIn extends Component {
                             height: 50,
                             borderColor: "black",
                             borderWidth: 1,
+                            backgroundColor: "white",
                         }}
                         onChangeText={text =>
                             this.setState({inputPassword: text})
@@ -117,6 +123,7 @@ class LogIn extends Component {
                             height: 50,
                             borderColor: "black",
                             borderWidth: 1,
+                            backgroundColor: "white",
                         }}
                         onChangeText={text =>
                             this.setState({inputPassword: text})
@@ -144,6 +151,10 @@ class LogIn extends Component {
                 </View>
             );
         }
+    };
+
+    render() {
+        return this.renderLogInScreen();
     }
 }
 

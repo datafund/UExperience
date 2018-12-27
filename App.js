@@ -6,7 +6,7 @@ import Home from "./src/Home.js";
 import List from "./src/List.js";
 import Questions from "./src/Questions.js";
 import Question from "./src/Question.js";
-import AddResearch from "./src/AddResearch.js";
+import Settings from "./src/Settings.js";
 import AddQuestion from "./src/AddQuestion.js";
 import RemoveQuestion from "./src/RemoveQuestion.js";
 import SaveToFile from "./src/SaveToFile.js";
@@ -15,6 +15,8 @@ import DeleteFile from "./src/DeleteFile.js";
 import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js";
 import LogIn from "./src/LogIn.js";
 import Notification from "./src/CreateNotifications.js";
+import Splash from "./src/Splash.js";
+import BeepRepresentation from "./src/BeepRepresentation.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -28,7 +30,7 @@ const AppNavigator = createStackNavigator(
         Location: Question,
         MultipleChoice: Question,
         Slider: Question,
-        AddResearch: AddResearch,
+        Settings: Settings,
         AddQuestion: AddQuestion,
         RemoveQuestion: RemoveQuestion,
         SaveToFile: SaveToFile,
@@ -37,9 +39,11 @@ const AppNavigator = createStackNavigator(
         LoadQuestionsFromNet: LoadQuestionsFromNet,
         LogIn: LogIn,
         Notification: Notification,
+        Splash: Splash,
+        BeepRepresentation: BeepRepresentation,
     },
     {
-        initialRouteName: "LogIn",
+        initialRouteName: "Splash",
         defaultNavigationOptions: {
             headerStyle: {backgroundColor: "black", color: "white"},
             headerTintColor: "white",

@@ -3,7 +3,7 @@ import {Text, View, TouchableHighlight, AsyncStorage} from "react-native";
 
 import styles from "./Styles.js";
 
-class AddResearch extends Component {
+class Settings extends Component {
     componentDidMount() {
         this.setState({
             password: this.props.navigation.getParam("password", ""),
@@ -92,4 +92,4 @@ class AddResearch extends Component {
     }
 }
 
-export default AddResearch;
+export default Settings;

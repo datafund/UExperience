@@ -70,6 +70,15 @@ export class QuestionMultipleChoice extends Component {
 export class QuestionSlider extends Component {
     state = {currentAnswer: 50};
 
+    componentWillUnmount = () => {
+        this.props.saveAnswer(
+            this.props.id,
+            this.props.question,
+            this.props.type,
+            this.state.currentAnswer,
+        );
+    };
+
     render() {
         return (
             <View>
@@ -81,19 +90,6 @@ export class QuestionSlider extends Component {
                     onValueChange={val => this.setState({currentAnswer: val})}
                 />
                 <Text>Current answer is : {this.state.currentAnswer}/100</Text>
-
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.saveAnswer(
-                            this.props.id,
-                            this.props.question,
-                            this.props.type,
-                            this.state.currentAnswer,
-                        )
-                    }>
-                    <Text>Save</Text>
-                </TouchableHighlight>
             </View>
         );
     }
@@ -153,6 +149,15 @@ export class QuestionTags extends Component {
         this.setState({loading: false});
     };
 
+    componentWillUnmount = () => {
+        this.props.saveAnswer(
+            this.props.id,
+            this.props.question,
+            this.props.type,
+            this.getAllChosenTags(this.state.tags),
+        );
+    };
+
     state = {
         tags: [],
         currentTag: "",
@@ -188,11 +193,7 @@ export class QuestionTags extends Component {
 
     render() {
         if (this.state.loading) {
-            return (
-                <View>
-                    <Text>Please wait a bit</Text>
-                </View>
-            );
+            return null;
         } else {
             return (
                 <View>
@@ -202,6 +203,7 @@ export class QuestionTags extends Component {
                                 height: 40,
                                 borderColor: "black",
                                 borderWidth: 1,
+                                backgroundColor: "white",
                             }}
                             onSubmitEditing={event =>
                                 this.updateTags(event.nativeEvent.text)
@@ -226,19 +228,6 @@ export class QuestionTags extends Component {
                             </View>
                         </TouchableHighlight>
                     ))}
-
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() =>
-                            this.props.saveAnswer(
-                                this.props.id,
-                                this.props.question,
-                                this.props.type,
-                                this.getAllChosenTags(this.state.tags),
-                            )
-                        }>
-                        <Text>Save</Text>
-                    </TouchableHighlight>
                 </View>
             );
         }
@@ -246,37 +235,33 @@ export class QuestionTags extends Component {
 }
 
 export class QuestionText extends Component {
-    static navigationOptions = {
-        title: "Question",
+    componentWillUnmount = () => {
+        this.props.saveAnswer(
+            this.props.id,
+            this.props.question,
+            this.props.type,
+            this.state.text,
+        );
     };
 
     state = {
         text: "",
     };
 
-    setName = value => {
-        this.setState({text: value});
-    };
-
     render() {
         return (
             <View>
                 <TextInput
-                    style={{height: 200, borderColor: "black", borderWidth: 1}}
-                    onChangeText={text => this.setName(text)}
+                    style={{
+                        height: 200,
+                        borderColor: "black",
+                        borderWidth: 1,
+                        backgroundColor: "white",
+                        alignItems: "flex-start",
+                    }}
+                    onChangeText={text => this.setState({text: text})}
+                    multiline={true}
                 />
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.saveAnswer(
-                            this.props.id,
-                            this.props.question,
-                            this.props.type,
-                            this.state.text,
-                        )
-                    }>
-                    <Text>Save</Text>
-                </TouchableHighlight>
             </View>
         );
     }

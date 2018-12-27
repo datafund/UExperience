@@ -63,8 +63,15 @@ class List extends Component {
                         {this.state.beeps.map((item, index) => (
                             <TouchableOpacity
                                 key={index}
-                                style={styles.container}
-                                onPress={() => this.alertItemName(item)}>
+                                style={styles.button}
+                                onPress={() =>
+                                    this.props.navigation.navigate(
+                                        "BeepRepresentation",
+                                        {
+                                            beep: item,
+                                        },
+                                    )
+                                }>
                                 <Text>{item.time}</Text>
                             </TouchableOpacity>
                         ))}
