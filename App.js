@@ -9,14 +9,12 @@ import Question from "./src/Question.js";
 import Settings from "./src/Settings.js";
 import AddQuestion from "./src/AddQuestion.js";
 import RemoveQuestion from "./src/RemoveQuestion.js";
-import SaveToFile from "./src/SaveToFile.js";
-import ReadFromFile from "./src/ReadFromFile.js";
-import DeleteFile from "./src/DeleteFile.js";
 import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js";
 import LogIn from "./src/LogIn.js";
 import Notification from "./src/CreateNotifications.js";
 import Splash from "./src/Splash.js";
 import BeepRepresentation from "./src/BeepRepresentation.js";
+import File from "./src/File.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -33,9 +31,7 @@ const AppNavigator = createStackNavigator(
         Settings: Settings,
         AddQuestion: AddQuestion,
         RemoveQuestion: RemoveQuestion,
-        SaveToFile: SaveToFile,
-        ReadFromFile: ReadFromFile,
-        DeleteFile: DeleteFile,
+        File: File,
         LoadQuestionsFromNet: LoadQuestionsFromNet,
         LogIn: LogIn,
         Notification: Notification,

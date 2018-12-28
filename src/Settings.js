@@ -34,25 +34,11 @@ class Settings extends Component {
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        this.props.navigation.navigate("SaveToFile", {
+                        this.props.navigation.navigate("File", {
                             password: this.state.password,
                         })
                     }>
-                    <Text>Shrani Datoteko</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("ReadFromFile")
-                    }>
-                    <Text>Preberi Shranjeno Datoteko</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("DeleteFile")
-                    }>
-                    <Text>Izbriši datoteko</Text>
+                    <Text>Pošlji Datoteko</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}

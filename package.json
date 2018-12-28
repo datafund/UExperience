@@ -17,6 +17,7 @@
     "react-native-fs": "^2.12.1",
     "react-native-gesture-handler": "^1.0.9",
     "react-native-image-picker": "^0.27.2",
+    "react-native-mail": "^3.0.7",
     "react-native-push-notification": "^3.1.2",
     "react-native-screens": "^1.0.0 || ^1.0.0-alpha\n",
     "react-navigation": "^3.0.0"
