@@ -1,5 +1,7 @@
 import React, {Component} from "react";
-import {Image, AsyncStorage, View, Dimensions} from "react-native";
+import {AsyncStorage, View} from "react-native";
+
+import styles from "./Styles.js";
 
 class Splash extends Component {
     static navigationOptions = {
@@ -18,18 +20,7 @@ class Splash extends Component {
     };
 
     render() {
-        return (
-            <View style={{}}>
-                <Image
-                    source={require("./ui/splash.png")}
-                    style={{
-                        resizeMode: "stretch",
-                        width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height,
-                    }}
-                />
-            </View>
-        );
+        return <View style={styles.background} />;
     }
 }
 
