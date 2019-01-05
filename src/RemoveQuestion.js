@@ -3,29 +3,13 @@ import {Text, View, TouchableHighlight, AsyncStorage} from "react-native";
 import moment from "moment";
 
 import styles from "./Styles.js";
-
-const CryptoJS = require("crypto-js");
+import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
 
 class RemoveQuestion extends Component {
-    componentDidMount() {
-        this.setState({
-            password: this.props.navigation.getParam("password", ""),
-        });
-        this.parseJSONString();
-    }
-
-    parseJSONString = async () => {
-        try {
-            value = await AsyncStorage.getItem("questions");
-            if (!(this.state.password === "")) {
-                value = CryptoJS.AES.decrypt(
-                    value,
-                    this.state.password,
-                ).toString(CryptoJS.enc.Utf8);
-            }
-        } catch {
-            value = "";
-        }
+    componentDidMount = async () => {
+        let password = this.props.navigation.getParam("password", "");
+        this.setState({password: password});
+        let value = await getDataFromStorage("questions", password);
         const questions = value ? JSON.parse(value) : [];
         this.setState({questions: questions});
     };
@@ -44,15 +28,8 @@ class RemoveQuestion extends Component {
         this.setState({tags: oldState});
     };
 
-    saveQuestions = questions => {
-        questions = JSON.stringify(questions);
-        if (!(this.state.password === "")) {
-            questions = CryptoJS.AES.encrypt(
-                questions,
-                this.state.password,
-            ).toString();
-        }
-        AsyncStorage.setItem("questions", questions);
+    saveQuestions = async (questions, password) => {
+        await setDataToStorage("questions", password, questions);
         this.props.navigation.goBack();
     };
 
@@ -76,7 +53,12 @@ class RemoveQuestion extends Component {
 
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={() => this.saveQuestions(this.state.questions)}>
+                    onPress={() =>
+                        this.saveQuestions(
+                            this.state.questions,
+                            this.state.password,
+                        )
+                    }>
                     <Text>Save</Text>
                 </TouchableHighlight>
             </View>

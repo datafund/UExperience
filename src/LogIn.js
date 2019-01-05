@@ -3,17 +3,22 @@ import {
     View,
     TouchableHighlight,
     Text,
-    AsyncStorage,
     TextInput,
+    AsyncStorage,
 } from "react-native";
 
 import styles from "./Styles.js";
+import {
+    getDataFromStorage,
+    setDataToStorage,
+    createNewProfile,
+} from "./functions/data.js";
 
 const CryptoJS = require("crypto-js");
 
 class LogIn extends Component {
     componentDidMount = async () => {
-        let passwordHash = await AsyncStorage.getItem("password");
+        let passwordHash = await getDataFromStorage("password", "");
         if (passwordHash === "None") {
             this.props.navigation.navigate("Index", {
                 password: "",
@@ -28,18 +33,20 @@ class LogIn extends Component {
         message: "",
     };
 
-    savePassword = password => {
+    savePassword = async password => {
         const passwordHash = CryptoJS.SHA256(password).toString(
             CryptoJS.enc.Base64,
         );
-        AsyncStorage.setItem("password", passwordHash);
+        await createNewProfile(password);
+        await setDataToStorage("password", "", passwordHash);
         this.props.navigation.navigate("Index", {
-            password: this.state.inputPassword,
+            password: password,
         });
     };
 
-    noEncryption = () => {
-        AsyncStorage.setItem("password", "None");
+    noEncryption = async () => {
+        await createNewProfile("");
+        await setDataToStorage("password", "", "None");
         this.props.navigation.navigate("Index", {
             password: "",
         });
@@ -60,7 +67,6 @@ class LogIn extends Component {
 
     deletePassword = (inputedPassword, savedPassword) => {
         AsyncStorage.clear();
-        AsyncStorage.setItem("currentIdQuestion", "0");
         this.setState({passwordHash: ""});
         this.setState({inputPassword: ""});
         this.setState({message: ""});

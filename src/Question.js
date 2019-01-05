@@ -17,16 +17,17 @@ import {
 import ImagePicker from "react-native-image-picker";
 
 import styles from "./Styles.js";
+import {setDataToStorage} from "./functions/data.js";
 
 class Question extends Component {
-    saveAnswer = (id, question, type, value) => {
+    saveAnswer = async (id, question, type, value) => {
         let newAnswer = {
             id: id,
             question: question,
             type: type,
             answer: value,
         };
-        AsyncStorage.setItem("answer", JSON.stringify(newAnswer));
+        await setDataToStorage("answer", this.state.password, newAnswer);
         this.props.navigation.goBack();
     };
 
@@ -42,8 +43,9 @@ class Question extends Component {
             question: this.props.navigation.getParam("name", "no question"),
         });
         this.setState({type: this.props.navigation.getParam("type", null)});
+        const password = this.props.navigation.getParam("password", "");
         this.setState({
-            password: this.props.navigation.getParam("password", ""),
+            password: password,
         });
 
         this.setState({

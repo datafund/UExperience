@@ -10,13 +10,16 @@ import {
 import styles from "./Styles.js";
 
 class Home extends Component {
-    componentDidMount() {
-        this.setState({
-            password: this.props.navigation.getParam("password", ""),
-        });
-    }
+    componentDidMount = () => {
+        let password = this.props.navigation.getParam("password", "");
+        this.setState({password: password});
+    };
 
-    state = {password: ""};
+    state = {
+        questions: [],
+        password: "",
+    };
+
     render() {
         return (
             <View style={{flex: 1}}>

@@ -10,11 +10,11 @@ import {
     TimePickerAndroid,
     TouchableOpacity,
     PushNotificationIOS,
-    AsyncStorage,
 } from "react-native";
 import PushNotification from "react-native-push-notification";
 
 import styles from "./Styles.js";
+import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
 
 class Notification extends Component {
     showAndroidDatePicker = async () => {
@@ -248,7 +248,7 @@ class Notification extends Component {
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {
+                    onPress={async () => {
                         let watchId = navigator.geolocation.watchPosition(
                             position => {
                                 this.createNotificationBasedOnLocation(
@@ -265,14 +265,18 @@ class Notification extends Component {
                                 distanceFilter: 0,
                             },
                         );
-                        AsyncStorage.setItem("positionID", String(watchId));
+                        await setDataToStorage(
+                            "positionID",
+                            this.state.password,
+                            watchId,
+                        );
                     }}>
                     <Text>Notifikacije glede na pozicijo</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={async () => {
-                        let watchId = await AsyncStorage.getItem("positionID");
+                        let watchId = await getDataFromStorage("positionID");
                         watchId = Number(watchId);
                         navigator.geolocation.clearWatch(watchId);
                         navigator.geolocation.stopObserving();

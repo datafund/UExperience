@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import styles from "./Styles.js";
+import {getDataFromStorage} from "./functions/data.js";
 
 export class QuestionBinary extends Component {
     render() {
@@ -97,47 +98,34 @@ export class QuestionSlider extends Component {
 
 export class QuestionTags extends Component {
     componentDidMount = async () => {
-        const CryptoJS = require("crypto-js");
         if (this.props.type === "Tags") {
-            try {
-                let value = await AsyncStorage.getItem("beeps");
-                if (!(this.props.password === "")) {
-                    value = CryptoJS.AES.decrypt(
-                        value,
-                        this.props.password,
-                    ).toString(CryptoJS.enc.Utf8);
-                }
-                allBeeps = value ? JSON.parse(value) : [];
-                var allTags = [];
-                for (beepIndex in allBeeps) {
-                    var allQuestions = allBeeps[beepIndex].questions;
-                    for (questionIndex in allQuestions) {
-                        if (allQuestions[questionIndex]) {
-                            if (
-                                allQuestions[questionIndex].id == this.props.id
-                            ) {
-                                for (tagIndex in allQuestions[questionIndex]
-                                    .answer) {
-                                    let newTag =
-                                        allQuestions[questionIndex].answer[
-                                            tagIndex
-                                        ];
-                                    allTags.findIndex(x => x.tag === newTag) ===
-                                    -1
-                                        ? allTags.push({
-                                              tag: newTag,
-                                              chosen: 0,
-                                          })
-                                        : null;
-                                }
+            let password = this.props.password;
+            let value = await getDataFromStorage("beeps", password);
+            allBeeps = value ? JSON.parse(value) : [];
+            var allTags = [];
+            for (beepIndex in allBeeps) {
+                var allQuestions = allBeeps[beepIndex].questions;
+                for (questionIndex in allQuestions) {
+                    if (allQuestions[questionIndex]) {
+                        if (allQuestions[questionIndex].id == this.props.id) {
+                            for (tagIndex in allQuestions[questionIndex]
+                                .answer) {
+                                let newTag =
+                                    allQuestions[questionIndex].answer[
+                                        tagIndex
+                                    ];
+                                allTags.findIndex(x => x.tag === newTag) === -1
+                                    ? allTags.push({
+                                          tag: newTag,
+                                          chosen: 0,
+                                      })
+                                    : null;
                             }
                         }
                     }
                 }
-                this.setState({tags: allTags, loading: false});
-            } catch (err) {
-                this.setState({tags: [], loading: false});
             }
+            this.setState({tags: allTags, loading: false});
         } else if (this.props.type === "TagsNoAdd") {
             let possibleAnswers = this.props.possibleAnswers;
             let allTags = [];

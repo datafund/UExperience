@@ -9,57 +9,73 @@ import {
 } from "react-native";
 
 import styles from "./Styles.js";
-
-const CryptoJS = require("crypto-js");
+import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
 
 class AddQuestion extends Component {
     componentDidMount = async () => {
-        let currentId = await AsyncStorage.getItem("currentIdQuestion");
-        this.setState({currentId: currentId}),
-            this.setState({
-                password: this.props.navigation.getParam("password", ""),
-            });
+        let password = this.props.navigation.getParam("password", "");
+        this.setState({
+            password: password,
+        });
+        let questions = await getDataFromStorage("questions", password);
+        questions = questions ? JSON.parse(questions) : [];
+        this.setState({questions: questions});
+        let nextId = this.getNextId(this.state.questions);
+        this.setState({nextId: nextId});
+    };
+
+    getNextId = questions => {
+        let allIds = [];
+        for (key in questions) {
+            allIds.push(questions[key].id);
+        }
+        let id = 0;
+        let i = 0;
+        while (id === 0) {
+            i++;
+            if (!allIds.includes(i)) {
+                id = i;
+            }
+        }
+        return i;
+    };
+
+    componentWillUnmount = async () => {
+        await setDataToStorage(
+            "questions",
+            this.state.password,
+            this.state.questions,
+        );
     };
 
     state = {
         vprašanje: "",
         type: "",
         possibleAnswers: "",
-        currentId: "",
+        questions: [],
     };
 
     saveQuestion = async () => {
         let newQuestion = {
-            id: this.state.currentId,
+            id: this.state.nextId,
             name: this.state.vprašanje,
             type: this.state.type,
             current: 1,
         };
         let newId = Number(this.state.currentId) + 1;
-        AsyncStorage.setItem("currentIdQuestion", String(newId));
+        await setDataToStorage("currentIdQuestion", this.state.password, newId);
         if (["TagsNoAdd", "MultipleChoice"].includes(this.state.type)) {
             newQuestion["possibleAnswers"] = this.state.possibleAnswers;
         }
-        try {
-            questions = await AsyncStorage.getItem("questions");
-
-            if (!(this.state.password === "")) {
-                questions = CryptoJS.AES.decrypt(
-                    questions,
-                    this.state.password,
-                ).toString(CryptoJS.enc.Utf8);
-            }
-        } catch (err) {
-            questions = "";
-        }
-        q = questions ? JSON.parse(questions) : [];
+        this.setState({vprašanje: ""});
+        this.setState({possibleAnswers: ""});
+        this.setState({type: ""});
+        this.textInput.clear();
+        let q = this.state.questions;
         q.push(newQuestion);
-        q = JSON.stringify(q);
-        if (!(this.state.password === "")) {
-            q = CryptoJS.AES.encrypt(q, this.state.password).toString();
-        }
-        AsyncStorage.setItem("questions", q);
-        this.props.navigation.goBack();
+        this.setState({questions: q});
+        let nextId = this.getNextId(this.state.questions);
+        this.setState({nextId: nextId});
     };
 
     seperateTags = text => {
@@ -99,6 +115,9 @@ class AddQuestion extends Component {
                 <TextInput
                     style={{height: 50, borderColor: "black", borderWidth: 1}}
                     onChangeText={text => this.setState({vprašanje: text})}
+                    ref={input => {
+                        this.textInput = input;
+                    }}
                 />
                 {["TagsNoAdd", "MultipleChoice"].includes(this.state.type) ? (
                     <TextInput

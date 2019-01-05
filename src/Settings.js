@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Text, View, TouchableHighlight, AsyncStorage} from "react-native";
 
 import styles from "./Styles.js";
+import {createNewProfile} from "./functions/data.js";
 
 class Settings extends Component {
     componentDidMount() {
@@ -9,6 +10,10 @@ class Settings extends Component {
             password: this.props.navigation.getParam("password", ""),
         });
     }
+
+    state = {
+        questions: [],
+    };
 
     render() {
         return (
@@ -60,18 +65,6 @@ class Settings extends Component {
                     style={styles.button}
                     onPress={() => AsyncStorage.clear()}>
                     <Text>Izbriši AsyncStorage</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        AsyncStorage.setItem("currentIdQuestion", "1000")
-                    }>
-                    <Text>Dodaj id 0 v AsyncStorage</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() => AsyncStorage.setItem("beeps", "")}>
-                    <Text>Delete Beeps</Text>
                 </TouchableHighlight>
             </View>
         );

@@ -12,34 +12,21 @@ import {
 import Mailer from "react-native-mail";
 
 import styles from "./Styles.js";
+import {getDataFromStorage} from "./functions/data.js";
 
 const RNFS = require("react-native-fs");
 const CryptoJS = require("crypto-js");
 
 class File extends Component {
     componentDidMount = async () => {
-        this.setState({
-            password: this.props.navigation.getParam("password", ""),
-        });
-        try {
-            let beeps = await AsyncStorage.getItem("beeps");
-            this.parseJSONString(beeps);
-        } catch (err) {
-            this.setState({beeps: []});
-        }
-        try {
-            let questions = await AsyncStorage.getItem("questions");
-            if (!(this.state.password === "")) {
-                questions = CryptoJS.AES.decrypt(
-                    questions,
-                    this.state.password,
-                ).toString(CryptoJS.enc.Utf8);
-            }
-            questions = questions ? JSON.parse(questions) : [];
-            this.setState({questions: questions});
-        } catch (err) {
-            this.setState({questions: []});
-        }
+        let password = this.props.navigation.getParam("password", "");
+        this.setState({password: password});
+        let beeps = await getDataFromStorage("beeps", password);
+        beeps = beeps ? JSON.parse(beeps) : [];
+        this.setState({beeps: beeps});
+        let questions = await getDataFromStorage("questions", password);
+        questions = questions ? JSON.parse(questions) : [];
+        this.setState({questions: questions});
         let currentTime = new Date();
         currentTime = currentTime.toISOString().split("T")[0];
         if (Platform.OS === "android") {
@@ -56,16 +43,6 @@ class File extends Component {
 
     componentWillUnmount = () => {
         this.deleteFile();
-    };
-
-    parseJSONString = value => {
-        if (!(this.state.password === "")) {
-            value = CryptoJS.AES.decrypt(value, this.state.password).toString(
-                CryptoJS.enc.Utf8,
-            );
-        }
-        const questions = value ? JSON.parse(value) : [];
-        this.setState({beeps: questions});
     };
 
     state = {

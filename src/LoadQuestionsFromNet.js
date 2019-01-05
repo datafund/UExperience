@@ -8,8 +8,7 @@ import {
 } from "react-native";
 
 import styles from "./Styles.js";
-
-const CryptoJS = require("crypto-js");
+import {setDataToStorage} from "./functions/data.js";
 
 class LoadQuestionsFromNet extends Component {
     componentDidMount() {
@@ -45,14 +44,7 @@ class LoadQuestionsFromNet extends Component {
             return;
         }
         questions = questions.questions;
-        questions = JSON.stringify(questions);
-        if (!(this.state.password === "")) {
-            questions = CryptoJS.AES.encrypt(
-                questions,
-                this.state.password,
-            ).toString();
-        }
-        AsyncStorage.setItem("questions", questions);
+        await setDataToStorage("questions", this.state.password, questions);
         this.setState({success: "No problems"});
     };
 

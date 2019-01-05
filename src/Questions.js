@@ -9,8 +9,7 @@ import {
 import moment from "moment";
 
 import styles from "./Styles.js";
-
-const CryptoJS = require("crypto-js");
+import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
 
 class Questions extends Component {
     componentDidMount = async () => {
@@ -19,15 +18,16 @@ class Questions extends Component {
                 this.componentDidFocus();
             }),
         ];
+        const password = this.props.navigation.getParam("password", "");
         this.setState({
-            password: this.props.navigation.getParam("password", ""),
+            password: password,
         });
-        try {
-            let value = await AsyncStorage.getItem("questions");
-            this.parseJSONString(value);
-        } catch (err) {
-            this.setState({questions: []});
-        }
+
+        let questions = await getDataFromStorage("questions", password);
+
+        questions = questions ? JSON.parse(questions) : [];
+        this.setState({questions: questions});
+
         this.setState({
             time: moment()
                 .utcOffset("+02")
@@ -50,33 +50,30 @@ class Questions extends Component {
             },
         );
     };
+
     componentDidFocus = async () => {
-        let newAnswer = await AsyncStorage.getItem("answer");
-        if (!(newAnswer === null || newAnswer === "")) {
+        let newAnswer = await getDataFromStorage("answer", this.state.password);
+        if (!(newAnswer === null || newAnswer === [])) {
             newAnswer = JSON.parse(newAnswer);
             this.state.answers.push(newAnswer);
-            AsyncStorage.setItem("answer", "");
+            await setDataToStorage(
+                "answer",
+                this.state.password,
+                JSON.stringify([]),
+            );
         }
     };
+
     componentWillUnmount() {
         this.subs.forEach(sub => sub.remove());
         this.saveBeep();
     }
 
-    parseJSONString = value => {
-        if (!(this.state.password === "")) {
-            value = CryptoJS.AES.decrypt(value, this.state.password).toString(
-                CryptoJS.enc.Utf8,
-            );
-        }
-        const questions = value ? JSON.parse(value) : [];
-        this.setState({questions: questions});
-    };
-
     state = {
         answers: [],
         time: "",
         questions: [],
+        password: "",
     };
 
     saveBeep = async () => {
@@ -87,26 +84,12 @@ class Questions extends Component {
                 latitude: this.state.latitude,
                 questions: this.state.answers.filter(x => x),
             };
-            try {
-                beeps = await AsyncStorage.getItem("beeps");
-                if (!(this.state.password === "")) {
-                    beeps = CryptoJS.AES.decrypt(
-                        beeps,
-                        this.state.password,
-                    ).toString(CryptoJS.enc.Utf8);
-                }
-            } catch (err) {
-                beeps = "";
-            }
+            let beeps = await getDataFromStorage("beeps", this.state.password);
             let b = beeps ? JSON.parse(beeps) : [];
             b.push(newBeep);
-            b = JSON.stringify(b);
-            if (!(this.state.password === "")) {
-                b = CryptoJS.AES.encrypt(b, this.state.password).toString();
-            }
-            AsyncStorage.setItem("beeps", b);
+            await setDataToStorage("beeps", this.state.password, b);
         }
-        AsyncStorage.setItem("answers", "");
+        await setDataToStorage("answers", "", "");
     };
 
     createQuestionButton = (item, index) => {
