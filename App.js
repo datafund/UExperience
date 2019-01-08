@@ -7,14 +7,14 @@ import List from "./src/List.js";
 import Questions from "./src/Questions.js";
 import Question from "./src/Question.js";
 import Settings from "./src/Settings.js";
-import AddQuestion from "./src/AddQuestion.js";
-import RemoveQuestion from "./src/RemoveQuestion.js";
-import LoadQuestionsFromNet from "./src/LoadQuestionsFromNet.js";
 import LogIn from "./src/LogIn.js";
-import Notification from "./src/CreateNotifications.js";
 import Splash from "./src/Splash.js";
 import BeepRepresentation from "./src/BeepRepresentation.js";
 import File from "./src/File.js";
+import ResearchChoice from "./src/ResearchChoice.js";
+import ResearchModify from "./src/ResearchModify.js";
+import ResearchDescription from "./src/ResearchDescription.js";
+import PersonalInfo from "./src/PersonalInfo.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -29,14 +29,14 @@ const AppNavigator = createStackNavigator(
         MultipleChoice: Question,
         Slider: Question,
         Settings: Settings,
-        AddQuestion: AddQuestion,
-        RemoveQuestion: RemoveQuestion,
         File: File,
-        LoadQuestionsFromNet: LoadQuestionsFromNet,
         LogIn: LogIn,
-        Notification: Notification,
         Splash: Splash,
         BeepRepresentation: BeepRepresentation,
+        ResearchChoice: ResearchChoice,
+        ResearchModify: ResearchModify,
+        ResearchDescription: ResearchDescription,
+        PersonalInfo: PersonalInfo,
     },
     {
         initialRouteName: "Splash",

@@ -21,21 +21,32 @@ class Settings extends Component {
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        this.props.navigation.navigate("AddQuestion", {
+                        this.props.navigation.navigate("PersonalInfo", {
                             password: this.state.password,
                         })
                     }>
-                    <Text>Dodaj novo vprašanje</Text>
+                    <Text>Spremeni osebne podatke</Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() =>
+                        this.props.navigation.navigate("ResearchChoice", {
+                            password: this.state.password,
+                        })
+                    }>
+                    <Text>Izberi Raziskovalni Načrt</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
-                        this.props.navigation.navigate("RemoveQuestion", {
+                        this.props.navigation.navigate("ResearchModify", {
                             password: this.state.password,
                         })
                     }>
-                    <Text>Določi vprašanja, ki se prikažejo</Text>
+                    <Text>Spremeni Raziskovalni Načrt</Text>
                 </TouchableHighlight>
+
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
@@ -47,24 +58,8 @@ class Settings extends Component {
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("LoadQuestionsFromNet", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text>Naloži vprašanja iz interneta</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("Notification")
-                    }>
-                    <Text>Notifikacije</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
                     onPress={() => AsyncStorage.clear()}>
-                    <Text>Izbriši AsyncStorage</Text>
+                    <Text>Izbriši vse podatke</Text>
                 </TouchableHighlight>
             </View>
         );

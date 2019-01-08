@@ -24,6 +24,13 @@ class File extends Component {
         let beeps = await getDataFromStorage("beeps", password);
         beeps = beeps ? JSON.parse(beeps) : [];
         this.setState({beeps: beeps});
+        let pictureNames = [];
+        for (beepIndex in beeps) {
+            if (beeps[beepIndex].picture) {
+                pictureNames.push(beeps[beepIndex].picture);
+            }
+        }
+        this.setState({pictures: pictureNames});
         let questions = await getDataFromStorage("questions", password);
         questions = questions ? JSON.parse(questions) : [];
         this.setState({questions: questions});
@@ -38,7 +45,6 @@ class File extends Component {
             currentTime: currentTime,
             pathBeeps: this.state.pathFolder + "/beeps.csv",
         });
-        this.saveAnswerToFile(this.state.beeps);
     };
 
     componentWillUnmount = () => {
@@ -51,7 +57,11 @@ class File extends Component {
         filePassword: "",
         fileContent: "",
         questions: [],
-        research: {name: "Researching Experience", researcher: "Sara Jakša"},
+        research: {
+            name: "Researching Experience",
+            researcher: "Sara Jakša",
+            email: "sarajaksa@sarajaksa.eu",
+        },
     };
 
     deleteFile = async () => {
@@ -65,7 +75,7 @@ class File extends Component {
     getBeepsCsvContent = beeps => {
         finalFileContent = "";
         finalFileContent +=
-            "#This file ave the collection of beeps and it was written on" +
+            "#This file have the collection of beeps and it was written on " +
             this.state.currentTime +
             "\n";
         finalFileContent +=
@@ -93,7 +103,7 @@ class File extends Component {
             if (!(beep.questions === "null")) {
                 for (questionIndex in beep.questions) {
                     let question = beep.questions[questionIndex];
-                    if (!(question === null)) {
+                    if (!(question === null || question.answer === undefined)) {
                         finalFileContent += '"' + beep.time + '";';
                         finalFileContent += '"' + question.id + '";';
                         finalFileContent += '"' + question.question + '";';
@@ -128,29 +138,16 @@ class File extends Component {
         this.setState({filePassword: ""});
     };
 
-    sendEmail = async beeps => {
-        let result = this.getBeepsCsvContent(beeps);
-        if (this.state.filePassword) {
-            result = CryptoJS.AES.encrypt(
-                result,
-                this.state.filePassword,
-            ).toString();
-        }
-        result = finalFileContent.replace("\n", "%0A");
-        await Linking.openURL(
-            "mailto:sarajaksa@sarajaksa.eu?subject=Beeps&body=" + result,
-        );
-    };
-
     sendEmail2 = async beeps => {
         const path = this.state.pathBeeps;
+        await this.movePictures(this.state.pictures, this.state.pathFolder);
         await this.saveAnswerToFile(beeps);
         Mailer.mail(
             {
                 subject: "Beeps",
-                recipients: ["sarajaksa@sarajaksa.eu"],
-                body: "This are my beeps",
-                isHTML: true,
+                recipients: [this.state.research.email],
+                body: "",
+                isHTML: false,
                 attachment: {
                     path: path,
                     type: "csv",
@@ -161,30 +158,17 @@ class File extends Component {
         );
     };
 
-    readFromFile = async () => {
-        const path = this.state.pathBeeps;
-        let files = await RNFS.readdir(this.state.pathFolder);
-        this.setState({files: files});
-        try {
-            var result = await RNFS.readFile(path, "utf8");
-            this.setState({fileContent: result});
-        } catch (error) {
-            this.setState({fileContent: "This file does not exist"});
-        } finally {
-            if (this.state.filePassword) {
-                try {
-                    result = CryptoJS.AES.decrypt(
-                        result,
-                        this.state.filePassword,
-                    ).toString(CryptoJS.enc.Utf8);
-                    this.setState({fileContent: result});
-                } catch (error) {
-                    this.setState({fileContent: "Wrong password"});
-                }
-            }
+    movePictures = async (pictures, folder) => {
+        for (pictureIndex in pictures) {
+            let picture = pictures[pictureIndex];
+            let currentPicture = new File(picture.getPath());
+            let finalPath = folder + "/" + picture;
+            let worked = await RNFS.writeFile(
+                finalPath,
+                currentPicture,
+                "base64",
+            );
         }
-        this.textInput.clear();
-        this.setState({filePassword: ""});
     };
 
     render() {
@@ -211,30 +195,9 @@ class File extends Component {
                     />
                     <TouchableHighlight
                         style={styles.button}
-                        onPress={() => this.saveAnswerToFile(this.state.beeps)}>
-                        <Text>Save File</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() => this.sendEmail(this.state.beeps)}>
-                        <Text>Send Email (No Libaries)</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                        style={styles.button}
                         onPress={() => this.sendEmail2(this.state.beeps)}>
-                        <Text>Send Email (With libary)</Text>
+                        <Text>Send Email</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() => this.deleteFile()}>
-                        <Text>Delete File</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() => this.readFromFile()}>
-                        <Text>Read File</Text>
-                    </TouchableHighlight>
-                    <Text>{JSON.stringify(this.state.fileContent)}</Text>
                 </ScrollView>
             </View>
         );

@@ -14,7 +14,7 @@ import {getDataFromStorage} from "./functions/data.js";
 export class QuestionBinary extends Component {
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
@@ -47,7 +47,7 @@ export class QuestionBinary extends Component {
 export class QuestionMultipleChoice extends Component {
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 {this.props.possibleAnswers.map((item, index) => (
                     <TouchableHighlight
                         style={styles.button}
@@ -82,7 +82,7 @@ export class QuestionSlider extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <Slider
                     step={1}
                     minimumValue={0}
@@ -184,7 +184,7 @@ export class QuestionTags extends Component {
             return null;
         } else {
             return (
-                <View>
+                <View style={styles.background}>
                     {this.props.type === "Tags" ? (
                         <TextInput
                             style={{
@@ -238,7 +238,7 @@ export class QuestionText extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.background}>
                 <TextInput
                     style={{
                         height: 200,

@@ -12,6 +12,7 @@ class List extends Component {
             latitude: beep.latitude,
             questions: beep.questions,
             picture: beep.picture,
+            experience: beep.experience,
         });
     };
 
@@ -21,6 +22,7 @@ class List extends Component {
         latitude: "",
         questions: [],
         picture: "",
+        experience: "",
     };
 
     render() {
@@ -36,6 +38,10 @@ class List extends Component {
                     {this.state.latitude ? (
                         <Text>Latitude: {this.state.latitude}</Text>
                     ) : null}
+                    {this.state.experience ? (
+                        <Text>Experience: {this.state.experience}</Text>
+                    ) : null}
+
                     <Text>Questions:</Text>
                     {this.state.questions.map((item, index) => (
                         <View key={index}>
@@ -48,6 +54,12 @@ class List extends Component {
                                     ? item.answer.join(", ")
                                     : item.answer}
                             </Text>
+                            {this.state.picture ? (
+                                <Image
+                                    source={this.state.picture}
+                                    style={{height: 200}}
+                                />
+                            ) : null}
                         </View>
                     ))}
                 </ScrollView>

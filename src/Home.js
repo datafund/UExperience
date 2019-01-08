@@ -62,7 +62,7 @@ class Home extends Component {
                             })
                         }>
                         <Image
-                            source={require("./ui/Basic-Settings-icon.png")}
+                            source={require("./ui/settings.png")}
                             style={{height: 40, width: 40}}
                         />
                     </TouchableHighlight>
