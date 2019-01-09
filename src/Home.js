@@ -9,8 +9,10 @@ import {
 
 import styles from "./Styles.js";
 
+import {getDataFromStorage} from "./functions/data.js";
+
 class Home extends Component {
-    componentDidMount = () => {
+    componentDidMount = async () => {
         let password = this.props.navigation.getParam("password", "");
         this.setState({password: password});
     };

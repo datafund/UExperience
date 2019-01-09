@@ -1,18 +1,48 @@
 import React, {Component} from "react";
-import {Text, View, TouchableHighlight, AsyncStorage} from "react-native";
+import {Text, View, TouchableHighlight, Alert} from "react-native";
 
 import styles from "./Styles.js";
-import {createNewProfile} from "./functions/data.js";
+import {
+    createNewProfile,
+    exportAllData,
+    sendEmailToResearcher,
+    getDataFromStorage,
+} from "./functions/data.js";
 
 class Settings extends Component {
-    componentDidMount() {
+    componentDidMount = async () => {
+        let password = this.props.navigation.getParam("password", "");
         this.setState({
-            password: this.props.navigation.getParam("password", ""),
+            password: password,
         });
-    }
+        let research = await getDataFromStorage("research", password);
+        research = research ? JSON.parse(research) : [];
+        let share = research.share;
+        this.setState({share: share});
+    };
 
     state = {
         questions: [],
+        share: true,
+    };
+
+    deleteProfileAlert = password => {
+        Alert.alert(
+            "TO BO IZBRISALO VSE VAŠE PODATKE IZ TELEFONA",
+            "Če se kasneje premislite, in želite katere vaše podatke, jih ne bo več na telefonu. Podatke, ki jih nistve izvozili ali poslali raziskovalcem bodo izgubljeni za vedno. Ali ste prepričani, da želite izbrisati svoje podatke:",
+            [
+                {
+                    text: "Ne izbriši",
+                    onPress: () => {},
+                    style: "cancel",
+                },
+                {
+                    text: "Izbriši",
+                    onPress: () => createNewProfile(this.state.password),
+                },
+                {onDismiss: () => {}},
+            ],
+        );
     };
 
     render() {
@@ -37,28 +67,31 @@ class Settings extends Component {
                     }>
                     <Text>Izberi Raziskovalni Načrt</Text>
                 </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("ResearchModify", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text>Spremeni Raziskovalni Načrt</Text>
-                </TouchableHighlight>
+                {!this.state.share ? (
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() =>
+                            this.props.navigation.navigate("ResearchModify", {
+                                password: this.state.password,
+                            })
+                        }>
+                        <Text>Spremeni Raziskovalni Načrt</Text>
+                    </TouchableHighlight>
+                ) : null}
 
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("File", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text>Pošlji Datoteko</Text>
+                    onPress={() => sendEmailToResearcher(this.state.password)}>
+                    <Text>Pošlji beepe raziskovalcu</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={() => AsyncStorage.clear()}>
+                    onPress={() => exportAllData(this.state.password)}>
+                    <Text>Izvozi vse svoje podatke</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() => this.deleteProfileAlert()}>
                     <Text>Izbriši vse podatke</Text>
                 </TouchableHighlight>
             </View>

@@ -19,11 +19,11 @@ export default class ResearchDescription extends Component {
             password: this.props.navigation.getParam("password", ""),
         });
         this.setState({
-            research: this.props.navigation.getParam("research", []),
+            research: this.props.navigation.getParam("research", {}),
         });
     }
 
-    state = {research: [], participate: false, share: false};
+    state = {research: {share: false}};
 
     render() {
         return (
@@ -58,23 +58,6 @@ export default class ResearchDescription extends Component {
                     </Text>
                 ) : null}
                 <View style={{flexDirection: "row"}}>
-                    <Text>Želim sodelovati v tej raziskavi</Text>
-                    <Switch
-                        style={{
-                            position: "absolute",
-                            right: 0,
-
-                            alignSelf: "flex-end",
-                        }}
-                        value={this.state.participate}
-                        onValueChange={() =>
-                            this.setState({
-                                participate: !this.state.participate,
-                            })
-                        }
-                    />
-                </View>
-                <View style={{flexDirection: "row"}}>
                     <Text>Svoje podatke želim deliti z raziskovalcem</Text>
                     <Switch
                         style={{
@@ -82,21 +65,24 @@ export default class ResearchDescription extends Component {
                             right: 0,
                             alignSelf: "flex-end",
                         }}
-                        value={this.state.share}
-                        onValueChange={() =>
-                            this.setState({share: !this.state.share})
-                        }
+                        value={this.state.research.share}
+                        onValueChange={() => {
+                            let researchPlan = this.state.research;
+                            researchPlan.share = !researchPlan.share;
+                            this.setState({research: researchPlan});
+                        }}
                     />
                 </View>
 
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() => {
-                        if (this.state.participate === true) {
-                            setDataToStorage("research", this.state.research);
-
-                            this.props.navigation.goBack();
-                        }
+                        setDataToStorage(
+                            "research",
+                            this.state.password,
+                            this.state.research,
+                        );
+                        this.props.navigation.goBack();
                     }}>
                     <Text>Želim sodelovati v tej raziskavi</Text>
                 </TouchableHighlight>

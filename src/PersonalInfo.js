@@ -24,12 +24,17 @@ export default class PersonalInfo extends Component {
             password: password,
         });
         let personalInfo = await getDataFromStorage("personal", password);
+        personalInfo = personalInfo ? JSON.parse(personalInfo) : {};
         this.setState({
             email: personalInfo.email,
             time: personalInfo.time,
             passwordHash: personalInfo.passwordHash,
-            //days: personalInfo.days,
         });
+        if (personalInfo.days) {
+            this.setState({days: personalInfo.days});
+        } else {
+            this.setState({days: []});
+        }
     };
 
     componentWillUnmount = async () => {
@@ -37,6 +42,7 @@ export default class PersonalInfo extends Component {
             email: this.state.email,
             time: this.state.time,
             passwordHash: this.state.passwordHash,
+            days: this.state.days,
         };
         await setDataToStorage("personal", this.state.password, personalInfo);
     };
@@ -45,7 +51,8 @@ export default class PersonalInfo extends Component {
         email: "",
         passwordHash: "",
         time: "",
-        days: ["2018-01-10", "2018-01-11", "2018-01-12", "2018-01-13"],
+        days: [],
+        currentDay: new Date(),
     };
 
     showAndroidDatePicker = async () => {
@@ -54,12 +61,19 @@ export default class PersonalInfo extends Component {
                 date: this.state.selectedValue,
             });
             if (action !== DatePickerAndroid.dismissedAction) {
-                var date = new Date(year, month, day, 0, 0, 0, 0);
-                this.setState({konec: date});
+                let newDate = new Date(year, month, day, 3, 30, 0, 0);
+                this.addNewDate(newDate);
             }
         } catch ({code, message}) {
             console.warn("Cannot open date picker", message);
         }
+    };
+
+    addNewDate = date => {
+        let newDate = date.toISOString().split("T")[0];
+        let dates = this.state.days;
+        dates.push(newDate);
+        this.setState({days: dates});
     };
 
     datePickerBasedOnOS = platform => {
@@ -67,8 +81,8 @@ export default class PersonalInfo extends Component {
             return (
                 <View>
                     <DatePickerIOS
-                        date={this.state.chosenDate}
-                        onDateChange={this.setDate}
+                        date={this.state.currentDate}
+                        onDateChange={this.addNewDate}
                         mode={date}
                     />
                 </View>
@@ -93,7 +107,7 @@ export default class PersonalInfo extends Component {
                             borderColor: "black",
                             borderWidth: 1,
                         }}
-                        onChangeText={text => this.setState({endDate: text})}
+                        onChangeText={text => this.addNewDate(text)}
                     />
                 </View>
             );
@@ -136,7 +150,14 @@ export default class PersonalInfo extends Component {
                     {this.state.days.map((item, index) => (
                         <View key={index} style={{flexDirection: "row"}}>
                             <Text>{item}</Text>
-                            <Switch value={true} />
+                            <Switch
+                                value={true}
+                                onValueChange={() => {
+                                    let currentDays = this.state.days;
+                                    currentDays.splice(index, 1);
+                                    this.setState({days: currentDays});
+                                }}
+                            />
                         </View>
                     ))}
 

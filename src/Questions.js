@@ -21,49 +21,64 @@ class Questions extends Component {
                 this.componentDidFocus();
             }),
         ];
+        await setDataToStorage(
+            "answer",
+            this.state.password,
+            JSON.stringify([]),
+        );
         const password = this.props.navigation.getParam("password", "");
         this.setState({
             password: password,
         });
 
-        let questions = await getDataFromStorage("questions", password);
+        let research = await getDataFromStorage("research", password);
 
-        questions = questions ? JSON.parse(questions) : [];
-        this.setState({questions: questions});
+        research = research ? JSON.parse(research) : [];
+        this.setState({research: research});
 
         this.setState({
             time: moment()
                 .utcOffset("+02")
                 .format("YYYY-MM-DD-HH-mm-ss"),
         });
-        navigator.geolocation.getCurrentPosition(
-            position =>
-                this.setState({
-                    longitude: position.coords.longitude,
-                    latitude: position.coords.latitude,
-                }),
-            error =>
-                this.setState({
-                    longitude: "None",
-                    latitude: "None",
-                }),
-            {
-                maximumAge: 60000,
-                distanceFilter: 0,
-            },
-        );
+        if (research.descriptive) {
+            this.setState({primaryDescriptive: true, showText: 1});
+        } else {
+            this.setState({primaryDescriptive: false, showText: 0});
+        }
+        if (research.place) {
+            navigator.geolocation.getCurrentPosition(
+                position =>
+                    this.setState({
+                        longitude: position.coords.longitude,
+                        latitude: position.coords.latitude,
+                    }),
+                error =>
+                    this.setState({
+                        longitude: "None",
+                        latitude: "None",
+                    }),
+                {
+                    maximumAge: 60000,
+                    distanceFilter: 0,
+                },
+            );
+        }
     };
 
     componentDidFocus = async () => {
         let newAnswer = await getDataFromStorage("answer", this.state.password);
-        if (!(newAnswer === null || newAnswer === [])) {
+        if (!(newAnswer === "[]")) {
             newAnswer = JSON.parse(newAnswer);
-            this.state.answers.push(newAnswer);
+            let allAnswers = this.state.answers;
+            allAnswers.push(newAnswer);
+            this.setState({answers: allAnswers});
             await setDataToStorage(
                 "answer",
                 this.state.password,
                 JSON.stringify([]),
             );
+            this.setState({newAnswer: newAnswer});
         }
     };
 
@@ -81,24 +96,32 @@ class Questions extends Component {
         primaryDescriptive: true,
         text: "",
         showText: 1,
+        newAnswer: {},
     };
 
     saveBeep = async () => {
-        if (!(this.state.answers.length === 0)) {
+        let allAnswers = this.state.answers;
+        allAnswers.filter(item => item);
+        if (!(allAnswers.length === 0 && this.state.text === "")) {
             let newBeep = {
                 time: this.state.time,
-                longitude: this.state.longitude,
-                latitude: this.state.latitude,
-                picture: this.state.picture,
-                experience: this.state.experience,
-                questions: this.state.answers.filter(x => x),
+                questions: allAnswers,
             };
+            if (this.state.research.place) {
+                newBeep["longitude"] = this.state.longitude;
+                newBeep["latitude"] = this.state.latitude;
+            }
+            if (this.state.research.picture) {
+                newBeep["picture"] = this.state.picture;
+            }
+            if (this.state.research.descriptive) {
+                newBeep["experience"] = this.state.text;
+            }
             let beeps = await getDataFromStorage("beeps", this.state.password);
             let b = beeps ? JSON.parse(beeps) : [];
             b.push(newBeep);
             await setDataToStorage("beeps", this.state.password, b);
         }
-        await setDataToStorage("answers", "", "");
     };
 
     createQuestionButton = (item, index) => {
@@ -111,7 +134,7 @@ class Questions extends Component {
                         this.props.navigation.navigate(item.type, item)
                     }>
                     <View>
-                        <Text style={styles.button}>{item.name}</Text>
+                        <Text style={styles.button}>{item.question}</Text>
                     </View>
                 </TouchableHighlight>
             );
@@ -159,7 +182,6 @@ class Questions extends Component {
                         top: 0,
                     }}
                     onPress={() => {
-                        this.saveBeep();
                         this.props.navigation.goBack();
                     }}>
                     <Image
@@ -221,7 +243,7 @@ class Questions extends Component {
             return (
                 <View style={styles.background}>
                     <ScrollView>
-                        {this.state.questions.map((item, index) =>
+                        {this.state.research.questions.map((item, index) =>
                             this.createQuestionButton(item, index),
                         )}
                     </ScrollView>

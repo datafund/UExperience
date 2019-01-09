@@ -19,10 +19,10 @@ export default class ResearchModify extends Component {
         this.setState({
             password: password,
         });
-        let questions = await getDataFromStorage("questions", password);
-        questions = questions ? JSON.parse(questions) : [];
-        this.setState({questions: questions});
-        let nextId = this.getNextId(this.state.questions);
+        let research = await getDataFromStorage("research", password);
+        research = research ? JSON.parse(research) : [];
+        this.setState({research: research});
+        let nextId = this.getNextId(this.state.research.questions);
         this.setState({nextId: nextId});
     };
 
@@ -44,23 +44,23 @@ export default class ResearchModify extends Component {
 
     componentWillUnmount = async () => {
         await setDataToStorage(
-            "questions",
+            "research",
             this.state.password,
-            this.state.questions,
+            this.state.research,
         );
     };
 
     state = {
+        research: {},
         vprašanje: "",
         type: "",
         possibleAnswers: "",
-        questions: [],
         newQuestion: true,
     };
 
     changeChosenStatus = index => {
-        let oldState = this.state.questions;
-        if (this.state.questions[index].current === 1) {
+        let oldState = this.state.research.questions;
+        if (oldState[index].current === 1) {
             oldState[index].current = 0;
         } else {
             oldState[index].current = 1;
@@ -71,23 +71,22 @@ export default class ResearchModify extends Component {
     saveQuestion = async () => {
         let newQuestion = {
             id: this.state.nextId,
-            name: this.state.vprašanje,
+            question: this.state.vprašanje,
             type: this.state.type,
             current: 1,
         };
-        let newId = Number(this.state.currentId) + 1;
-        await setDataToStorage("currentIdQuestion", this.state.password, newId);
         if (["TagsNoAdd", "MultipleChoice"].includes(this.state.type)) {
             newQuestion["possibleAnswers"] = this.state.possibleAnswers;
         }
+        let nextId = this.getNextId(this.state.questions);
+
         this.setState({vprašanje: ""});
         this.setState({possibleAnswers: ""});
         this.setState({type: ""});
         this.textInput.clear();
-        let q = this.state.questions;
-        q.push(newQuestion);
-        this.setState({questions: q});
-        let nextId = this.getNextId(this.state.questions);
+        let q = this.state.research;
+        q.questions.push(newQuestion);
+        this.setState({research: q});
         this.setState({nextId: nextId});
     };
 
@@ -204,7 +203,7 @@ export default class ResearchModify extends Component {
             return (
                 <View style={styles.background}>
                     <ScrollView>
-                        {this.state.questions.map((item, index) => (
+                        {this.state.research.questions.map((item, index) => (
                             <TouchableHighlight
                                 key={index}
                                 onPress={() => this.changeChosenStatus(index)}>
@@ -214,10 +213,11 @@ export default class ResearchModify extends Component {
                                             ? styles.container2
                                             : styles.container
                                     }>
-                                    {item.name}
+                                    {item.question}
                                 </Text>
                             </TouchableHighlight>
                         ))}
+                        <Text>{JSON.stringify(this.state.research)}</Text>
                     </ScrollView>
                     {this.getFooter()}
                 </View>

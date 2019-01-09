@@ -40,7 +40,7 @@ class Question extends Component {
     componentDidMount() {
         this.setState({id: this.props.navigation.getParam("id", "NO-ID")});
         this.setState({
-            question: this.props.navigation.getParam("name", "no question"),
+            question: this.props.navigation.getParam("question", "no question"),
         });
         this.setState({type: this.props.navigation.getParam("type", null)});
         const password = this.props.navigation.getParam("password", "");
@@ -70,12 +70,6 @@ class Question extends Component {
                         top: 0,
                     }}
                     onPress={() => {
-                        this.props.saveAnswer(
-                            this.props.id,
-                            this.props.questions,
-                            this.props.type,
-                            this.state.text,
-                        );
                         this.props.navigation.goBack();
                     }}>
                     <Image

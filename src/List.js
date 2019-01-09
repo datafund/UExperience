@@ -17,7 +17,8 @@ export default class List extends Component {
             password: password,
         });
         let beeps = await getDataFromStorage("beeps", password);
-        this.setState({beeps: beeps ? JSON.parse(beeps) : [], loading: false});
+        beeps = beeps ? JSON.parse(beeps) : [];
+        this.setState({beeps: beeps});
     };
 
     state = {

@@ -91,21 +91,12 @@ class Notification extends Component {
     };
 
     createNotification = (platform, date = new Date()) => {
-        if (platform === "ios") {
-            PushNotificationIOS.scheduleLocalNotification({
-                fireDate: date,
-                alertBody: "Prosim shrani si novi bip",
-                alertTitle: "Nov bip",
-                silent: false,
-            });
-        } else if (platform === "android") {
-            PushNotification.localNotificationSchedule({
-                date: date,
-                title: "Nov bip",
-                message: "Prosim shrani si nov bip",
-                sound: "default",
-            });
-        }
+        PushNotification.localNotificationSchedule({
+            date: date,
+            title: "Nov bip",
+            message: "Prosim shrani si nov bip",
+            sound: "default",
+        });
     };
 
     degreesToRadians = degrees => {
