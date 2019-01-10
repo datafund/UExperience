@@ -217,7 +217,6 @@ export default class ResearchModify extends Component {
                                 </Text>
                             </TouchableHighlight>
                         ))}
-                        <Text>{JSON.stringify(this.state.research)}</Text>
                     </ScrollView>
                     {this.getFooter()}
                 </View>

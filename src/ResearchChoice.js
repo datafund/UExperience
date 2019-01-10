@@ -127,8 +127,7 @@ export default class ResearchChoice extends Component {
             });
             return;
         }
-        questions = questions.questions;
-        await setDataToStorage("questions", this.state.password, questions);
+        await setDataToStorage("research", this.state.password, questions);
         this.setState({success: "No problems"});
     };
 

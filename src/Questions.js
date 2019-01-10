@@ -104,6 +104,7 @@ class Questions extends Component {
         allAnswers.filter(item => item);
         if (!(allAnswers.length === 0 && this.state.text === "")) {
             let newBeep = {
+                researchId: this.state.research.id,
                 time: this.state.time,
                 questions: allAnswers,
             };
