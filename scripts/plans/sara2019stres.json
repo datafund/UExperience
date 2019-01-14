@@ -1,0 +1,40 @@
+{
+                "id": 2,
+                "name": "Raziskovanje Stresa",
+                "description":
+                    "Ta raziskava raziskuje povezavo med stresom in različnimi dejavnostmi",
+                "organization": "None",
+                "days": 30,
+                "start": "2019-01-08",
+                "end": "2019-12-31",
+                "privacy": "",
+                "researcher": "Sara Jakša",
+                "email": "sarajaksa@sarajaksa.eu",
+                "subjectId": null,
+                "share": false,
+                "beeps": {
+                    "aditionalCriteria": true,
+                    "importantMomentsOnly": true,
+                    "dailyBeeps": 3
+                },
+                "audio": false,
+                "place": false,
+                "picture": false,
+                "descriptive": true,
+                "questions": [
+                    {
+                        "id": 1,
+                        "question": "Kaj trenutno počneš?",
+                        "context": true,
+                        "type": "Tags",
+                        "current": 1
+                    },
+                    {
+                        "id": 2,
+                        "question": "Koliko stresa doživljaš?",
+                        "context": false,
+                        "type": "Slider",
+                        "current": 1
+                    }
+                ]
+            }
