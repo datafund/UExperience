@@ -15,6 +15,13 @@ import PushNotification from "react-native-push-notification";
 
 import styles from "./Styles.js";
 import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
+import {
+    createNotification,
+    createNotificationsInOneDay,
+    modificationOfIntervals,
+    createNotificationsForResearch,
+    locationNotifications,
+} from "./functions/notifications.js";
 
 class Notification extends Component {
     showAndroidDatePicker = async () => {
@@ -71,6 +78,7 @@ class Notification extends Component {
             konec: new Date(),
             numberOfNotifications: 0,
             currentTimes: [],
+            test: {},
         };
         this.setDate = this.setDate.bind(this);
     }
@@ -78,26 +86,6 @@ class Notification extends Component {
     setDate(newDate) {
         this.setState({konec: newDate.toLocalDateString()});
     }
-
-    createNotificationsBasedOnTime = (number, time, platform) => {
-        const currentDate = new Date();
-        max = time.getTime();
-        min = currentDate.getTime();
-        for (i = 0; i < number; i++) {
-            let time = Math.floor(Math.random() * (max - min + 1)) + min;
-            let date = new Date(time);
-            this.createNotification(platform, date);
-        }
-    };
-
-    createNotification = (platform, date = new Date()) => {
-        PushNotification.localNotificationSchedule({
-            date: date,
-            title: "Nov bip",
-            message: "Prosim shrani si nov bip",
-            sound: "default",
-        });
-    };
 
     degreesToRadians = degrees => {
         return (degrees * Math.PI) / 180;
@@ -181,52 +169,22 @@ class Notification extends Component {
     render() {
         return (
             <View style={styles.background}>
-                <Text>
-                    Tukaj lahko določite, koliko notifikacij se vam bo pokazalo
-                    v kolikšnem obdobju. Najprej na sliderju določite, koliko
-                    notifikacij želite, da se vam pokaže v tem obdobju.
-                </Text>
-                <Slider
-                    step={1}
-                    minimumValue={0}
-                    maximumValue={100}
-                    value={0}
-                    onValueChange={val =>
-                        this.setState({numberOfNotifications: val})
-                    }
-                />
-                <Text>
-                    Nato določeti, kdaj želite, da se vam notifikacije končajo
-                    prikazovati:
-                </Text>
-                {this.datePickerBasedOnOS(Platform.OS)}
-                <Text>
-                    Prejeli boste {this.state.numberOfNotifications}{" "}
-                    notifikacij. Ki se bodo končale{" "}
-                    {this.state.konec.toString()}.
-                </Text>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() =>
-                        this.createNotificationsBasedOnTime(
-                            this.state.numberOfNotifications,
-                            this.state.konec,
-                            Platform.OS,
-                        )
-                    }>
+                    onPress={() => {
+                        let notifications = createNotificationsForResearch(
+                            2,
+                            2,
+                            modificationOfIntervals(
+                                "0800-1200,1300-1500,1800-2100",
+                            ),
+                            new Date(2020, 9, 13, 0, 0, 0, 0),
+                        );
+                        this.setState({test: notifications});
+                    }}>
                     <Text>Ustvari Notifikacije</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() =>
-                        PushNotification.localNotification({
-                            title: "Nov bip",
-                            message: "Prosim shrani si nov bip",
-                            sound: "default",
-                        })
-                    }>
-                    <Text>Pokaži notifikacijo</Text>
-                </TouchableOpacity>
+                <Text>{JSON.stringify(this.state.test)}</Text>
                 <Text>Latitude</Text>
                 <TextInput
                     style={{height: 50, borderColor: "black", borderWidth: 1}}
@@ -240,7 +198,7 @@ class Notification extends Component {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={async () => {
-                        let watchId = navigator.geolocation.watchPosition(
+                        /*let watchId = navigator.geolocation.watchPosition(
                             position => {
                                 this.createNotificationBasedOnLocation(
                                     this.state.lan,
@@ -260,7 +218,12 @@ class Notification extends Component {
                             "positionID",
                             this.state.password,
                             watchId,
+                        );*/
+                        let id = locationNotifications(
+                            this.state.lan,
+                            this.state.log,
                         );
+                        this.setState({test: id});
                     }}>
                     <Text>Notifikacije glede na pozicijo</Text>
                 </TouchableOpacity>

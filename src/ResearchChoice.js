@@ -11,6 +11,7 @@ import {
 
 import styles from "./Styles.js";
 import {setDataToStorage, getDataFromStorage} from "./functions/data.js";
+import {newResearch} from "./functions/notifications.js";
 
 export default class ResearchChoice extends Component {
     componentDidMount() {
@@ -81,7 +82,7 @@ export default class ResearchChoice extends Component {
                 share: false,
                 beeps: {
                     aditionalCriteria: true,
-                    importantMomentsOnly: false,
+                    importantMomentsOnly: true,
                     dailyBeeps: 3,
                 },
                 audio: false,
@@ -127,25 +128,7 @@ export default class ResearchChoice extends Component {
             });
             return;
         }
-        let oldResearchPlans = await getDataFromStorage(
-            "oldResearchPlans",
-            this.state.password,
-        );
-        let currentResearchPlan = await getDataFromStorage(
-            "research",
-            this.state.password,
-        );
-        oldResearchPlans = oldResearchPlans ? JSON.parse(oldResearchPlans) : [];
-        currentResearchPlan = currentResearchPlan
-            ? JSON.parse(currentResearchPlan)
-            : {};
-        oldResearchPlans.push(currentResearchPlan);
-        setDataToStorage(
-            "oldResearchPlans",
-            this.state.password,
-            oldResearchPlans,
-        );
-        await setDataToStorage("research", this.state.password, questions);
+        await newResearch(questions, this.state.password);
         this.setState({success: "No problems"});
     };
 

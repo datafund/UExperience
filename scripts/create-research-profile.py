@@ -5,8 +5,8 @@ research_plan = dict()
 research_plan["name"] = input("Kakšno je ime raziskovalnega projekta?")
 research_plan["description"] = input("Kako bi bolj podrobno opisal, kaj raziskuješ?")
 research_plan["organization"] = input("Which organization is overseeing the research?")
-research_plan["days"] = input(
-    "How many days would the person expect to be involved in this research?"
+research_plan["days"] = int(
+    input("How many days would the person expect to be involved in this research?")
 )
 research_plan["start"] = input(
     "When did/will the whole research start? (in YYYY-MM-DD)"
@@ -49,21 +49,24 @@ if importantMomentsOnly == "1":
     beeps["ImportantMomentsOnly"] = True
 else:
     beeps["importantMomentsOnly"] = False
-    beeps["dailyBeeps"] = input(
-        "How many random beeps will the research require? (0 if beeps are not time related)"
+    beeps["dailyBeeps"] = int(
+        input(
+            "How many random beeps will the research require? (0 if beeps are not time related)"
+        )
     )
     place = input(
         "If beeps will be generated based on the location, which location should be tracked in longitude and latitude? (Press enter for not location related beeps. Location can be found on google maps, click on the place and copy numbers)"
     )
     if place:
         beeps["location"] = (element.strip() for element in place.split(","))
-    additionalCriteria = input(
-        "Should different criteria be additive (1 = all need to be true) or not (0=just one needs to be true)"
-    )
-    if additionalCriteria == "1":
-        beeps["additionalCriteria"] = True
-    else:
-        beeps["additionalCriteria"] = False
+    beeps["additionalCriteria"] = False
+    # additionalCriteria = input(
+    #    "Should different criteria be additive (1 = all need to be true) or not (0=just one needs to be true)"
+    # )
+    # if additionalCriteria == "1":
+    #    beeps["additionalCriteria"] = True
+    # else:
+    #    beeps["additionalCriteria"] = False
 
 research_plan["beeps"] = beeps
 

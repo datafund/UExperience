@@ -13,9 +13,14 @@ import {
     TouchableOpacity,
     DatePickerAndroid,
 } from "react-native";
+import PushNotification from "react-native-push-notification";
 
 import styles from "./Styles.js";
 import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
+import {
+    createNotificationsForResearch,
+    modificationOfIntervals,
+} from "./functions/notifications.js";
 
 export default class PersonalInfo extends Component {
     componentDidMount = async () => {
@@ -31,11 +36,19 @@ export default class PersonalInfo extends Component {
             passwordHash: personalInfo.passwordHash,
             emailPassword: personalInfo.emailPassword,
         });
-        if (personalInfo.days) {
-            this.setState({days: personalInfo.days});
-        } else {
-            this.setState({days: []});
+        let notifications = await getDataFromStorage("notifications", password);
+        notifications = notifications ? JSON.parse(notifications) : {};
+        days = [];
+        for (index in notifications.time) {
+            if (!days.includes(notifications.time[index].date)) {
+                days.push(notifications.time[index].date);
+            }
         }
+        this.setState({days: days});
+        this.setState({notifications: notifications});
+        let research = await getDataFromStorage("research", password);
+        research = research ? JSON.parse(research) : {};
+        this.setState({research: research});
     };
 
     componentWillUnmount = async () => {
@@ -47,6 +60,11 @@ export default class PersonalInfo extends Component {
             emailPassword: this.state.emailPassword,
         };
         await setDataToStorage("personal", this.state.password, personalInfo);
+        await setDataToStorage(
+            "notifications",
+            this.state.password,
+            this.state.notifications,
+        );
     };
 
     state = {
@@ -56,6 +74,8 @@ export default class PersonalInfo extends Component {
         days: [],
         currentDay: new Date(),
         emailPassword: "",
+
+        notifications: {},
     };
 
     showAndroidDatePicker = async () => {
@@ -65,6 +85,21 @@ export default class PersonalInfo extends Component {
             });
             if (action !== DatePickerAndroid.dismissedAction) {
                 let newDate = new Date(year, month, day, 3, 30, 0, 0);
+                if (
+                    !(this.state.research.beeps.importantMomentsOnly === true)
+                ) {
+                    let newNotes = createNotificationsForResearch(
+                        this.state.research.beeps.dailyBeeps,
+                        1,
+                        modificationOfIntervals(this.state.time),
+                        newDate,
+                    );
+                    allNotes = this.state.notifications;
+                    for (index in newNotes) {
+                        allNotes.time.push(newNotes[index]);
+                    }
+                    this.setState({notifications: allNotes});
+                }
                 this.addNewDate(newDate);
             }
         } catch ({code, message}) {
@@ -134,9 +169,9 @@ export default class PersonalInfo extends Component {
                     />
                     <Text>Časi za beep-e:</Text>
                     <Text>
-                        (Napiši čas v vojaškem načinu. Če želiš, da te beep-i
-                        motijo samo med službo, torej med 8. in 16., potem
-                        napiši 0800-1600)
+                        (Napiši čas v vojaškem načinu, ločeno s vejicami. Če
+                        želiš, da te beep-i motijo samo med službo, torej med 8.
+                        in 16., potem napiši 0800-1600
                     </Text>
                     <TextInput
                         style={{
@@ -176,6 +211,34 @@ export default class PersonalInfo extends Component {
                                     let currentDays = this.state.days;
                                     currentDays.splice(index, 1);
                                     this.setState({days: currentDays});
+                                    let notifications = this.state
+                                        .notifications;
+                                    let newNotifications = [];
+                                    for (index in notifications.time) {
+                                        if (
+                                            !(
+                                                notifications.time[index]
+                                                    .date === item
+                                            )
+                                        ) {
+                                            newNotifications.push(
+                                                this.state.notifications.time[
+                                                    index
+                                                ],
+                                            );
+                                        } else {
+                                            PushNotification.cancelLocalNotifications(
+                                                {
+                                                    id: this.state.notifications
+                                                        .time[index].id,
+                                                },
+                                            );
+                                        }
+                                    }
+                                    notifications.time = newNotifications;
+                                    this.setState({
+                                        notifications: notifications,
+                                    });
                                 }}
                             />
                         </View>

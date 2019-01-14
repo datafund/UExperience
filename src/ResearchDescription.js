@@ -12,6 +12,7 @@ import {
 
 import styles from "./Styles.js";
 import {setDataToStorage, getDataFromStorage} from "./functions/data.js";
+import {newResearch} from "./functions/notifications.js";
 
 export default class ResearchDescription extends Component {
     componentDidMount() {
@@ -100,31 +101,7 @@ export default class ResearchDescription extends Component {
                     onPress={async () => {
                         let researchPlan = this.state.research;
                         researchPlan.password = this.state.inputedPassword;
-                        let oldResearchPlans = await getDataFromStorage(
-                            "oldResearchPlans",
-                            this.state.password,
-                        );
-                        let currentResearchPlan = await getDataFromStorage(
-                            "research",
-                            this.state.password,
-                        );
-                        oldResearchPlans = oldResearchPlans
-                            ? JSON.parse(oldResearchPlans)
-                            : [];
-                        currentResearchPlan = currentResearchPlan
-                            ? JSON.parse(currentResearchPlan)
-                            : {};
-                        oldResearchPlans.push(currentResearchPlan);
-                        setDataToStorage(
-                            "research",
-                            this.state.password,
-                            researchPlan,
-                        );
-                        setDataToStorage(
-                            "oldResearchPlans",
-                            this.state.password,
-                            oldResearchPlans,
-                        );
+                        await newResearch(researchPlan, this.state.password);
                         this.props.navigation.goBack();
                     }}>
                     <Text>Želim sodelovati v tej raziskavi</Text>

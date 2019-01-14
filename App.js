@@ -15,6 +15,7 @@ import ResearchChoice from "./src/ResearchChoice.js";
 import ResearchModify from "./src/ResearchModify.js";
 import ResearchDescription from "./src/ResearchDescription.js";
 import PersonalInfo from "./src/PersonalInfo.js";
+import Notifications from "./src/CreateNotifications.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -37,6 +38,7 @@ const AppNavigator = createStackNavigator(
         ResearchModify: ResearchModify,
         ResearchDescription: ResearchDescription,
         PersonalInfo: PersonalInfo,
+        Notifications: Notifications,
     },
     {
         initialRouteName: "Splash",
