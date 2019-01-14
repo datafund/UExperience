@@ -33,6 +33,30 @@ class LogIn extends Component {
         message: "",
     };
 
+    deleteProfileAlert = () => {
+        Alert.alert(
+            "TO BO IZBRISALO VSE VAŠE PODATKE IZ TELEFONA",
+            "Če se kasneje premislite, in želite katere vaše podatke, jih ne bo več na telefonu. Podatke, ki jih nistve izvozili ali poslali raziskovalcem bodo izgubljeni za vedno. Ali ste prepričani, da želite izbrisati svoje podatke:",
+            [
+                {
+                    text: "Ne izbriši",
+                    onPress: () => {},
+                    style: "cancel",
+                },
+                {
+                    text: "Izbriši",
+                    onPress: () => {
+                        createNewProfile("");
+                        this.setState({passwordHash: ""});
+                        this.setState({inputPassword: ""});
+                        this.setState({message: ""});
+                    },
+                },
+                {onDismiss: () => {}},
+            ],
+        );
+    };
+
     savePassword = async password => {
         const passwordHash = CryptoJS.SHA256(password).toString(
             CryptoJS.enc.Base64,
@@ -63,13 +87,6 @@ class LogIn extends Component {
         } else {
             this.setState({message: "To ni pravilno geslo"});
         }
-    };
-
-    deletePassword = (inputedPassword, savedPassword) => {
-        AsyncStorage.clear();
-        this.setState({passwordHash: ""});
-        this.setState({inputPassword: ""});
-        this.setState({message: ""});
     };
 
     renderLogInScreen = () => {
@@ -147,7 +164,7 @@ class LogIn extends Component {
                     </TouchableHighlight>
                     <TouchableHighlight
                         style={styles.button}
-                        onPress={() => this.deletePassword()}>
+                        onPress={() => this.deleteProfileAlert()}>
                         <Text>
                             Izbriši geslo (to bo izbrisalo vse vaše podatke)
                         </Text>
