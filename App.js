@@ -10,12 +10,10 @@ import Settings from "./src/Settings.js";
 import LogIn from "./src/LogIn.js";
 import Splash from "./src/Splash.js";
 import BeepRepresentation from "./src/BeepRepresentation.js";
-import File from "./src/File.js";
 import ResearchChoice from "./src/ResearchChoice.js";
 import ResearchModify from "./src/ResearchModify.js";
 import ResearchDescription from "./src/ResearchDescription.js";
 import PersonalInfo from "./src/PersonalInfo.js";
-import Notifications from "./src/CreateNotifications.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -30,7 +28,6 @@ const AppNavigator = createStackNavigator(
         MultipleChoice: Question,
         Slider: Question,
         Settings: Settings,
-        File: File,
         LogIn: LogIn,
         Splash: Splash,
         BeepRepresentation: BeepRepresentation,
@@ -38,7 +35,6 @@ const AppNavigator = createStackNavigator(
         ResearchModify: ResearchModify,
         ResearchDescription: ResearchDescription,
         PersonalInfo: PersonalInfo,
-        Notifications: Notifications,
     },
     {
         initialRouteName: "Splash",

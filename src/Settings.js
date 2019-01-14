@@ -110,16 +110,6 @@ class Settings extends Component {
                     onPress={() => this.deleteProfileAlert()}>
                     <Text>Izbriši vse podatke</Text>
                 </TouchableHighlight>
-
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("Notifications", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text>Notifikacije (TEST)</Text>
-                </TouchableHighlight>
             </View>
         );
     }
