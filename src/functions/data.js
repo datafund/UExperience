@@ -42,12 +42,18 @@ export const createNewProfile = async password => {
     setDataToStorage(
         "personal",
         password,
-        JSON.stringify({email: "", passwordHash: "", time: "", days: []}),
+        JSON.stringify({
+            email: "",
+            passwordHash: "",
+            time: "",
+            days: [],
+            emailPassword: "",
+        }),
     );
     setDataToStorage("oldResearchPlans", password, JSON.stringify([]));
 };
 
-export const exportAllData = async password => {
+export const exportAllData = async (password, password2) => {
     let pathToFile = getPathToSaveFilesAccessable(Platform.OS) + "/backup.txt";
     allVariables = [];
     let personal = await getDataFromStorage("personal", password);
@@ -66,7 +72,7 @@ export const exportAllData = async password => {
     allVariables.push(beeps);
     allVariables.push(oldResearchPlans);
     allVariables = JSON.stringify(allVariables);
-    await saveDataToFile(allVariables, pathToFile, "");
+    await saveDataToFile(allVariables, pathToFile, password2);
     await sendEmail(
         personal.email,
         "BackUp from UExperience",
@@ -77,9 +83,9 @@ export const exportAllData = async password => {
     //await deleteFile(pathToFile);
 };
 
-export const saveDataToFile = async (data, path, password) => {
-    if (password) {
-        data = CryptoJS.AES.encrypt(data, password).toString();
+export const saveDataToFile = async (data, path, publicKey) => {
+    if (!(publicKey === "")) {
+        data = CryptoJS.AES.encrypt(data, publicKey).toString();
     }
     let worked = await RNFS.writeFile(path, data, "utf8");
     return worked;
@@ -121,7 +127,7 @@ export const movePictures = async (pictures, folder) => {
     }
 };
 
-export const sendEmailToResearcher = async password => {
+export const sendEmailToResearcher = async (password, publicKey) => {
     let path = getPathToSaveFilesAccessable(Platform.OS);
     let pathToFile = path + "/beeps.csv";
     let time = new Date();
@@ -134,7 +140,7 @@ export const sendEmailToResearcher = async password => {
     notification = research ? JSON.parse(notification) : {};
     let data = getBeepsCsvContent(time, research, beeps, notification);
     //await movePictures(picturesName, path);
-    await saveDataToFile(data, pathToFile, "");
+    await saveDataToFile(data, pathToFile, publicKey);
     await sendEmail(research.email, "Beeps", "", pathToFile, "csv");
     //await deleteFile(pathToFile);
 };
@@ -148,58 +154,58 @@ export const deleteFile = async pathToFile => {
 
 export const getBeepsCsvContent = (time, research, beeps, notification) => {
     finalFileContent = "";
-    finalFileContent += "#Ta datoteka je nastala " + time + "\n";
+    finalFileContent += "#Ta datoteka je nastala " + time + "|||\n";
     finalFileContent +=
-        "#Raziskava " + research.name + " od " + research.researcher + "\n";
-    finalFileContent += "\n";
-    finalFileContent += "#Vprašanja\n";
-    finalFileContent += "Id;Questions;Type\n";
+        "#Raziskava " + research.name + " od " + research.researcher + "|||\n";
+    finalFileContent += "|||\n";
+    finalFileContent += "#Vprašanja|||\n";
+    finalFileContent += "Id;Questions;Type|||\n";
     for (id in research.questions) {
         finalFileContent +=
             research.questions[id].id +
             ";" +
-            research.questions[id].name +
+            research.questions[id].question +
             ";" +
             research.questions[id].type +
-            "\n";
+            "|||\n";
     }
-    finalFileContent += "\n";
-    finalFileContent += "# Seznam sproženih notifikacij\n";
+    finalFileContent += "|||\n";
+    finalFileContent += "# Seznam sproženih notifikacij|||\n";
     finalFileContent += "Notification\n";
     for (id in notification) {
         if (notification[id].triggered === true) {
-            finalFileContent += notification[id].time + "\n";
+            finalFileContent += notification[id].time + "|||\n";
         }
     }
-    finalFileContent += "\n\n\n";
-    finalFileContent += "#Beeps\n";
-    finalFileContent += "Time;QuestionId;Answer;\n";
+    finalFileContent += "|||\n|||\n|||\n";
+    finalFileContent += "#Beeps|||\n";
+    finalFileContent += "Time;QuestionId;Answer;|||\n";
     for (beepIndex in beeps) {
         let beep = beeps[beepIndex];
-        if (beep.reserachId === research.id) {
-            if (!(beep.experience === null)) {
-                finalFileConent +=
+        if (beep.researchId === research.id) {
+            if (!(beep.experience === "")) {
+                finalFileContent +=
                     '"' +
                     beep.time +
                     '";"experience";"' +
                     beep.experience +
-                    '";\n';
+                    '";|||\n';
             }
-            if (!(beep.answers === null)) {
-                for (questionIndex in beep.answers) {
-                    let question = beep.answers[questionIndex];
-                    if (!(question === null || question.answer === undefined)) {
+            if (!(beep.questions === undefined)) {
+                for (questionIndex in beep.questions) {
+                    let answer = beep.questions[questionIndex];
+                    if (answer.answer) {
                         finalFileContent += '"' + beep.time + '";';
-                        finalFileContent += '"' + question.id + '";';
+                        finalFileContent += '"' + answer.id + '";';
                         finalFileContent +=
                             '"' +
-                            JSON.stringify(question.answer)
+                            JSON.stringify(answer.answer)
                                 .replace("[", "")
                                 .replace("]", "")
                                 .split('"')
                                 .join("") +
                             '";';
-                        finalFileContent += "\n";
+                        finalFileContent += "|||\n";
                     }
                 }
             }

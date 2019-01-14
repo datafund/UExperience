@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import styles from "./Styles.js";
-import {setDataToStorage} from "./functions/data.js";
+import {setDataToStorage, getDataFromStorage} from "./functions/data.js";
 
 export default class ResearchChoice extends Component {
     componentDidMount() {
@@ -127,6 +127,24 @@ export default class ResearchChoice extends Component {
             });
             return;
         }
+        let oldResearchPlans = await getDataFromStorage(
+            "oldResearchPlans",
+            this.state.password,
+        );
+        let currentResearchPlan = await getDataFromStorage(
+            "research",
+            this.state.password,
+        );
+        oldResearchPlans = oldResearchPlans ? JSON.parse(oldResearchPlans) : [];
+        currentResearchPlan = currentResearchPlan
+            ? JSON.parse(currentResearchPlan)
+            : {};
+        oldResearchPlans.push(currentResearchPlan);
+        setDataToStorage(
+            "oldResearchPlans",
+            this.state.password,
+            oldResearchPlans,
+        );
         await setDataToStorage("research", this.state.password, questions);
         this.setState({success: "No problems"});
     };

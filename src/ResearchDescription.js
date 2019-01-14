@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import styles from "./Styles.js";
-import {setDataToStorage} from "./functions/data.js";
+import {setDataToStorage, getDataFromStorage} from "./functions/data.js";
 
 export default class ResearchDescription extends Component {
     componentDidMount() {
@@ -23,7 +23,7 @@ export default class ResearchDescription extends Component {
         });
     }
 
-    state = {research: {share: false}};
+    state = {research: {share: false}, inputedPassword: ""};
 
     render() {
         return (
@@ -73,14 +73,57 @@ export default class ResearchDescription extends Component {
                         }}
                     />
                 </View>
+                {this.state.research.share ? (
+                    <View>
+                        <Text>
+                            Če želiš, da se podatki pred pošiljanjem kriptirajo,
+                            potem prosim vnesi geslo, ki bo potrebno, da se
+                            vidijo vaši podatki. Ne pozabite tega gesla deliti z
+                            raziskovalcem.
+                        </Text>
+                        <TextInput
+                            style={{
+                                height: 50,
+                                borderColor: "black",
+                                borderWidth: 1,
+                                backgroundColor: "white",
+                            }}
+                            onChangeText={text =>
+                                this.setState({inputedPassword: text})
+                            }
+                        />
+                    </View>
+                ) : null}
 
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={() => {
+                    onPress={async () => {
+                        let researchPlan = this.state.research;
+                        researchPlan.password = this.state.inputedPassword;
+                        let oldResearchPlans = await getDataFromStorage(
+                            "oldResearchPlans",
+                            this.state.password,
+                        );
+                        let currentResearchPlan = await getDataFromStorage(
+                            "research",
+                            this.state.password,
+                        );
+                        oldResearchPlans = oldResearchPlans
+                            ? JSON.parse(oldResearchPlans)
+                            : [];
+                        currentResearchPlan = currentResearchPlan
+                            ? JSON.parse(currentResearchPlan)
+                            : {};
+                        oldResearchPlans.push(currentResearchPlan);
                         setDataToStorage(
                             "research",
                             this.state.password,
-                            this.state.research,
+                            researchPlan,
+                        );
+                        setDataToStorage(
+                            "oldResearchPlans",
+                            this.state.password,
+                            oldResearchPlans,
                         );
                         this.props.navigation.goBack();
                     }}>

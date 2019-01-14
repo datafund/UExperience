@@ -118,6 +118,7 @@ while still_question == "1":
     i = i + 1
 
 research_plan["questions"] = questions
+research_plan["password"] = ""
 
 
 final_json = json.dumps(research_plan, sort_keys=True, indent=4)

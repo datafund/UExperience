@@ -100,41 +100,47 @@ export class QuestionTags extends Component {
     componentDidMount = async () => {
         if (this.props.type === "Tags") {
             let password = this.props.password;
+            let research = await getDataFromStorage("research", password);
+            research = research ? JSON.parse(research) : [];
             let value = await getDataFromStorage("beeps", password);
             allBeeps = value ? JSON.parse(value) : [];
             var allTags = [];
             for (beepIndex in allBeeps) {
-                var allQuestions = allBeeps[beepIndex].questions;
-                for (questionIndex in allQuestions) {
-                    if (allQuestions[questionIndex]) {
-                        if (allQuestions[questionIndex].id == this.props.id) {
-                            for (tagIndex in allQuestions[questionIndex]
-                                .answer) {
-                                let newTag =
-                                    allQuestions[questionIndex].answer[
-                                        tagIndex
-                                    ];
-                                allTags.findIndex(x => x.tag === newTag) === -1
-                                    ? allTags.push({
-                                          tag: newTag,
-                                          chosen: 0,
-                                      })
-                                    : null;
+                if (allBeeps[beepIndex].researchId === research.id) {
+                    var allQuestions = allBeeps[beepIndex].questions;
+                    for (questionIndex in allQuestions) {
+                        if (allQuestions[questionIndex]) {
+                            if (
+                                allQuestions[questionIndex].id == this.props.id
+                            ) {
+                                for (tagIndex in allQuestions[questionIndex]
+                                    .answer) {
+                                    let newTag =
+                                        allQuestions[questionIndex].answer[
+                                            tagIndex
+                                        ];
+                                    allTags.findIndex(x => x.tag === newTag) ===
+                                    -1
+                                        ? allTags.push({
+                                              tag: newTag,
+                                              chosen: 0,
+                                          })
+                                        : null;
+                                }
                             }
                         }
                     }
                 }
             }
-            this.setState({tags: allTags, loading: false});
+            this.setState({tags: allTags});
         } else if (this.props.type === "TagsNoAdd") {
             let possibleAnswers = this.props.possibleAnswers;
             let allTags = [];
             for (tag in possibleAnswers) {
                 allTags.push({tag: possibleAnswers[tag], chosen: 0});
             }
-            this.setState({tags: allTags, loading: false});
+            this.setState({tags: allTags});
         }
-        this.setState({loading: false});
     };
 
     componentWillUnmount = () => {
@@ -147,7 +153,7 @@ export class QuestionTags extends Component {
     };
 
     state = {
-        tags: [],
+        tags: ["Test"],
         currentTag: "",
         loading: true,
     };
@@ -180,45 +186,41 @@ export class QuestionTags extends Component {
     };
 
     render() {
-        if (this.state.loading) {
-            return null;
-        } else {
-            return (
-                <View style={styles.background}>
-                    {this.props.type === "Tags" ? (
-                        <TextInput
-                            style={{
-                                height: 40,
-                                borderColor: "black",
-                                borderWidth: 1,
-                                backgroundColor: "white",
-                            }}
-                            onSubmitEditing={event =>
-                                this.updateTags(event.nativeEvent.text)
-                            }
-                            ref={input => {
-                                this.textInput = input;
-                            }}
-                        />
-                    ) : null}
+        return (
+            <View style={styles.background}>
+                {this.props.type === "Tags" ? (
+                    <TextInput
+                        style={{
+                            height: 40,
+                            borderColor: "black",
+                            borderWidth: 1,
+                            backgroundColor: "white",
+                        }}
+                        onSubmitEditing={event =>
+                            this.updateTags(event.nativeEvent.text)
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                    />
+                ) : null}
 
-                    {this.state.tags.map((item, index) => (
-                        <TouchableHighlight
-                            key={index}
-                            onPress={() => this.changeChosenStatus(index)}>
-                            <View
-                                style={
-                                    item.chosen === 1
-                                        ? styles.container2
-                                        : styles.container
-                                }>
-                                <Text>{item.tag}</Text>
-                            </View>
-                        </TouchableHighlight>
-                    ))}
-                </View>
-            );
-        }
+                {this.state.tags.map((item, index) => (
+                    <TouchableHighlight
+                        key={index}
+                        onPress={() => this.changeChosenStatus(index)}>
+                        <View
+                            style={
+                                item.chosen === 1
+                                    ? styles.container2
+                                    : styles.container
+                            }>
+                            <Text>{item.tag}</Text>
+                        </View>
+                    </TouchableHighlight>
+                ))}
+            </View>
+        );
     }
 }
 

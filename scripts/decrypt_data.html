@@ -1,0 +1,18 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/aes.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+
+
+<script>
+function myFunction() {
+    var encrypted_data = document.getElementById("encrypted").value;
+    var password = document.getElementById("password").value;
+    var decrypted = CryptoJS.AES.decrypt(encrypted_data,password).toString(CryptoJS.enc.Utf8);
+    document.getElementById("decrypted").innerHTML = decrypted;
+}
+</script>
+<p>Tukaj kopiraj enkriptane podatke</p>
+<input type="text" id="encrypted" style="height:300px;width:600px;font-size:14pt;"><br>
+<p>Tukaj napiši geslo</p>
+<input type="text" id="password" style="height:20px;width:600px;font-size:14pt;"><br>
+<button type="button" onclick="myFunction()">Click Me!</button> 
+<p id="decrypted"></p>

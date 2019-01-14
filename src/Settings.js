@@ -19,11 +19,17 @@ class Settings extends Component {
         research = research ? JSON.parse(research) : [];
         let share = research.share;
         this.setState({share: share});
+        this.setState({research: research});
+        let personal = await getDataFromStorage("personal", password);
+        personal = personal ? JSON.parse(personal) : {};
+        this.setState({personal: personal});
     };
 
     state = {
         questions: [],
         share: true,
+        research: {},
+        keys: "",
     };
 
     deleteProfileAlert = password => {
@@ -77,16 +83,26 @@ class Settings extends Component {
                         }>
                         <Text>Spremeni Raziskovalni Načrt</Text>
                     </TouchableHighlight>
-                ) : null}
-
+                ) : (
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() =>
+                            sendEmailToResearcher(
+                                this.state.password,
+                                this.state.research.password,
+                            )
+                        }>
+                        <Text>Pošlji beepe raziskovalcu</Text>
+                    </TouchableHighlight>
+                )}
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={() => sendEmailToResearcher(this.state.password)}>
-                    <Text>Pošlji beepe raziskovalcu</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() => exportAllData(this.state.password)}>
+                    onPress={() =>
+                        exportAllData(
+                            this.state.password,
+                            this.state.personal.emailPassword,
+                        )
+                    }>
                     <Text>Izvozi vse svoje podatke</Text>
                 </TouchableHighlight>
                 <TouchableHighlight

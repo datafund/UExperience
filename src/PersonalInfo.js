@@ -29,6 +29,7 @@ export default class PersonalInfo extends Component {
             email: personalInfo.email,
             time: personalInfo.time,
             passwordHash: personalInfo.passwordHash,
+            emailPassword: personalInfo.emailPassword,
         });
         if (personalInfo.days) {
             this.setState({days: personalInfo.days});
@@ -43,6 +44,7 @@ export default class PersonalInfo extends Component {
             time: this.state.time,
             passwordHash: this.state.passwordHash,
             days: this.state.days,
+            emailPassword: this.state.emailPassword,
         };
         await setDataToStorage("personal", this.state.password, personalInfo);
     };
@@ -53,6 +55,7 @@ export default class PersonalInfo extends Component {
         time: "",
         days: [],
         currentDay: new Date(),
+        emailPassword: "",
     };
 
     showAndroidDatePicker = async () => {
@@ -144,6 +147,23 @@ export default class PersonalInfo extends Component {
                         }}
                         defaultValue={this.state.time}
                         onChangeText={text => this.setState({time: text})}
+                    />
+                    <Text>
+                        Geslo za enkripcijo varnostne kopije, ki si jo lahko
+                        pošlješ po emailu. Če pustiš prazno, potem datoteka ne
+                        bo enkriptana.
+                    </Text>
+                    <TextInput
+                        style={{
+                            height: 40,
+                            borderColor: "black",
+                            borderWidth: 1,
+                            backgroundColor: "white",
+                        }}
+                        defaultValue={this.state.emailPassword}
+                        onChangeText={text =>
+                            this.setState({emailPassword: text})
+                        }
                     />
                     <Text>Kateri so primerni dnevi za raziskovanje:</Text>
                     <Text>Trenutni Datumi:</Text>
