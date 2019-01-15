@@ -67,10 +67,13 @@ export const exportAllData = async (password, password2) => {
         password,
     );
     oldResearchPlans = oldResearchPlans ? JSON.parse(oldResearchPlans) : [];
+    let notifications = await getDataFromStorage("notifications", password);
+    notifications = notifications ? JSON.parse(notifications) : notifications;
     allVariables.push(personal);
     allVariables.push(research);
     allVariables.push(beeps);
     allVariables.push(oldResearchPlans);
+    allVariables.push(notifications);
     allVariables = JSON.stringify(allVariables);
     await saveDataToFile(allVariables, pathToFile, password2);
     await sendEmail(
