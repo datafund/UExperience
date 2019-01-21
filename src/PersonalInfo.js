@@ -38,10 +38,19 @@ export default class PersonalInfo extends Component {
         });
         let notifications = await getDataFromStorage("notifications", password);
         notifications = notifications ? JSON.parse(notifications) : {};
-        days = [];
+        let days = [];
+        let today = new Date();
+        today = today.toDateString();
         for (index in notifications.time) {
             if (!days.includes(notifications.time[index].date)) {
-                days.push(notifications.time[index].date);
+                if (
+                    !(
+                        new Date(notifications.time[index].date) <
+                        new Date(today)
+                    )
+                ) {
+                    days.push(notifications.time[index].date);
+                }
             }
         }
         this.setState({days: days});

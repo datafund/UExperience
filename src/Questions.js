@@ -8,7 +8,6 @@ import {
     Image,
     TextInput,
 } from "react-native";
-import moment from "moment";
 import ImagePicker from "react-native-image-picker";
 
 import styles from "./Styles.js";
@@ -37,9 +36,13 @@ class Questions extends Component {
         this.setState({research: research});
 
         this.setState({
-            time: moment()
-                .utcOffset("+02")
-                .format("YYYY-MM-DD-HH-mm-ss"),
+            time: new Date()
+                .toISOString()
+                .split(".")[0]
+                .split("T")
+                .join("-")
+                .split(":")
+                .join("-"),
         });
         if (research.descriptive) {
             this.setState({primaryDescriptive: true, showText: 1});

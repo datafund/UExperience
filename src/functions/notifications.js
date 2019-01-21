@@ -40,19 +40,20 @@ export const modificationOfIntervals = interval => {
 export const createNotificationsOne = (day, avalableIntervals) => {
     max = new Date(day.getTime()).setHours(0, 0, 0, 0);
     min = new Date(day.getTime()).setHours(24, 0, 0, 0);
+    current = new Date();
     let date = null;
     while (date === null) {
         let time = Math.floor(Math.random() * (max - min + 1)) + min;
         for (index in avalableIntervals) {
             let interval = avalableIntervals[index];
             let minInterval = new Date(day.getTime()).setHours(
-                parseInt(interval[0].substring(0, 2)) + 1,
+                parseInt(interval[0].substring(0, 2)),
                 interval[0].substring(2, 4),
                 0,
                 0,
             );
             let maxInterval = new Date(day.getTime()).setHours(
-                parseInt(interval[1].substring(0, 2)) + 1,
+                parseInt(interval[1].substring(0, 2)),
                 interval[1].substring(2, 4),
                 0,
                 0,
