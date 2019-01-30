@@ -45,7 +45,7 @@ class Questions extends Component {
                 .join("-"),
         });
         if (research.descriptive) {
-            this.setState({primaryDescriptive: true, showText: 1});
+            this.setState({primaryDescriptive: true, showText: 0});
         } else {
             this.setState({primaryDescriptive: false, showText: 0});
         }

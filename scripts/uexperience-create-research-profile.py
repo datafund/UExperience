@@ -4,21 +4,19 @@ research_plan = dict()
 
 research_plan["name"] = input("Kakšno je ime raziskovalnega projekta?")
 research_plan["description"] = input("Kako bi bolj podrobno opisal, kaj raziskuješ?")
-research_plan["organization"] = input("Which organization is overseeing the research?")
-research_plan["days"] = int(
-    input("How many days would the person expect to be involved in this research?")
-)
-research_plan["start"] = input(
-    "When did/will the whole research start? (in YYYY-MM-DD)"
-)
-research_plan["end"] = input("When will the whole research end? (in YYYY-MM-DD)")
+research_plan["organization"] = input("Pod katero organizacijo se izvaja ta raziskava?")
+research_plan["days"] = int(input("Koliko dni naj bi oseba sodelovala v raziskavi?"))
+research_plan["start"] = input("Kdaj se je/bo raziskava začela? (v YYYY-MM-DD)")
+research_plan["end"] = input("Kdaj se bo raziskava končala? (v YYYY-MM-DD)")
 research_plan["privacy"] = input(
-    "Besides input, what information will also be collected?"
+    "Poleg informacij, ki jih bodo ljudje vpisali, katere informacije se bodo še zbirale?"
 )
 research_plan["researcher"] = input(
-    "What is the name of the researcher doing this research? (name lastname)"
+    "Kako je ime raziskovalcu, ki izvaja ta načrt? (ime priimek)"
 )
-research_plan["email"] = input("What is the email of the researcher?")
+research_plan["email"] = input(
+    "Kakšen je elektronski naslov raziskovalca, ki izvaja to raziskavo?"
+)
 
 research_plan["id"] = (
     research_plan["researcher"]
@@ -42,20 +40,18 @@ research_plan["subjectId"] = None
 research_plan["share"] = False
 
 beeps = dict()
-importantMomentsOnly = input(
-    "Will this research only research the moments the participant chooses himself? (1 for yes)"
-)
+importantMomentsOnly = input("Ali ta raziskava vsebuje le pomembne trenutke? (1 za ja)")
 if importantMomentsOnly == "1":
     beeps["ImportantMomentsOnly"] = True
 else:
     beeps["importantMomentsOnly"] = False
     beeps["dailyBeeps"] = int(
         input(
-            "How many random beeps will the research require? (0 if beeps are not time related)"
+            "Koliko naključnih bip-ov na dan vklučuje raziskovalni načrt? (0 če bip-i niso povezani s časom)"
         )
     )
     place = input(
-        "If beeps will be generated based on the location, which location should be tracked in longitude and latitude? (Press enter for not location related beeps. Location can be found on google maps, click on the place and copy numbers)"
+        "Na kateri lokaciji naj se sprožijo bip-i (pusti prazno, če ni povezano z lokacijo, drugače vpiši geografsko širino in dolžino, ločeno z vejico)"
     )
     if place:
         beeps["location"] = (element.strip() for element in place.split(","))
@@ -70,13 +66,13 @@ else:
 
 research_plan["beeps"] = beeps
 
-location = input("Does research require tracking of location? (1 for true)")
+location = input("Ali naj se pri bip-ih shrani lokacija? (1 za ja)")
 if location == "1":
     research_plan["location"] = True
 else:
     research_plan["location"] = False
 descriptive = input(
-    "Does the research also includes the description of experience, or do participants just answer in advance prepared questions? (1 for also descriptive)"
+    "Ali raziskava vsebuje tudi prosto opisno komponentno, ali osebe le odgovorijo na v naprej postavljena vprašanja? (1 za tudi opisno)"
 )
 if descriptive == "1":
     research_plan["descriptive"] = True
@@ -85,7 +81,7 @@ else:
 
 questions = []
 still_question = input(
-    "Does this research also includes the in advance prepared questions? (1 for true)"
+    "Ali raziskava vključuje tudi v naprej postavljena vprašanja? (1 za resnično)"
 )
 question_types = {
     "1": "Binary",
@@ -100,24 +96,22 @@ i = 1
 while still_question == "1":
     question = dict()
     question["id"] = i
-    question["question"] = input("What is the question?")
-    context = input("Does question describe the context or experience? (1 for context)")
+    question["question"] = input("Kako se glasi vprašanje?")
+    context = input("Ali je vprašanje iz konteksta ali doživljajsko? (1 za kontekst)")
     if context == "1":
         question["context"] = True
     else:
         question["context"] = False
     type_of_question = input(
-        "What type of question is this? (1 = Binary, 2 = Multiple Choice, 3 = Tags, 4 = Multiple Choice with multiple answers, 5 = Slider, 6 = Free Text)"
+        "Kakšen tip vprašanja je to? (1 = Binarno/Y-N, 2 = Vprašanje z več možnimi odgovori, 3 = Tagi, 4 = Tagi brez možnosti dodajanja (vendar se lahko izbere več možnih odgovorov naenkrat), 5 = Slider (vrednosti 1-100), 6 = Prosto besedilo)"
     )
     question["type"] = question_types[type_of_question.strip()]
     if type_of_question == "4" or type_of_question == "2":
-        possible_answers = input(
-            "What are the possible answers in this question? (seperate them with comma (,))"
-        )
+        possible_answers = input("Kakšni so možni odgovori? (loči jih z vejico (,))")
         question["possibleAnswers"] = [element.strip() for element in possible_answers]
     question["current"] = 1
     questions.append(question)
-    still_question = input("Are there still additional questions? (1 for yes)")
+    still_question = input("Ali ima raziskovalni načrt še druga vprašanja? (1 za ja)")
     i = i + 1
 
 research_plan["questions"] = questions

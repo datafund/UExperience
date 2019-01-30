@@ -41,6 +41,28 @@ export const createNotificationsOne = (day, avalableIntervals) => {
     max = new Date(day.getTime()).setHours(0, 0, 0, 0);
     min = new Date(day.getTime()).setHours(24, 0, 0, 0);
     current = new Date();
+    if (new Date(day.toDateString()) < new Date(current.toDateString())) {
+        return null;
+    }
+    if (
+        day.getFullYear() == current.getFullYear() &&
+        day.getMonth() == current.getMonth() &&
+        day.getDay() == current.getDay()
+    ) {
+        let everythingPassedAlready = true;
+        for (index in avalableIntervals) {
+            let hours = parseInt(avalableIntervals[index][1].substring(0, 2));
+            let minutes = parseInt(avalableIntervals[index][1].substring(2, 4));
+            if (hours >= current.getHours()) {
+                if (minutes > current.getMinutes()) {
+                    everythingPassedAlready = false;
+                }
+            }
+        }
+        if (everythingPassedAlready === true) {
+            return null;
+        }
+    }
     let date = null;
     while (date === null) {
         let time = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -58,7 +80,7 @@ export const createNotificationsOne = (day, avalableIntervals) => {
                 0,
                 0,
             );
-            if (time > minInterval && time < maxInterval) {
+            if (time > minInterval && time < maxInterval && time > current) {
                 date = new Date(time);
                 let notification = createNotification(date);
                 return notification;
@@ -81,8 +103,13 @@ export const createNotificationsForResearch = (
             startDate.getDate() + i,
         );
         for (j = 0; j < numberPerDay; j++) {
-            notification = createNotificationsOne(newDate, avalableIntervals);
-            notifications.push(notification);
+            let notification = createNotificationsOne(
+                newDate,
+                avalableIntervals,
+            );
+            if (notification) {
+                notifications.push(notification);
+            }
         }
     }
     return notifications;
