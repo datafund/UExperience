@@ -30,26 +30,34 @@ class List extends Component {
             <View style={styles.background}>
                 <ScrollView>
                     {this.state.time ? (
-                        <Text>Time: {this.state.time}</Text>
+                        <Text style={styles.textButton}>
+                            Čas: {this.state.time}
+                        </Text>
                     ) : null}
                     {this.state.longitude ? (
-                        <Text>Longitude: {this.state.longitude}</Text>
+                        <Text style={styles.textButton}>
+                            Longitude: {this.state.longitude}
+                        </Text>
                     ) : null}
                     {this.state.latitude ? (
-                        <Text>Latitude: {this.state.latitude}</Text>
+                        <Text style={styles.textButton}>
+                            Latitude: {this.state.latitude}
+                        </Text>
                     ) : null}
                     {this.state.experience ? (
-                        <Text>Experience: {this.state.experience}</Text>
+                        <Text style={styles.textButton}>
+                            Doživljanje: {this.state.experience}
+                        </Text>
                     ) : null}
 
-                    <Text>Questions:</Text>
+                    <Text style={styles.textButton}>Questions:</Text>
                     {this.state.questions.map((item, index) => (
                         <View key={index}>
-                            <Text>
-                                Question: {item.question} ({item.type})
+                            <Text style={styles.textButton}>
+                                Vprašanje: {item.question} ({item.type})
                             </Text>
-                            <Text>
-                                Answer:{" "}
+                            <Text style={styles.textButton}>
+                                Odgovor:{" "}
                                 {["TagsNoAdd", "Tags"].includes(item.type)
                                     ? item.answer.join(", ")
                                     : item.answer}

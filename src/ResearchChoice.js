@@ -42,7 +42,7 @@ export default class ResearchChoice extends Component {
     };
 
     state = {
-        success: "You did not try it yet",
+        success: "Nisi še poskusil",
         url: "",
         password: "",
         researchFromApi: true,
@@ -55,7 +55,7 @@ export default class ResearchChoice extends Component {
         } catch (err) {
             this.setState({
                 success:
-                    "Something went wrong. Is the internet connection working?",
+                    "Nekaj je šlo narobe. Ali je kaj narobe z internetno povezavo?",
             });
             return;
         }
@@ -64,12 +64,13 @@ export default class ResearchChoice extends Component {
             questions = JSON.parse(questions);
         } catch {
             this.setState({
-                success: "Something went wrong. Is you put in the right url?",
+                success:
+                    "Nekaj je šlo narobe. Ali je bil notri dan pravilen URL?",
             });
             return;
         }
         await newResearch(questions, this.state.password);
-        this.setState({success: "No problems"});
+        this.setState({success: "Ni bilo zaznanih problemov"});
     };
 
     getFooter = () => {
@@ -77,7 +78,7 @@ export default class ResearchChoice extends Component {
             <View
                 style={{
                     height: 50,
-                    backgroundColor: "black",
+                    backgroundColor: "#4e4d4d",
                 }}>
                 <TouchableHighlight
                     style={{
@@ -120,7 +121,9 @@ export default class ResearchChoice extends Component {
                                             },
                                         )
                                     }>
-                                    <Text>{item.name}</Text>
+                                    <Text style={styles.textButton}>
+                                        {item.name}
+                                    </Text>
                                 </TouchableHighlight>
                             )}
                             keyExtractor={(item, index) => item.id.toString()}
@@ -133,7 +136,7 @@ export default class ResearchChoice extends Component {
             return (
                 <View style={styles.background}>
                     <ScrollView>
-                        <Text>
+                        <Text style={styles.textButton}>
                             Če želiš uporabiti drug raziskovalni načrt, potem si
                             ga lahko naložiš iz interneta. Raziskovalni načrt
                             mora biti v skladu z podatkovno strukturo, ki jo
@@ -145,15 +148,18 @@ export default class ResearchChoice extends Component {
                                 height: 50,
                                 borderColor: "black",
                                 borderWidth: 1,
+                                backgroundColor: "white",
                             }}
                             onChangeText={text => this.setState({url: text})}
                         />
                         <TouchableHighlight
                             style={styles.button}
                             onPress={() => this.getQuestions(this.state.url)}>
-                            <Text>Get Questions</Text>
+                            <Text style={styles.textButton}>Get Questions</Text>
                         </TouchableHighlight>
-                        <Text>{JSON.stringify(this.state.success)}</Text>
+                        <Text style={styles.textButton}>
+                            {this.state.success}
+                        </Text>
                     </ScrollView>
                     {this.getFooter()}
                 </View>

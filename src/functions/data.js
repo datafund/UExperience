@@ -33,18 +33,87 @@ export const setDataToStorage = async (database, password, value) => {
 };
 
 export const createNewProfile = async password => {
-    //it creates a new profile - so far it just deletes the data and puts empty data to some fields
+    //it creates a new profile - so far it just deletes the data and puts empty data to some fields + it puts the default research plan in
+    if (!(password === "")) {
+        var newPasswordHash = CryptoJS.SHA256(password).toString(
+            CryptoJS.enc.Base64,
+        );
+    } else {
+        var newPasswordHash = "None";
+    }
     PushNotification.cancelAllLocalNotifications();
     AsyncStorage.clear();
     setDataToStorage("answer", password, JSON.stringify(""));
     setDataToStorage("beeps", password, JSON.stringify([]));
-    setDataToStorage("research", password, JSON.stringify({}));
+    setDataToStorage(
+        "research",
+        password,
+        JSON.stringify({
+            beeps: {
+                additionalCriteria: false,
+                dailyBeeps: 3,
+                importantMomentsOnly: false,
+            },
+            days: 30,
+            description: "",
+            descriptive: true,
+            email: "",
+            end: "",
+            id: "osnovni",
+            location: false,
+            name: "Osnovni raziskovalni načrt",
+            organization: "",
+            password: "",
+            privacy: "Nobene",
+            questions: [
+                {
+                    context: true,
+                    current: 1,
+                    id: 1,
+                    question: "Kje si?",
+                    type: "Tags",
+                },
+                {
+                    context: true,
+                    current: 1,
+                    id: 2,
+                    question: "Kaj počneš?",
+                    type: "Tags",
+                },
+                {
+                    context: true,
+                    current: 1,
+                    id: 3,
+                    question: "S kom si?",
+                    type: "Tags",
+                },
+                {
+                    context: false,
+                    current: 1,
+                    id: 4,
+                    question: "Kaj doživljaš?",
+                    type: "Tags",
+                },
+                {
+                    context: false,
+                    current: 1,
+                    id: 5,
+                    question: "Koliko si prisoten v trenutku?",
+                    type: "Tags",
+                },
+            ],
+            researcher: "",
+            share: false,
+            start: "",
+            subjectId: null,
+        }),
+    );
+    setDataToStorage("passwordHash", "", newPasswordHash);
     setDataToStorage(
         "personal",
         password,
         JSON.stringify({
             email: "",
-            passwordHash: "",
             time: "",
             days: [],
             emailPassword: "",

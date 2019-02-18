@@ -33,7 +33,7 @@ class Home extends Component {
                                 password: this.state.password,
                             })
                         }>
-                        <Text>Začni nov beep</Text>
+                        <Text style={styles.textButton}>Začni nov beep</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
                         style={styles.button}
@@ -42,7 +42,9 @@ class Home extends Component {
                                 password: this.state.password,
                             })
                         }>
-                        <Text>Preglej svoje beep-e</Text>
+                        <Text style={styles.textButton}>
+                            Preglej svoje beep-e
+                        </Text>
                     </TouchableHighlight>
                 </View>
                 <View
@@ -52,7 +54,7 @@ class Home extends Component {
                         right: 0,
                         bottom: 0,
                         height: 50,
-                        backgroundColor: "black",
+                        backgroundColor: "#4e4d4d",
                     }}>
                     <TouchableHighlight
                         style={{

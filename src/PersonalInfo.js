@@ -140,7 +140,7 @@ export default class PersonalInfo extends Component {
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => this.showAndroidDatePicker()}>
-                        <Text>Izberi datum</Text>
+                        <Text style={styles.textButton}>Izberi datum</Text>
                     </TouchableOpacity>
                 </View>
             );
@@ -165,7 +165,7 @@ export default class PersonalInfo extends Component {
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <Text>Email: </Text>
+                    <Text style={styles.textButton}>Email: </Text>
                     <TextInput
                         style={{
                             height: 40,
@@ -176,11 +176,11 @@ export default class PersonalInfo extends Component {
                         defaultValue={this.state.email}
                         onChangeText={text => this.setState({email: text})}
                     />
-                    <Text>Časi za beep-e:</Text>
-                    <Text>
+                    <Text style={styles.textButton}>Časi za beep-e:</Text>
+                    <Text style={styles.textButton}>
                         (Napiši čas v vojaškem načinu, ločeno s vejicami. Če
                         želiš, da te beep-i motijo samo med službo, torej med 8.
-                        in 16., potem napiši 0800-1600
+                        in 16., potem napiši 0800-1600)
                     </Text>
                     <TextInput
                         style={{
@@ -192,7 +192,7 @@ export default class PersonalInfo extends Component {
                         defaultValue={this.state.time}
                         onChangeText={text => this.setState({time: text})}
                     />
-                    <Text>
+                    <Text style={styles.textButton}>
                         Geslo za enkripcijo varnostne kopije, ki si jo lahko
                         pošlješ po emailu. Če pustiš prazno, potem datoteka ne
                         bo enkriptana.
@@ -209,8 +209,10 @@ export default class PersonalInfo extends Component {
                             this.setState({emailPassword: text})
                         }
                     />
-                    <Text>Kateri so primerni dnevi za raziskovanje:</Text>
-                    <Text>Trenutni Datumi:</Text>
+                    <Text style={styles.textButton}>
+                        Kateri so primerni dnevi za raziskovanje:
+                    </Text>
+                    <Text style={styles.textButton}>Trenutni Datumi:</Text>
                     {this.state.days.map((item, index) => (
                         <View key={index} style={{flexDirection: "row"}}>
                             <Text>{item}</Text>
@@ -253,7 +255,7 @@ export default class PersonalInfo extends Component {
                         </View>
                     ))}
 
-                    <Text>Dodaj nov datum:</Text>
+                    <Text style={styles.textButton}>Dodaj nov datum:</Text>
                     {this.datePickerBasedOnOS(Platform.OS)}
                 </ScrollView>
             </View>

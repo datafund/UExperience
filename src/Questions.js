@@ -131,14 +131,62 @@ class Questions extends Component {
     createQuestionButton = (item, index) => {
         if (item.current === 1) {
             item["password"] = this.state.password;
+            let currentAnswer = "";
+            for (idA in this.state.answers) {
+                if (this.state.answers[idA].id === item.id) {
+                    if (
+                        this.state.answers[idA].type === "Tags" ||
+                        this.state.answers[idA].type === "TagsNoAdd"
+                    ) {
+                        currentAnswer = JSON.stringify(
+                            this.state.answers[idA].answer,
+                        )
+                            .replace("[", "")
+                            .replace("]", "")
+                            .replace(/[\\"]+/g, "")
+                            .replace(/["]+/g, "")
+                            .replace(",", ", ");
+                    } else if (this.state.answers[idA].type === "Binary") {
+                        if (this.state.answers[idA].answer === 1) {
+                            currentAnswer = "Da";
+                        } else {
+                            currentAnswer = "Ne";
+                        }
+                    } else if (this.state.answers[idA].type === "Slider") {
+                        currentAnswer =
+                            String(this.state.answers[idA].answer) + "/100";
+                    } else if (
+                        this.state.answers[idA].type === "MultipleChoice"
+                    ) {
+                        currentAnswer = this.state.answers[idA].answer;
+                    } else if (this.state.answers[idA].type === "Text") {
+                        if (this.state.answers[idA].answer.length > 20) {
+                            currentAnswer =
+                                this.state.answers[idA].answer.substring(
+                                    0,
+                                    15,
+                                ) + " ...";
+                        } else {
+                            currentAnswer = this.state.answers[idA].answer;
+                        }
+                    } else {
+                        currentAnswer = JSON.stringify(
+                            this.state.answers[idA].answer,
+                        );
+                    }
+                }
+            }
             return (
                 <TouchableHighlight
                     key={item.id}
                     onPress={() =>
                         this.props.navigation.navigate(item.type, item)
                     }>
-                    <View>
-                        <Text style={styles.button}>{item.question}</Text>
+                    <View style={styles.buttonQuestion}>
+                        <Text style={styles.textButton}>
+                            {item.question.toUpperCase()}
+                        </Text>
+                        <Text style={styles.textButton}>{currentAnswer}</Text>
                     </View>
                 </TouchableHighlight>
             );
@@ -152,7 +200,7 @@ class Questions extends Component {
             <View
                 style={{
                     height: 50,
-                    backgroundColor: "black",
+                    backgroundColor: "#4e4d4d",
                 }}>
                 <TouchableHighlight
                     style={{

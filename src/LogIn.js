@@ -5,7 +5,10 @@ import {
     Text,
     TextInput,
     AsyncStorage,
+    Alert,
 } from "react-native";
+
+import PushNotification from "react-native-push-notification";
 
 import styles from "./Styles.js";
 import {
@@ -18,7 +21,7 @@ const CryptoJS = require("crypto-js");
 
 class LogIn extends Component {
     componentDidMount = async () => {
-        let passwordHash = await getDataFromStorage("password", "");
+        let passwordHash = await getDataFromStorage("passwordHash", "");
         if (passwordHash === "None") {
             this.props.navigation.navigate("Index", {
                 password: "",
@@ -46,7 +49,8 @@ class LogIn extends Component {
                 {
                     text: "Izbriši",
                     onPress: () => {
-                        createNewProfile("");
+                        PushNotification.cancelAllLocalNotifications();
+                        AsyncStorage.clear();
                         this.setState({passwordHash: ""});
                         this.setState({inputPassword: ""});
                         this.setState({message: ""});
@@ -55,25 +59,6 @@ class LogIn extends Component {
                 {onDismiss: () => {}},
             ],
         );
-    };
-
-    savePassword = async password => {
-        const passwordHash = CryptoJS.SHA256(password).toString(
-            CryptoJS.enc.Base64,
-        );
-        await createNewProfile(password);
-        await setDataToStorage("password", "", passwordHash);
-        this.props.navigation.navigate("Index", {
-            password: password,
-        });
-    };
-
-    noEncryption = async () => {
-        await createNewProfile("");
-        await setDataToStorage("password", "", "None");
-        this.props.navigation.navigate("Index", {
-            password: "",
-        });
     };
 
     checkPassword = (inputedPassword, savedPassword) => {
@@ -90,90 +75,90 @@ class LogIn extends Component {
     };
 
     renderLogInScreen = () => {
-        if (!this.state.passwordHash) {
-            return (
-                <View style={styles.background}>
-                    <Text>
-                        Zaradi potencialne zlorabe zbranih podatkov (pomisli
-                        Cambridge Analyitica) prosim, da si spodaj izberete
-                        geslo, z katerim bodo zavarovani vaši podatki:
-                    </Text>
-                    <TextInput
+        return (
+            <View style={styles.backgroundStart}>
+                <Text style={{flex: 0.1}} />
+                <Text
+                    style={{
+                        flex: 0.1,
+                        fontSize: 20,
+                        textAlign: "center",
+                        color: "white",
+                    }}>
+                    Prosim, da vpišete svoje geslo
+                </Text>
+                <Text style={{flex: 0.1}} />
+                <TextInput
+                    style={{
+                        height: 50,
+                        borderColor: "black",
+                        borderWidth: 1,
+                        backgroundColor: "white",
+                        width: "90%",
+                        alignSelf: "center",
+                    }}
+                    onChangeText={text => this.setState({inputPassword: text})}
+                />
+                <Text style={{flex: 0.1}} />
+                <View style={{flex: 0.1}}>
+                    <View
                         style={{
-                            height: 50,
-                            borderColor: "black",
-                            borderWidth: 1,
-                            backgroundColor: "white",
-                        }}
-                        onChangeText={text =>
-                            this.setState({inputPassword: text})
-                        }
-                    />
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() =>
-                            this.savePassword(this.state.inputPassword)
-                        }>
-                        <Text>Shrani geslo</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() => this.noEncryption()}>
-                        <Text>Želim nadeljevati brez enkripcije</Text>
-                    </TouchableHighlight>
+                            flexDirection: "row",
+                            justifyContent: "space-around",
+                            flex: 1,
+                        }}>
+                        <TouchableHighlight
+                            style={{
+                                backgroundColor: "#4e9363",
+                                padding: 30,
+                                height: 40,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                flex: 0.4,
+                            }}
+                            onPress={() =>
+                                this.checkPassword(
+                                    this.state.inputPassword,
+                                    this.state.passwordHash,
+                                )
+                            }>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    justifyContent: "center",
+                                    textAlign: "center",
+                                    color: "white",
+                                }}>
+                                Vpiši se
+                            </Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            style={{
+                                backgroundColor: "#4e9363",
+                                padding: 30,
+                                height: 40,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                flex: 0.4,
+                            }}
+                            onPress={() => this.deleteProfileAlert()}>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    justifyContent: "center",
+                                    textAlign: "center",
+                                    color: "white",
+                                }}>
+                                Izbriši geslo
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
-            );
-        } else if (this.state.passwordHash === "None") {
-            return (
-                <View style={styles.background}>
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() =>
-                            this.props.navigation.navigate("Index", {
-                                password: "",
-                            })
-                        }>
-                        <Text>Pa Začnimo</Text>
-                    </TouchableHighlight>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.background}>
-                    <Text>Prosim, da vpišete svoje geslo</Text>
-                    <TextInput
-                        style={{
-                            height: 50,
-                            borderColor: "black",
-                            borderWidth: 1,
-                            backgroundColor: "white",
-                        }}
-                        onChangeText={text =>
-                            this.setState({inputPassword: text})
-                        }
-                    />
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() =>
-                            this.checkPassword(
-                                this.state.inputPassword,
-                                this.state.passwordHash,
-                            )
-                        }>
-                        <Text>Vpiši se</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() => this.deleteProfileAlert()}>
-                        <Text>
-                            Izbriši geslo (to bo izbrisalo vse vaše podatke)
-                        </Text>
-                    </TouchableHighlight>
+                <Text style={{flex: 0.1}} />
 
-                    <Text>{this.state.message}</Text>
-                </View>
-            );
-        }
+                <Text>{this.state.message}</Text>
+            </View>
+        );
     };
 
     render() {

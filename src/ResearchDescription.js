@@ -30,36 +30,50 @@ export default class ResearchDescription extends Component {
         return (
             <View style={styles.background}>
                 {this.state.research.id ? (
-                    <Text>ID: {this.state.research.id}</Text>
+                    <Text style={styles.textButton}>
+                        ID: {this.state.research.id}
+                    </Text>
                 ) : null}
                 {this.state.research.name ? (
-                    <Text>Raziskava: {this.state.research.name}</Text>
+                    <Text style={styles.textButton}>
+                        Raziskava: {this.state.research.name}
+                    </Text>
                 ) : null}
                 {this.state.research.description ? (
-                    <Text>Opis: {this.state.research.description}</Text>
+                    <Text style={styles.textButton}>
+                        Opis: {this.state.research.description}
+                    </Text>
                 ) : null}
                 {this.state.research.researcher ? (
-                    <Text>Raziskovalec: {this.state.research.researcher}</Text>
+                    <Text style={styles.textButton}>
+                        Raziskovalec: {this.state.research.researcher}
+                    </Text>
                 ) : null}
                 {this.state.research.name ? (
-                    <Text>
+                    <Text style={styles.textButton}>
                         Elektronska pošta raziskovalca:{" "}
                         {this.state.research.email}
                     </Text>
                 ) : null}
                 {this.state.research.start ? (
-                    <Text>Začetek raziskave: {this.state.research.start}</Text>
+                    <Text style={styles.textButton}>
+                        Začetek raziskave: {this.state.research.start}
+                    </Text>
                 ) : null}
                 {this.state.research.end ? (
-                    <Text>Konec raziskave: {this.state.research.end}</Text>
+                    <Text style={styles.textButton}>
+                        Konec raziskave: {this.state.research.end}
+                    </Text>
                 ) : null}
                 {this.state.research.dailyBeeps ? (
-                    <Text>
+                    <Text style={styles.textButton}>
                         Število dnevnih beepov: {this.state.research.dailyBeeps}
                     </Text>
                 ) : null}
                 <View style={{flexDirection: "row"}}>
-                    <Text>Svoje podatke želim deliti z raziskovalcem</Text>
+                    <Text style={styles.textButton}>
+                        Svoje podatke želim deliti z raziskovalcem
+                    </Text>
                     <Switch
                         style={{
                             position: "absolute",
@@ -76,7 +90,7 @@ export default class ResearchDescription extends Component {
                 </View>
                 {this.state.research.share ? (
                     <View>
-                        <Text>
+                        <Text style={styles.textButton}>
                             Če želiš, da se podatki pred pošiljanjem kriptirajo,
                             potem prosim vnesi geslo, ki bo potrebno, da se
                             vidijo vaši podatki. Ne pozabite tega gesla deliti z
@@ -104,14 +118,18 @@ export default class ResearchDescription extends Component {
                         await newResearch(researchPlan, this.state.password);
                         this.props.navigation.goBack();
                     }}>
-                    <Text>Želim sodelovati v tej raziskavi</Text>
+                    <Text style={styles.textButton}>
+                        Želim sodelovati v tej raziskavi
+                    </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() => {
                         this.props.navigation.goBack();
                     }}>
-                    <Text>Ne želim sodelovati v tej raziskavi</Text>
+                    <Text style={styles.textButton}>
+                        Ne želim sodelovati v tej raziskavi
+                    </Text>
                 </TouchableHighlight>
             </View>
         );

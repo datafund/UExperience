@@ -6,6 +6,8 @@ import {
     Slider,
     TextInput,
     AsyncStorage,
+    Platform,
+    TouchableNativeFeedback,
 } from "react-native";
 
 import styles from "./Styles.js";
@@ -25,7 +27,7 @@ export class QuestionBinary extends Component {
                             1,
                         )
                     }>
-                    <Text>Yes</Text>
+                    <Text style={{fontSize: 20}}>Yes</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
@@ -37,7 +39,7 @@ export class QuestionBinary extends Component {
                             0,
                         )
                     }>
-                    <Text>No</Text>
+                    <Text style={{fontSize: 20}}>No</Text>
                 </TouchableHighlight>
             </View>
         );
@@ -60,7 +62,7 @@ export class QuestionMultipleChoice extends Component {
                                 item,
                             )
                         }>
-                        <Text>{item}</Text>
+                        <Text style={{fontSize: 20}}>{item}</Text>
                     </TouchableHighlight>
                 ))}
             </View>
@@ -83,6 +85,7 @@ export class QuestionSlider extends Component {
     render() {
         return (
             <View style={styles.background}>
+                <Text style={{flex: 0.1}} />
                 <Slider
                     step={1}
                     minimumValue={0}
@@ -90,7 +93,9 @@ export class QuestionSlider extends Component {
                     value={50}
                     onValueChange={val => this.setState({currentAnswer: val})}
                 />
-                <Text>Current answer is : {this.state.currentAnswer}/100</Text>
+                <Text style={{fontSize: 20}}>
+                    Current answer is : {this.state.currentAnswer}/100
+                </Text>
             </View>
         );
     }
@@ -153,7 +158,7 @@ export class QuestionTags extends Component {
     };
 
     state = {
-        tags: ["Test"],
+        tags: [],
         currentTag: "",
         loading: true,
     };
@@ -161,8 +166,9 @@ export class QuestionTags extends Component {
     updateTags = addedTag => {
         const newTag = {tag: addedTag, chosen: 1};
         const newTags = [...this.state.tags, newTag];
-        this.setState({tags: newTags});
         this.textInput.clear();
+        this.setState({tags: newTags});
+        this.setState({currentTag: ""});
     };
 
     changeChosenStatus = index => {
@@ -185,40 +191,123 @@ export class QuestionTags extends Component {
         return newValue;
     };
 
-    render() {
-        return (
-            <View style={styles.background}>
-                {this.props.type === "Tags" ? (
-                    <TextInput
-                        style={{
-                            height: 40,
-                            borderColor: "black",
-                            borderWidth: 1,
-                            backgroundColor: "white",
-                        }}
-                        onSubmitEditing={event =>
-                            this.updateTags(event.nativeEvent.text)
-                        }
-                        ref={input => {
-                            this.textInput = input;
-                        }}
-                    />
-                ) : null}
-
-                {this.state.tags.map((item, index) => (
-                    <TouchableHighlight
+    showTag = (item, index) => {
+        if (item.tag.includes(this.state.currentTag)) {
+            if (Platform.OS === "android" && Platform.Version > 21) {
+                return (
+                    <TouchableNativeFeedback
+                        ripple={{color: "white", borderless: false}}
                         key={index}
-                        onPress={() => this.changeChosenStatus(index)}>
+                        onPress={() => {
+                            this.changeChosenStatus(index);
+                            this.setState({currentTag: ""});
+                            this.textInput.clear();
+                        }}>
                         <View
                             style={
                                 item.chosen === 1
                                     ? styles.container2
                                     : styles.container
                             }>
-                            <Text>{item.tag}</Text>
+                            <Text
+                                style={
+                                    item.chosen === 1
+                                        ? styles.textTags2
+                                        : styles.textTags
+                                }>
+                                {item.tag}
+                            </Text>
+                        </View>
+                    </TouchableNativeFeedback>
+                );
+            } else {
+                return (
+                    <TouchableHighlight
+                        key={index}
+                        onPress={() => {
+                            this.changeChosenStatus(index);
+                            this.setState({currentTag: ""});
+                            this.textInput.clear();
+                        }}>
+                        <View
+                            style={
+                                item.chosen === 1
+                                    ? styles.container2
+                                    : styles.container
+                            }>
+                            <Text
+                                style={
+                                    item.chosen === 1
+                                        ? styles.textTags2
+                                        : styles.textTags
+                                }>
+                                {item.tag}
+                            </Text>
                         </View>
                     </TouchableHighlight>
-                ))}
+                );
+            }
+        } else {
+            return null;
+        }
+    };
+
+    render() {
+        return (
+            <View style={styles.background}>
+                {this.props.type === "Tags" ? (
+                    <View
+                        style={{
+                            backgroundColor: "gray",
+                            flexDirection: "row",
+                            height: 60,
+                        }}>
+                        <TextInput
+                            style={{
+                                height: 40,
+                                borderColor: "black",
+                                borderWidth: 1,
+                                backgroundColor: "white",
+                                width: "80%",
+                                alignSelf: "flex-start",
+                                borderRadius: 10,
+                                top: 10,
+                                left: 5,
+                            }}
+                            placeholder="Poišči ali dodaj"
+                            onChangeText={text =>
+                                this.setState({currentTag: text})
+                            }
+                            onSubmitEditing={event =>
+                                this.updateTags(event.nativeEvent.text)
+                            }
+                            ref={input => {
+                                this.textInput = input;
+                            }}
+                        />
+                        <TouchableHighlight
+                            style={{
+                                alignSelf: "flex-end",
+                                margin: 15,
+                            }}
+                            onPress={() =>
+                                this.updateTags(this.state.currentTag)
+                            }>
+                            <Text
+                                style={{
+                                    textAlign: "right",
+                                    fontSize: 20,
+                                    color: "#f5f5f5",
+                                }}>
+                                Dodaj
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                ) : null}
+
+                {this.state.tags.map((item, index) =>
+                    this.showTag(item, index),
+                )}
             </View>
         );
     }
@@ -246,7 +335,7 @@ export class QuestionText extends Component {
                         height: 200,
                         borderColor: "black",
                         borderWidth: 1,
-                        backgroundColor: "white",
+                        backgroundColor: "#f5f5f5",
                         alignItems: "flex-start",
                     }}
                     onChangeText={text => this.setState({text: text})}

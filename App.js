@@ -14,6 +14,7 @@ import ResearchChoice from "./src/ResearchChoice.js";
 import ResearchModify from "./src/ResearchModify.js";
 import ResearchDescription from "./src/ResearchDescription.js";
 import PersonalInfo from "./src/PersonalInfo.js";
+import LoadingNewUsers from "./src/LoadingNewUsers.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -35,11 +36,17 @@ const AppNavigator = createStackNavigator(
         ResearchModify: ResearchModify,
         ResearchDescription: ResearchDescription,
         PersonalInfo: PersonalInfo,
+        LoadingNewUsers: LoadingNewUsers,
     },
     {
         initialRouteName: "Splash",
         defaultNavigationOptions: {
-            headerStyle: {backgroundColor: "black", color: "white"},
+            headerStyle: {
+                backgroundColor: "#4e4d4d",
+                color: "white",
+                shadowColor: "transparent",
+                elevation: 0,
+            },
             headerTintColor: "white",
             headerBackground: (
                 <Image

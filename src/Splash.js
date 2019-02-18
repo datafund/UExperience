@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {AsyncStorage, View} from "react-native";
+import {AsyncStorage, View, Text} from "react-native";
 
 import styles from "./Styles.js";
 import {getDataFromStorage} from "./functions/data.js";
@@ -9,9 +9,13 @@ class Splash extends Component {
         header: null,
     };
 
+    state = {personal: {}};
+
     componentDidMount = async () => {
-        let passwordHash = await getDataFromStorage("password", "");
-        if (passwordHash === "None") {
+        let passwordHash = await getDataFromStorage("passwordHash", "");
+        if (!passwordHash) {
+            this.props.navigation.navigate("LoadingNewUsers");
+        } else if (passwordHash === "None") {
             this.props.navigation.navigate("Index", {
                 password: "",
             });
@@ -21,7 +25,7 @@ class Splash extends Component {
     };
 
     render() {
-        return <View style={styles.background} />;
+        return <View style={styles.backgroundStart} />;
     }
 }
 

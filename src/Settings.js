@@ -1,5 +1,13 @@
 import React, {Component} from "react";
-import {Text, View, TouchableHighlight, Alert} from "react-native";
+import {
+    Text,
+    View,
+    TouchableHighlight,
+    Alert,
+    AsyncStorage,
+} from "react-native";
+
+import PushNotification from "react-native-push-notification";
 
 import styles from "./Styles.js";
 import {
@@ -44,7 +52,10 @@ class Settings extends Component {
                 },
                 {
                     text: "Izbriši",
-                    onPress: () => createNewProfile(this.state.password),
+                    onPress: () => {
+                        PushNotification.cancelAllLocalNotifications();
+                        AsyncStorage.clear();
+                    },
                 },
                 {onDismiss: () => {}},
             ],
@@ -61,7 +72,9 @@ class Settings extends Component {
                             password: this.state.password,
                         })
                     }>
-                    <Text>Spremeni osebne podatke</Text>
+                    <Text style={styles.textButton}>
+                        Spremeni osebne podatke
+                    </Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight
@@ -71,7 +84,9 @@ class Settings extends Component {
                             password: this.state.password,
                         })
                     }>
-                    <Text>Izberi Raziskovalni Načrt</Text>
+                    <Text style={styles.textButton}>
+                        Izberi Raziskovalni Načrt
+                    </Text>
                 </TouchableHighlight>
                 {!this.state.share ? (
                     <TouchableHighlight
@@ -81,7 +96,9 @@ class Settings extends Component {
                                 password: this.state.password,
                             })
                         }>
-                        <Text>Spremeni Raziskovalni Načrt</Text>
+                        <Text style={styles.textButton}>
+                            Spremeni Raziskovalni Načrt
+                        </Text>
                     </TouchableHighlight>
                 ) : (
                     <TouchableHighlight
@@ -92,7 +109,9 @@ class Settings extends Component {
                                 this.state.research.password,
                             )
                         }>
-                        <Text>Pošlji beepe raziskovalcu</Text>
+                        <Text style={styles.textButton}>
+                            Pošlji beepe raziskovalcu
+                        </Text>
                     </TouchableHighlight>
                 )}
                 <TouchableHighlight
@@ -103,12 +122,14 @@ class Settings extends Component {
                             this.state.personal.emailPassword,
                         )
                     }>
-                    <Text>Izvozi vse svoje podatke</Text>
+                    <Text style={styles.textButton}>
+                        Izvozi vse svoje podatke
+                    </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() => this.deleteProfileAlert()}>
-                    <Text>Izbriši vse podatke</Text>
+                    <Text style={styles.textButton}>Izbriši vse podatke</Text>
                 </TouchableHighlight>
             </View>
         );

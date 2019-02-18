@@ -61,7 +61,7 @@ class Question extends Component {
             <View
                 style={{
                     height: 50,
-                    backgroundColor: "black",
+                    backgroundColor: "#4e4d4d",
                 }}>
                 <TouchableHighlight
                     style={{
@@ -86,10 +86,6 @@ class Question extends Component {
             <View style={{flex: 1}}>
                 <View style={styles.background}>
                     <ScrollView>
-                        <Text style={styles.question}>
-                            {JSON.stringify(this.state.question)}
-                        </Text>
-
                         {this.state.type === "Binary" ? (
                             <QuestionBinary
                                 question={this.state.question}

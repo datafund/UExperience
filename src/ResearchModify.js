@@ -22,8 +22,6 @@ export default class ResearchModify extends Component {
         let research = await getDataFromStorage("research", password);
         research = research ? JSON.parse(research) : [];
         this.setState({research: research});
-        let nextId = this.getNextId(this.state.research.questions);
-        this.setState({nextId: nextId});
     };
 
     getNextId = questions => {
@@ -31,15 +29,15 @@ export default class ResearchModify extends Component {
         for (key in questions) {
             allIds.push(questions[key].id);
         }
-        let id = 0;
+        this.setState({allIds: allIds});
+        id = 0;
         let i = 0;
         while (id === 0) {
             i++;
             if (!allIds.includes(i)) {
-                id = i;
+                return i;
             }
         }
-        return i;
     };
 
     componentWillUnmount = async () => {
@@ -56,6 +54,7 @@ export default class ResearchModify extends Component {
         type: "",
         possibleAnswers: "",
         newQuestion: true,
+        allIds: [],
     };
 
     changeChosenStatus = index => {
@@ -70,7 +69,7 @@ export default class ResearchModify extends Component {
 
     saveQuestion = async () => {
         let newQuestion = {
-            id: this.state.nextId,
+            id: this.getNextId(this.state.research.questions),
             question: this.state.vprašanje,
             type: this.state.type,
             current: 1,
@@ -78,8 +77,6 @@ export default class ResearchModify extends Component {
         if (["TagsNoAdd", "MultipleChoice"].includes(this.state.type)) {
             newQuestion["possibleAnswers"] = this.state.possibleAnswers;
         }
-        let nextId = this.getNextId(this.state.questions);
-
         this.setState({vprašanje: ""});
         this.setState({possibleAnswers: ""});
         this.setState({type: ""});
@@ -87,7 +84,6 @@ export default class ResearchModify extends Component {
         let q = this.state.research;
         q.questions.push(newQuestion);
         this.setState({research: q});
-        this.setState({nextId: nextId});
     };
 
     seperateTags = text => {
@@ -101,7 +97,7 @@ export default class ResearchModify extends Component {
             <View
                 style={{
                     height: 50,
-                    backgroundColor: "black",
+                    backgroundColor: "#4e4d4d",
                 }}>
                 <TouchableHighlight
                     style={{
@@ -130,9 +126,12 @@ export default class ResearchModify extends Component {
             return (
                 <View style={styles.background}>
                     <ScrollView>
-                        <Text>
+                        <Text style={styles.textButton}>
                             Tukaj lahko dodaš dodatna vprašanja, ki jih želiš
                             spremljati pri raziskovanju svojega doživljanja.
+                        </Text>
+                        <Text style={styles.textButton}>
+                            Izberi tip vprašanja:
                         </Text>
                         <Picker
                             selectedValue={this.state.type}
@@ -148,15 +147,18 @@ export default class ResearchModify extends Component {
                             />
                             <Picker.Item label="Slider" value="Slider" />
                             <Picker.Item
-                                label="Vprašanja z tagi z možnostjo dodajanja novih"
+                                label="Vprašanja z tagi z novimi"
                                 value="Tags"
                             />
                             <Picker.Item
-                                label="Vprašanja z tagi brez možnosti dodajanja novih"
+                                label="Vprašanja z tagi brez novih"
                                 value="TagsNoAdd"
                             />
                             <Picker.Item label="Prosto besedilo" value="Text" />
                         </Picker>
+                        <Text style={styles.textButton}>
+                            Spodaj napiši vprašanje:
+                        </Text>
                         <TextInput
                             style={{
                                 height: 50,
@@ -174,7 +176,7 @@ export default class ResearchModify extends Component {
                             this.state.type,
                         ) ? (
                             <View>
-                                <Text>
+                                <Text style={styles.textButton}>
                                     Tukaj dodaj možne odgovore, ločene z
                                     vejicami.
                                 </Text>
@@ -193,7 +195,7 @@ export default class ResearchModify extends Component {
                         <TouchableHighlight
                             style={styles.button}
                             onPress={() => this.saveQuestion()}>
-                            <Text>Shrani</Text>
+                            <Text style={styles.textButton}>Shrani</Text>
                         </TouchableHighlight>
                     </ScrollView>
                     {this.getFooter()}

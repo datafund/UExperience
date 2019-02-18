@@ -41,7 +41,7 @@ export default class List extends Component {
                                     },
                                 )
                             }>
-                            <Text>{item.time}</Text>
+                            <Text style={styles.textButton}>{item.time}</Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
