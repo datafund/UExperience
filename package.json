@@ -20,6 +20,7 @@
     "react-native-mail": "^3.0.7",
     "react-native-push-notification": "^3.1.2",
     "react-native-screens": "^1.0.0 || ^1.0.0-alpha\n",
+    "react-native-svg": "^6.2.1",
     "react-navigation": "^3.0.0"
   },
   "devDependencies": {

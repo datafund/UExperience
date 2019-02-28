@@ -46,6 +46,17 @@ class Home extends Component {
                             Preglej svoje beep-e
                         </Text>
                     </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={() =>
+                            this.props.navigation.navigate("Analitics", {
+                                password: this.state.password,
+                            })
+                        }>
+                        <Text style={styles.textButton}>
+                            Analiziraj svoje beep-e
+                        </Text>
+                    </TouchableHighlight>
                 </View>
                 <View
                     style={{
