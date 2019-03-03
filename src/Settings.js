@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import PushNotification from "react-native-push-notification";
+import Mailer from "react-native-mail";
 
 import styles from "./Styles.js";
 import {
@@ -124,6 +125,23 @@ class Settings extends Component {
                     }>
                     <Text style={styles.textButton}>
                         Izvozi vse svoje podatke
+                    </Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={async () =>
+                        Mailer.mail(
+                            {
+                                subject: "UExperience - Report",
+                                recipients: ["sarajaksa@sarajaksa.eu"],
+                                body: "",
+                                isHTML: false,
+                            },
+                            (error, event) => {},
+                        )
+                    }>
+                    <Text style={styles.textButton}>
+                        Pošlji email glede aplikacije
                     </Text>
                 </TouchableHighlight>
                 <TouchableHighlight

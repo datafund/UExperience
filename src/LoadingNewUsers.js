@@ -45,6 +45,126 @@ class LoadingNewUsers extends Component {
                             flex: 0.2,
                             color: "white",
                         }}>
+                        To je testna verzija aplikacije
+                    </Text>
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            textAlign: "center",
+                            justifyContent: "flex-start",
+                            alignSelf: "center",
+                            flex: 0.5,
+                            width: "80%",
+                            color: "white",
+                        }}>
+                        To je testna verzija aplikacije, kar pomeni, da so
+                        znotraj nje lahko še prisotni hroški, ki bodo povzročali
+                        probleme, vključno z izgubo podatkov. Uporaba le je na
+                        lastno odgovornost
+                    </Text>
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            textAlign: "center",
+                            justifyContent: "flex-start",
+                            alignSelf: "center",
+                            flex: 0.5,
+                            width: "80%",
+                            color: "white",
+                        }}>
+                        Pripombe in probleme lahko pošljete preko nastavitev v
+                        aplikaciji.
+                    </Text>
+
+                    <TouchableHighlight
+                        onPress={() => {
+                            this.setState({currentScreen: 2});
+                        }}
+                        style={{
+                            backgroundColor: "#4e9363",
+                            padding: 20,
+                            width: "60%",
+                            height: 20,
+                            justifyContent: "center",
+                            flex: 0.1,
+                            alignSelf: "center",
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                justifyContent: "center",
+                                textAlign: "center",
+                                color: "white",
+                            }}>
+                            Strinjam se
+                        </Text>
+                    </TouchableHighlight>
+                    <Text
+                        style={{
+                            flex: 0.1,
+                        }}
+                    />
+
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                        }}>
+                        <View
+                            key={1}
+                            style={{
+                                height: 10,
+                                width: 10,
+                                backgroundColor: "white",
+                                margin: 8,
+                                borderRadius: 5,
+                            }}
+                        />
+                        <View
+                            key={2}
+                            style={{
+                                height: 10,
+                                width: 10,
+                                backgroundColor: "#595959",
+                                margin: 8,
+                                borderRadius: 5,
+                            }}
+                        />
+
+                        <View
+                            key={3}
+                            style={{
+                                height: 10,
+                                width: 10,
+                                backgroundColor: "#595959",
+                                margin: 8,
+                                borderRadius: 5,
+                            }}
+                        />
+                    </View>
+                    <Text
+                        style={{
+                            flex: 0.1,
+                        }}
+                    />
+                </View>
+            );
+        } else if (this.state.currentScreen === 2) {
+            return (
+                <View style={styles.backgroundStart}>
+                    <Text
+                        style={{
+                            flex: 0.1,
+                        }}
+                    />
+                    <Text
+                        style={{
+                            fontSize: 24,
+                            textAlign: "center",
+                            justifyContent: "space-around",
+                            flex: 0.2,
+                            color: "white",
+                        }}>
                         Ti si raziskovalec
                     </Text>
                     <Text
@@ -64,7 +184,7 @@ class LoadingNewUsers extends Component {
                     </Text>
                     <TouchableHighlight
                         onPress={() => {
-                            this.setState({currentScreen: 2});
+                            this.setState({currentScreen: 3});
                         }}
                         style={{
                             backgroundColor: "#4e9363",
@@ -101,13 +221,24 @@ class LoadingNewUsers extends Component {
                             style={{
                                 height: 10,
                                 width: 10,
-                                backgroundColor: "white",
+                                backgroundColor: "#595959",
                                 margin: 8,
                                 borderRadius: 5,
                             }}
                         />
                         <View
                             key={2}
+                            style={{
+                                height: 10,
+                                width: 10,
+                                backgroundColor: "white",
+                                margin: 8,
+                                borderRadius: 5,
+                            }}
+                        />
+
+                        <View
+                            key={3}
                             style={{
                                 height: 10,
                                 width: 10,
@@ -124,7 +255,7 @@ class LoadingNewUsers extends Component {
                     />
                 </View>
             );
-        } else if (this.state.currentScreen === 2)
+        } else if (this.state.currentScreen === 3)
             return (
                 <View style={styles.backgroundStart}>
                     <Text
@@ -245,6 +376,17 @@ class LoadingNewUsers extends Component {
                         />
                         <View
                             key={2}
+                            style={{
+                                height: 10,
+                                width: 10,
+                                backgroundColor: "#595959",
+                                margin: 8,
+                                borderRadius: 5,
+                            }}
+                        />
+
+                        <View
+                            key={3}
                             style={{
                                 height: 10,
                                 width: 10,
