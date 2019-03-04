@@ -216,9 +216,19 @@ export const newResearch = async (researchPlan, password) => {
     currentResearchPlan = currentResearchPlan
         ? JSON.parse(currentResearchPlan)
         : {};
-    oldResearchPlans.push(currentResearchPlan);
+    let uniq = {};
+    oldResearchPlans = oldResearchPlans.filter(
+        obj => !uniq[obj.id] && (uniq[obj.id] = true),
+    );
+    let oldResearchPlansFiltered = [];
+    for (idPlan in oldResearchPlans) {
+        if (!(oldResearchPlans[idPlan].id === currentResearchPlan.id)) {
+            oldResearchPlansFiltered.push(oldResearchPlans[idPlan]);
+        }
+    }
+    oldResearchPlansFiltered.push(currentResearchPlan);
     setDataToStorage("research", password, researchPlan);
-    setDataToStorage("oldResearchPlans", password, oldResearchPlans);
+    setDataToStorage("oldResearchPlans", password, oldResearchPlansFiltered);
     let notifications = await getDataFromStorage("notifications", password);
     notifications = notifications ? JSON.parse(notifications) : {};
     deleteAllNotifications(password, notifications);

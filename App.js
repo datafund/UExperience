@@ -16,6 +16,7 @@ import ResearchDescription from "./src/ResearchDescription.js";
 import PersonalInfo from "./src/PersonalInfo.js";
 import LoadingNewUsers from "./src/LoadingNewUsers.js";
 import Analitics from "./src/Analitics.js";
+import ResearchSwitch from "./src/SwitchResearchPlan.js";
 
 const AppNavigator = createStackNavigator(
     {
@@ -39,6 +40,7 @@ const AppNavigator = createStackNavigator(
         PersonalInfo: PersonalInfo,
         LoadingNewUsers: LoadingNewUsers,
         Analitics: Analitics,
+        ResearchSwitch: ResearchSwitch,
     },
     {
         initialRouteName: "Splash",
