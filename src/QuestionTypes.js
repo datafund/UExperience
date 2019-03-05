@@ -137,6 +137,16 @@ export class QuestionTags extends Component {
                     }
                 }
             }
+            if (this.props.possibleAnswers) {
+                let possibleAnswers = this.props.possibleAnswers;
+                for (tag in possibleAnswers) {
+                    allTags.push({tag: possibleAnswers[tag], chosen: 0});
+                }
+                let uniq = {};
+                allTags = allTags.filter(
+                    obj => !uniq[obj.tag] && (uniq[obj.tag] = true),
+                );
+            }
             this.setState({tags: allTags});
         } else if (this.props.type === "TagsNoAdd") {
             let possibleAnswers = this.props.possibleAnswers;
@@ -193,60 +203,31 @@ export class QuestionTags extends Component {
 
     showTag = (item, index) => {
         if (item.tag.includes(this.state.currentTag)) {
-            if (Platform.OS === "android" && Platform.Version > 21) {
-                return (
-                    <TouchableNativeFeedback
-                        ripple={{color: "white", borderless: false}}
-                        key={index}
-                        onPress={() => {
-                            this.changeChosenStatus(index);
-                            this.setState({currentTag: ""});
-                            this.textInput.clear();
-                        }}>
-                        <View
+            return (
+                <TouchableHighlight
+                    key={index}
+                    onPress={() => {
+                        this.changeChosenStatus(index);
+                        this.setState({currentTag: ""});
+                        this.textInput.clear();
+                    }}>
+                    <View
+                        style={
+                            item.chosen === 1
+                                ? styles.container2
+                                : styles.container
+                        }>
+                        <Text
                             style={
                                 item.chosen === 1
-                                    ? styles.container2
-                                    : styles.container
+                                    ? styles.textTags2
+                                    : styles.textTags
                             }>
-                            <Text
-                                style={
-                                    item.chosen === 1
-                                        ? styles.textTags2
-                                        : styles.textTags
-                                }>
-                                {item.tag}
-                            </Text>
-                        </View>
-                    </TouchableNativeFeedback>
-                );
-            } else {
-                return (
-                    <TouchableHighlight
-                        key={index}
-                        onPress={() => {
-                            this.changeChosenStatus(index);
-                            this.setState({currentTag: ""});
-                            this.textInput.clear();
-                        }}>
-                        <View
-                            style={
-                                item.chosen === 1
-                                    ? styles.container2
-                                    : styles.container
-                            }>
-                            <Text
-                                style={
-                                    item.chosen === 1
-                                        ? styles.textTags2
-                                        : styles.textTags
-                                }>
-                                {item.tag}
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
-                );
-            }
+                            {item.tag}
+                        </Text>
+                    </View>
+                </TouchableHighlight>
+            );
         } else {
             return null;
         }
