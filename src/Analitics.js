@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, Text, TouchableHighlight} from "react-native";
+import {View, Text, TouchableHighlight, ScrollView} from "react-native";
 
 import styles from "./Styles.js";
 
@@ -77,42 +77,43 @@ class Analitics extends Component {
         return (
             <View style={{flex: 1}}>
                 <View style={styles.background}>
-                    <View style={{flex: 0.2}} />
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexDirection: "row",
-                            flexWrap: "wrap",
-                        }}>
-                        {this.state.tags.map(element => {
-                            return (
-                                <TouchableHighlight
-                                    style={{
-                                        margin: 5,
-                                    }}
-                                    key={element.label}
-                                    onPress={() => {
-                                        this.setState({
-                                            currentTag: element.label,
-                                        });
-                                        let tags = this.getVizualizationData(
-                                            this.state.beeps,
-                                            element.label,
-                                        );
-                                        this.setState({tags: tags});
-                                    }}>
-                                    <Text
+                    <View style={{flex: 0.1}} />
+                    <ScrollView style={{flex: 1}}>
+                        <View
+                            style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexDirection: "row",
+                                flexWrap: "wrap",
+                            }}>
+                            {this.state.tags.map(element => {
+                                return (
+                                    <TouchableHighlight
                                         style={{
-                                            fontSize: element.fontSize,
+                                            margin: 5,
+                                        }}
+                                        key={element.label}
+                                        onPress={() => {
+                                            this.setState({
+                                                currentTag: element.label,
+                                            });
+                                            let tags = this.getVizualizationData(
+                                                this.state.beeps,
+                                                element.label,
+                                            );
+                                            this.setState({tags: tags});
                                         }}>
-                                        {element.label}
-                                    </Text>
-                                </TouchableHighlight>
-                            );
-                        })}
-                    </View>
+                                        <Text
+                                            style={{
+                                                fontSize: element.fontSize,
+                                            }}>
+                                            {element.label}
+                                        </Text>
+                                    </TouchableHighlight>
+                                );
+                            })}
+                        </View>
+                    </ScrollView>
                     <View
                         style={{
                             borderBottomColor: "black",
