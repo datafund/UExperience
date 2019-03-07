@@ -23,7 +23,7 @@ class LoadingNewUsers extends Component {
 
     savePassword = async password => {
         await createNewProfile(password);
-        this.props.navigation.navigate("Index", {
+        this.props.navigation.replace("Index", {
             password: password,
         });
     };

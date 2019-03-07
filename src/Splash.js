@@ -14,13 +14,13 @@ class Splash extends Component {
     componentDidMount = async () => {
         let passwordHash = await getDataFromStorage("passwordHash", "");
         if (!passwordHash) {
-            this.props.navigation.navigate("LoadingNewUsers");
+            this.props.navigation.replace("LoadingNewUsers");
         } else if (passwordHash === "None") {
-            this.props.navigation.navigate("Index", {
+            this.props.navigation.replace("Index", {
                 password: "",
             });
         } else {
-            this.props.navigation.navigate("LogIn");
+            this.props.navigation.replace("LogIn");
         }
     };
 

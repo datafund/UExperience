@@ -51,9 +51,9 @@ class LogIn extends Component {
                     onPress: () => {
                         PushNotification.cancelAllLocalNotifications();
                         AsyncStorage.clear();
-                        this.setState({passwordHash: ""});
-                        this.setState({inputPassword: ""});
-                        this.setState({message: ""});
+                        this.props.navigation.replace("Splash", {
+                            password: "",
+                        });
                     },
                 },
                 {onDismiss: () => {}},
@@ -66,7 +66,7 @@ class LogIn extends Component {
             CryptoJS.enc.Base64,
         );
         if (passwordHash === savedPassword) {
-            this.props.navigation.navigate("Index", {
+            this.props.navigation.replace("Index", {
                 password: inputedPassword,
             });
         } else {
