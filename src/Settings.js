@@ -77,7 +77,37 @@ class Settings extends Component {
                         Spremeni osebne podatke
                     </Text>
                 </TouchableHighlight>
-
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() =>
+                        this.props.navigation.navigate("Beeps", {
+                            password: this.state.password,
+                        })
+                    }>
+                    <Text style={styles.textButton}>Preglej svoje beep-e</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() =>
+                        this.props.navigation.navigate("Analitics", {
+                            password: this.state.password,
+                        })
+                    }>
+                    <Text style={styles.textButton}>
+                        Analiziraj svoje beep-e
+                    </Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() =>
+                        this.props.navigation.navigate("ResearchSwitch", {
+                            password: this.state.password,
+                        })
+                    }>
+                    <Text style={styles.textButton}>
+                        Zamenjaj raziskovalni načrt
+                    </Text>
+                </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>

@@ -7,34 +7,106 @@ import {
     ScrollView,
     Image,
     TextInput,
+    AppState,
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
 
 import styles from "./Styles.js";
-import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
+import {
+    getDataFromStorage,
+    setDataToStorage,
+    saveBeep,
+} from "./functions/data.js";
 
 class Questions extends Component {
+    static navigationOptions = ({navigation}) => ({
+        headerRight: (
+            <TouchableHighlight
+                onPress={() => {
+                    navigation.state.params.handleSave();
+                }}>
+                <Image
+                    source={require("./ui/settings.png")}
+                    style={{flex: 0.8}}
+                />
+            </TouchableHighlight>
+        ),
+    });
+
     componentDidMount = async () => {
         this.subs = [
             this.props.navigation.addListener("didFocus", () => {
                 this.componentDidFocus();
             }),
         ];
+        AppState.addEventListener("change", state => {
+            if (state === "background") {
+                saveBeep(
+                    this.state.password,
+                    this.state.answers,
+                    this.state.text,
+                    this.state.research,
+                    this.state.time,
+                    this.state.longitude,
+                    this.state.latitude,
+                    this.state.picture,
+                );
+                this.prepareForNewBeep();
+            }
+        });
+        const password = this.props.navigation.getParam("password", "");
+        this.setState({
+            password: password,
+        });
+        this.prepareForNewBeep();
+        this.props.navigation.setParams({
+            handleSave: this.saveDetails.bind(this),
+        });
+    };
+
+    saveDetails() {
+        this.saveNewBeep();
+        this.prepareForNewBeep();
+        this.props.navigation.navigate("Settings", {
+            password: this.state.password,
+        });
+    }
+
+    saveNewBeep = () => {
+        saveBeep(
+            this.state.password,
+            this.state.answers,
+            this.state.text,
+            this.state.research,
+            this.state.time,
+            this.state.longitude,
+            this.state.latitude,
+            this.state.picture,
+        );
+    };
+
+    prepareForNewBeep = async () => {
+        this.setState({
+            answers: [],
+            time: "",
+            questions: [],
+            picture: "",
+            primaryDescriptive: true,
+            text: "",
+            showText: 1,
+            newAnswer: {},
+        });
         await setDataToStorage(
             "answer",
             this.state.password,
             JSON.stringify([]),
         );
-        const password = this.props.navigation.getParam("password", "");
-        this.setState({
-            password: password,
-        });
-
-        let research = await getDataFromStorage("research", password);
-
+        let research = await getDataFromStorage(
+            "research",
+            this.state.password,
+        );
         research = research ? JSON.parse(research) : [];
         this.setState({research: research});
-
         this.setState({
             time: new Date()
                 .toISOString()
@@ -44,6 +116,7 @@ class Questions extends Component {
                 .split(":")
                 .join("-"),
         });
+
         if (research.descriptive) {
             this.setState({primaryDescriptive: true, showText: 0});
         } else {
@@ -82,13 +155,41 @@ class Questions extends Component {
                 JSON.stringify([]),
             );
             this.setState({newAnswer: newAnswer});
+        } else {
+            if (!this.state.answers) {
+                this.prepareForNewBeep();
+            }
         }
     };
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.subs.forEach(sub => sub.remove());
-        this.saveBeep();
-    }
+        saveBeep(
+            this.state.password,
+            this.state.answers,
+            this.state.text,
+            this.state.research,
+            this.state.time,
+            this.state.longitude,
+            this.state.latitude,
+            this.state.picture,
+        );
+        AppState.removeEventListener("change", state => {
+            if (state === "background") {
+                saveBeep(
+                    this.state.password,
+                    this.state.answers,
+                    this.state.text,
+                    this.state.research,
+                    this.state.time,
+                    this.state.longitude,
+                    this.state.latitude,
+                    this.state.picture,
+                );
+                this.prepareForNewBeep();
+            }
+        });
+    };
 
     state = {
         answers: [],
@@ -100,32 +201,6 @@ class Questions extends Component {
         text: "",
         showText: 1,
         newAnswer: {},
-    };
-
-    saveBeep = async () => {
-        let allAnswers = this.state.answers;
-        allAnswers.filter(item => item);
-        if (!(allAnswers.length === 0 && this.state.text === "")) {
-            let newBeep = {
-                researchId: this.state.research.id,
-                time: this.state.time,
-                questions: allAnswers,
-            };
-            if (this.state.research.place) {
-                newBeep["longitude"] = this.state.longitude;
-                newBeep["latitude"] = this.state.latitude;
-            }
-            if (this.state.research.picture) {
-                newBeep["picture"] = this.state.picture;
-            }
-            if (this.state.research.descriptive) {
-                newBeep["experience"] = this.state.text;
-            }
-            let beeps = await getDataFromStorage("beeps", this.state.password);
-            let b = beeps ? JSON.parse(beeps) : [];
-            b.push(newBeep);
-            await setDataToStorage("beeps", this.state.password, b);
-        }
     };
 
     createQuestionButton = (item, index) => {
@@ -199,15 +274,13 @@ class Questions extends Component {
         return (
             <View
                 style={{
-                    height: 50,
+                    flex: 0.3,
                     backgroundColor: "#4e4d4d",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                 }}>
                 <TouchableHighlight
-                    style={{
-                        position: "absolute",
-                        alignSelf: "flex-start",
-                        top: 0,
-                    }}
                     onPress={() =>
                         ImagePicker.launchCamera(null, response => {
                             if (
@@ -223,32 +296,32 @@ class Questions extends Component {
                     }>
                     <Image
                         source={require("./ui/camera.png")}
-                        style={{height: 40, width: 40}}
+                        style={{flex: 0.9}}
                     />
                 </TouchableHighlight>
 
                 <TouchableHighlight
-                    style={{
-                        position: "absolute",
-                        alignSelf: "center",
-                        top: 0,
-                    }}
-                    onPress={() => {
-                        this.props.navigation.goBack();
+                    onPress={async () => {
+                        await saveBeep(
+                            this.state.password,
+                            this.state.answers,
+                            this.state.text,
+                            this.state.research,
+                            this.state.time,
+                            this.state.longitude,
+                            this.state.latitude,
+                            this.state.picture,
+                        );
+                        this.prepareForNewBeep();
                     }}>
                     <Image
                         source={require("./ui/save.png")}
-                        style={{height: 40, width: 40}}
+                        style={{flex: 0.9}}
                     />
                 </TouchableHighlight>
 
                 {this.state.primaryDescriptive ? (
                     <TouchableHighlight
-                        style={{
-                            position: "absolute",
-                            alignSelf: "flex-end",
-                            top: 0,
-                        }}
                         onPress={() => {
                             if (this.state.showText === 0) {
                                 this.setState({showText: 1});
@@ -258,7 +331,7 @@ class Questions extends Component {
                         }}>
                         <Image
                             source={require("./ui/memo.png")}
-                            style={{height: 40, width: 40}}
+                            style={{flex: 0.9}}
                         />
                     </TouchableHighlight>
                 ) : null}

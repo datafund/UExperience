@@ -286,3 +286,39 @@ export const getBeepsCsvContent = (time, research, beeps, notification) => {
 
     return finalFileContent;
 };
+
+export const saveBeep = async (
+    password,
+    answers,
+    text,
+    research,
+    time,
+    place,
+    longitude,
+    latitude,
+    picture,
+) => {
+    let allAnswers = answers;
+    allAnswers.filter(item => item);
+    if (!(allAnswers.length === 0 && text === "")) {
+        let newBeep = {
+            researchId: research.id,
+            time: time,
+            questions: allAnswers,
+        };
+        if (research.place) {
+            newBeep["longitude"] = longitude;
+            newBeep["latitude"] = latitude;
+        }
+        if (research.picture) {
+            newBeep["picture"] = picture;
+        }
+        if (research.descriptive) {
+            newBeep["experience"] = text;
+        }
+        let beeps = await getDataFromStorage("beeps", password);
+        let b = beeps ? JSON.parse(beeps) : [];
+        b.push(newBeep);
+        await setDataToStorage("beeps", password, b);
+    }
+};

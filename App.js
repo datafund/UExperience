@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {Image, StyleSheet, View, Header} from "react-native";
 import {createStackNavigator, createAppContainer} from "react-navigation";
 
-import Home from "./src/Home.js";
 import List from "./src/List.js";
 import Questions from "./src/Questions.js";
 import Question from "./src/Question.js";
@@ -20,7 +19,7 @@ import ResearchSwitch from "./src/SwitchResearchPlan.js";
 
 const AppNavigator = createStackNavigator(
     {
-        Index: Home,
+        Index: Questions,
         NewBeep: Questions,
         Beeps: List,
         Binary: Question,
