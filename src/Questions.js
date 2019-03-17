@@ -160,6 +160,14 @@ class Questions extends Component {
                 this.prepareForNewBeep();
             }
         }
+        let research = await getDataFromStorage(
+            "research",
+            this.state.password,
+        );
+        research = JSON.parse(research);
+        if (!(research.id === this.state.research.id)) {
+            this.prepareForNewBeep();
+        }
     };
 
     componentWillUnmount = () => {
@@ -274,32 +282,12 @@ class Questions extends Component {
         return (
             <View
                 style={{
-                    flex: 0.3,
+                    flex: 0.1,
                     backgroundColor: "#4e4d4d",
                     flexDirection: "row",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
                     alignItems: "center",
                 }}>
-                <TouchableHighlight
-                    onPress={() =>
-                        ImagePicker.launchCamera(null, response => {
-                            if (
-                                response.didCancel ||
-                                response.error ||
-                                response.customButton
-                            ) {
-                            } else {
-                                const source = response.uri;
-                                this.setState({picture: source});
-                            }
-                        })
-                    }>
-                    <Image
-                        source={require("./ui/camera.png")}
-                        style={{flex: 0.9}}
-                    />
-                </TouchableHighlight>
-
                 <TouchableHighlight
                     onPress={async () => {
                         await saveBeep(
@@ -319,22 +307,6 @@ class Questions extends Component {
                         style={{flex: 0.9}}
                     />
                 </TouchableHighlight>
-
-                {this.state.primaryDescriptive ? (
-                    <TouchableHighlight
-                        onPress={() => {
-                            if (this.state.showText === 0) {
-                                this.setState({showText: 1});
-                            } else {
-                                this.setState({showText: 0});
-                            }
-                        }}>
-                        <Image
-                            source={require("./ui/memo.png")}
-                            style={{flex: 0.9}}
-                        />
-                    </TouchableHighlight>
-                ) : null}
             </View>
         );
     };
@@ -342,12 +314,12 @@ class Questions extends Component {
     render() {
         if (this.state.showText) {
             return (
-                <View style={styles.background}>
-                    <ScrollView>
-                        {this.state.primaryDescriptive ? (
+                <View style={{flex: 1}}>
+                    <View style={styles.background}>
+                        <ScrollView style={{flex: 0.9}}>
                             <TextInput
                                 style={{
-                                    height: 400,
+                                    height: 350,
                                     borderColor: "black",
                                     borderWidth: 1,
                                     backgroundColor: "#f5f5f5",
@@ -359,20 +331,75 @@ class Questions extends Component {
                                 }
                                 multiline={true}
                             />
-                        ) : null}
-                    </ScrollView>
-                    {this.getFooter()}
+                            <TouchableHighlight
+                                key={"text"}
+                                onPress={() => {
+                                    this.setState({showText: 0});
+                                }}>
+                                <View style={styles.buttonQuestion}>
+                                    <Image
+                                        source={require("./ui/memo.png")}
+                                        style={{flex: 0.9}}
+                                    />
+                                    <Text style={styles.textButton}>
+                                        Odgovori na vprašanja
+                                    </Text>
+                                </View>
+                            </TouchableHighlight>
+                        </ScrollView>
+                        {this.getFooter()}
+                    </View>
                 </View>
             );
         } else {
             return (
-                <View style={styles.background}>
-                    <ScrollView>
-                        {this.state.research.questions.map((item, index) =>
-                            this.createQuestionButton(item, index),
-                        )}
-                    </ScrollView>
-                    {this.getFooter()}
+                <View style={{flex: 1}}>
+                    <View style={styles.background}>
+                        <ScrollView style={{flex: 0.8}}>
+                            {this.state.research.questions.map((item, index) =>
+                                this.createQuestionButton(item, index),
+                            )}
+
+                            <TouchableHighlight
+                                key={"camera"}
+                                onPress={() =>
+                                    ImagePicker.launchCamera(null, response => {
+                                        if (
+                                            response.didCancel ||
+                                            response.error ||
+                                            response.customButton
+                                        ) {
+                                        } else {
+                                            const source = response.uri;
+                                            this.setState({picture: source});
+                                        }
+                                    })
+                                }>
+                                <View style={styles.buttonQuestion}>
+                                    <Image
+                                        source={require("./ui/camera.png")}
+                                    />
+
+                                    <Text style={styles.textButton}>
+                                        Dodaj sliko
+                                    </Text>
+                                </View>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                key={"text"}
+                                onPress={() => {
+                                    this.setState({showText: 1});
+                                }}>
+                                <View style={styles.buttonQuestion}>
+                                    <Image source={require("./ui/memo.png")} />
+                                    <Text style={styles.textButton}>
+                                        Opiši svoje doživljanje
+                                    </Text>
+                                </View>
+                            </TouchableHighlight>
+                        </ScrollView>
+                        {this.getFooter()}
+                    </View>
                 </View>
             );
         }
