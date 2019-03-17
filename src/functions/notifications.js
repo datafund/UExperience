@@ -223,7 +223,9 @@ export const newResearch = async (researchPlan, password) => {
     let oldResearchPlansFiltered = [];
     for (idPlan in oldResearchPlans) {
         if (!(oldResearchPlans[idPlan].id === currentResearchPlan.id)) {
-            oldResearchPlansFiltered.push(oldResearchPlans[idPlan]);
+            if (!(oldResearchPlans[idPlan].id === researchPlan.id)) {
+                oldResearchPlansFiltered.push(oldResearchPlans[idPlan]);
+            }
         }
     }
     oldResearchPlansFiltered.push(currentResearchPlan);
