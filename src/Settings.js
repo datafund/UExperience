@@ -170,9 +170,7 @@ class Settings extends Component {
                             (error, event) => {},
                         )
                     }>
-                    <Text style={styles.textButton}>
-                        Pošlji email glede aplikacije
-                    </Text>
+                    <Text style={styles.textButton}>Feedback</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
