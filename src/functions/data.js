@@ -123,7 +123,7 @@ export const createNewProfile = async password => {
 };
 
 export const exportAllData = async (password, password2) => {
-    let pathToFile = getPathToSaveFilesAccessable(Platform.OS) + "/backup.txt";
+    let pathToFile = getPathToSaveFilesAccessable(Platform.OS) + "/backup.csv";
     allVariables = [];
     let personal = await getDataFromStorage("personal", password);
     personal = personal ? JSON.parse(personal) : {};
@@ -150,7 +150,7 @@ export const exportAllData = async (password, password2) => {
         "BackUp from UExperience",
         "",
         pathToFile,
-        "txt",
+        "csv",
     );
     //await deleteFile(pathToFile);
 };

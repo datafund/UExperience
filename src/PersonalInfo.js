@@ -12,6 +12,7 @@ import {
     Platform,
     TouchableOpacity,
     DatePickerAndroid,
+    DatePickerIOS,
 } from "react-native";
 import PushNotification from "react-native-push-notification";
 
@@ -83,6 +84,7 @@ export default class PersonalInfo extends Component {
         days: [],
         currentDay: new Date(),
         emailPassword: "",
+        notifications: "No data yet", 
 
         notifications: {},
     };
@@ -128,9 +130,9 @@ export default class PersonalInfo extends Component {
             return (
                 <View>
                     <DatePickerIOS
-                        date={this.state.currentDate}
+                        date={new Date(Date.now() - 86400000)}
                         onDateChange={this.addNewDate}
-                        mode={date}
+                        mode={"date"}
                     />
                 </View>
             );
