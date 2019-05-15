@@ -184,6 +184,7 @@ class LoadingNewUsers extends Component {
                     </Text>
                     <TouchableHighlight
                         onPress={() => {
+                            PushNotification.requestPermissions();
                             this.setState({currentScreen: 3});
                         }}
                         style={{
