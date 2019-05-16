@@ -1,7 +1,20 @@
 import React, {Component} from "react";
-import {Image, StyleSheet, View, Header} from "react-native";
-import {createStackNavigator, createAppContainer} from "react-navigation";
+import {
+    Image,
+    StyleSheet,
+    View,
+    Header,
+    Alert,
+    PushNotificationIOS,
+} from "react-native";
+import {
+    createStackNavigator,
+    createAppContainer,
+    NavigationActions,
+} from "react-navigation";
+import PushNotification from "react-native-push-notification";
 
+import NavigationService from "./NavigationService.js";
 import List from "./src/List.js";
 import Questions from "./src/Questions.js";
 import Question from "./src/Question.js";
@@ -66,10 +79,23 @@ const AppNavigator = createStackNavigator(
     },
 );
 
+PushNotification.configure({
+    onNotification: function(notification) {
+        NavigationService.navigate("Index");
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+    },
+});
+
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
     render() {
-        return <AppContainer />;
+        return (
+            <AppContainer
+                ref={navigatorRef => {
+                    NavigationService.setTopLevelNavigator(navigatorRef);
+                }}
+            />
+        );
     }
 }

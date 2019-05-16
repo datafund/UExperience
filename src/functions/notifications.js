@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import PushNotification from "react-native-push-notification";
 
 import {getDataFromStorage, setDataToStorage} from "./data.js";
@@ -7,6 +7,7 @@ import {getDataFromStorage, setDataToStorage} from "./data.js";
 
 export const createNotification = (date = new Date()) => {
     let id = date.getTime();
+
     PushNotification.localNotificationSchedule({
         id: id,
         date: date,
