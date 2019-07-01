@@ -279,6 +279,7 @@ export class QuestionTags extends Component {
                                     textAlign: "right",
                                     fontSize: 20,
                                     color: "#f5f5f5",
+                                    fontFamily: "Gill Sans",
                                 }}>
                                 Dodaj
                             </Text>

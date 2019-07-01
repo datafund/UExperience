@@ -28,6 +28,7 @@ export default StyleSheet.create({
         padding: 20,
         margin: 0,
         backgroundColor: "#eaeaea",
+        fontFamily: "Gill Sans",
     },
     container: {
         padding: 20,
@@ -43,9 +44,9 @@ export default StyleSheet.create({
         alignItems: "center",
         borderWidth: 1,
     },
-    textTags2: {fontSize: 22},
-    textTags: {fontSize: 18},
-    textButton: {fontSize: 20, textAlign: "center"},
+    textTags2: {fontSize: 22, fontFamily: "Gill Sans"},
+    textTags: {fontSize: 18, fontFamily: "Gill Sans"},
+    textButton: {fontSize: 20, textAlign: "center", fontFamily: "Gill Sans"},
     background: {
         flex: 1,
         backgroundColor: "#eaeaea",

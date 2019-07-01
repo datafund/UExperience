@@ -44,6 +44,7 @@ class LoadingNewUsers extends Component {
                             justifyContent: "space-around",
                             flex: 0.2,
                             color: "white",
+                            fontFamily: "Gill Sans",
                         }}>
                         To je testna verzija aplikacije
                     </Text>
@@ -56,6 +57,7 @@ class LoadingNewUsers extends Component {
                             flex: 0.5,
                             width: "80%",
                             color: "white",
+                            fontFamily: "Gill Sans",
                         }}>
                         To je testna verzija aplikacije, kar pomeni, da so
                         znotraj nje lahko še prisotni hroški, ki bodo povzročali
@@ -71,6 +73,7 @@ class LoadingNewUsers extends Component {
                             flex: 0.5,
                             width: "80%",
                             color: "white",
+                            fontFamily: "Gill Sans",
                         }}>
                         Pripombe in probleme lahko pošljete preko nastavitev v
                         aplikaciji.
@@ -95,6 +98,7 @@ class LoadingNewUsers extends Component {
                                 justifyContent: "center",
                                 textAlign: "center",
                                 color: "white",
+                                fontFamily: "Gill Sans",
                             }}>
                             Strinjam se
                         </Text>
@@ -164,6 +168,7 @@ class LoadingNewUsers extends Component {
                             justifyContent: "space-around",
                             flex: 0.2,
                             color: "white",
+                            fontFamily: "Gill Sans",
                         }}>
                         Ti si raziskovalec
                     </Text>
@@ -176,6 +181,7 @@ class LoadingNewUsers extends Component {
                             flex: 0.5,
                             width: "80%",
                             color: "white",
+                            fontFamily: "Gill Sans",
                         }}>
                         Descriptive Experience Sampling (diskriptivno vzorčenje
                         doživljanja) je enostavno. Ob naključnih časih se sproži
@@ -202,6 +208,7 @@ class LoadingNewUsers extends Component {
                                 justifyContent: "center",
                                 textAlign: "center",
                                 color: "white",
+                                fontFamily: "Gill Sans",
                             }}>
                             Dovoli notifikacije
                         </Text>
@@ -271,6 +278,7 @@ class LoadingNewUsers extends Component {
                             justifyContent: "space-around",
                             flex: 0.1,
                             color: "white",
+                            fontFamily: "Gill Sans",
                         }}>
                         Zaščiti svoje podatke
                     </Text>
@@ -281,6 +289,7 @@ class LoadingNewUsers extends Component {
                             justifyContent: "flex-start",
                             flex: 0.3,
                             color: "white",
+                            fontFamily: "Gill Sans",
                         }}>
                         Spodaj lahko vpišete svoje geslo za zaščito svojih
                         podatkov.
@@ -329,6 +338,7 @@ class LoadingNewUsers extends Component {
                                         justifyContent: "center",
                                         textAlign: "center",
                                         color: "white",
+                                        fontFamily: "Gill Sans",
                                     }}>
                                     Shrani geslo
                                 </Text>
@@ -349,6 +359,7 @@ class LoadingNewUsers extends Component {
                                         justifyContent: "center",
                                         textAlign: "center",
                                         color: "white",
+                                        fontFamily: "Gill Sans",
                                     }}>
                                     Brez gesla
                                 </Text>

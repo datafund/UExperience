@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -48,6 +47,7 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		D950279318FF44998F861C81 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E74029927864C139E321CF1 /* libRNSVG.a */; };
 		E3A7F6C439874ECDA516342A /* libRNScreens.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB470D5C8B84E2197493265 /* libRNScreens.a */; };
+		76931282A1C24D6AA7261543 /* Gill Sans.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 15812B3D62DF46AA9A720D62 /* Gill Sans.ttc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -452,6 +452,9 @@
 		B1EC0E682BD54F399C4D1B48 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; };
 		CCB470D5C8B84E2197493265 /* libRNScreens.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNScreens.a; sourceTree = "<group>"; };
 		DCDD8CAF00A24210992DBF16 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
+		05AE184F1B1C42089FC8F6D5 /* GillSans.ttc */ = {isa = PBXFileReference; name = "GillSans.ttc"; path = "../assets/fonts/GillSans.ttc"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B5B6042347354DEC97351975 /* vincHand.ttf */ = {isa = PBXFileReference; name = "vincHand.ttf"; path = "../assets/fonts/vincHand.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		15812B3D62DF46AA9A720D62 /* Gill Sans.ttc */ = {isa = PBXFileReference; name = "Gill Sans.ttc"; path = "../assets/fonts/Gill Sans.ttc"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -704,6 +707,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				8499A60F228195DF00A634E7 /* Recovered References */,
+				5E2A89E9762A44D19496BF98 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -805,6 +809,17 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		5E2A89E9762A44D19496BF98 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				05AE184F1B1C42089FC8F6D5 /* GillSans.ttc */,
+				B5B6042347354DEC97351975 /* vincHand.ttf */,
+				15812B3D62DF46AA9A720D62 /* Gill Sans.ttc */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -1364,6 +1379,9 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				FA4B4259EBCC4A97890F33CE /* GillSans.ttc in Resources */,
+				7A73D0A1129C4CA9BAFF21FC /* vincHand.ttf in Resources */,
+				76931282A1C24D6AA7261543 /* Gill Sans.ttc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
