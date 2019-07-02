@@ -2,6 +2,10 @@
 
 buildscript {
     ext {
+        //in order to make notification libary stop complaining
+        googlePlayServicesVersion = "16.1.0" // default: "+"
+        firebaseVersion = "15.0.2" // default: "+"
+        
         buildToolsVersion = "27.0.3"
         minSdkVersion = 16
         compileSdkVersion = 27
