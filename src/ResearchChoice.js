@@ -15,29 +15,31 @@ import {newResearch} from "./functions/notifications.js";
 
 export default class ResearchChoice extends Component {
     componentDidMount = async () => {
+        let password = this.props.navigation.getParam("password", "");
         this.setState({
-            password: this.props.navigation.getParam("password", ""),
+            password: password,
         });
         try {
             var researchPlans = await fetch(
-                "https://testing.sarajaksa.eu/all_research_projects.json",
-            );
+                    "https://testing.sarajaksa.eu/all_research_projects.json",
+                ),
+                researchPlans = researchPlans._bodyInit,
+                researchPlans = JSON.parse(researchPlans);
         } catch (err) {
-            this.setState({
-                success:
-                    "Something went wrong. Is the internet connection working?",
-            });
-            return;
+            researchPlans = [];
         }
-        researchPlans = researchPlans._bodyInit;
-        try {
-            researchPlans = JSON.parse(researchPlans);
-        } catch {
-            this.setState({
-                success: "Something went wrong. Is you put in the right url?",
-            });
-            return;
-        }
+        let currentResearchPlan = await getDataFromStorage(
+            "research",
+            password,
+        );
+        let oldResearchPlans = await getDataFromStorage(
+            "oldResearchPlans",
+            password,
+        );
+        currentResearchPlan = JSON.parse(currentResearchPlan);
+        oldResearchPlans = JSON.parse(oldResearchPlans);
+        oldResearchPlans.push(currentResearchPlan);
+        this.setState({existingResearchPlans: oldResearchPlans});
         this.setState({researchPlans: researchPlans});
     };
 
@@ -45,8 +47,10 @@ export default class ResearchChoice extends Component {
         success: "Nisi še poskusil",
         url: "",
         password: "",
-        researchFromApi: true,
+        currentScreen: "api",
         researchPlans: [],
+        existingResearchPlans: [],
+        updatePlans: [],
     };
 
     getQuestions = async url => {
@@ -77,25 +81,28 @@ export default class ResearchChoice extends Component {
         return (
             <View
                 style={{
-                    height: 50,
+                    flex: 0.1,
                     backgroundColor: "#4e4d4d",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                 }}>
                 <TouchableHighlight
-                    style={{
-                        position: "absolute",
-                        alignSelf: "flex-end",
-                        top: 0,
-                    }}
                     onPress={() => {
-                        if (this.state.researchFromApi === true) {
-                            this.setState({researchFromApi: false});
-                        } else {
-                            this.setState({researchFromApi: true});
-                        }
+                        this.setState({currentScreen: "api"});
+                    }}>
+                    <Image
+                        source={require("./ui/list.png")}
+                        style={{flex: 0.9, aspectRatio: 1}}
+                    />
+                </TouchableHighlight>
+                <TouchableHighlight
+                    onPress={() => {
+                        this.setState({currentScreen: "internet"});
                     }}>
                     <Image
                         source={require("./ui/world.png")}
-                        style={{height: 40, width: 40}}
+                        style={{flex: 0.9, aspectRatio: 1}}
                     />
                 </TouchableHighlight>
             </View>
@@ -103,10 +110,34 @@ export default class ResearchChoice extends Component {
     };
 
     render() {
-        if (this.state.researchFromApi === true) {
+        if (this.state.currentScreen === "api") {
             return (
                 <View style={styles.background}>
-                    <ScrollView>
+                    <ScrollView
+                        style={{
+                            flex: 1,
+                        }}>
+                        <FlatList
+                            data={this.state.updatePlans}
+                            renderItem={({item}) => (
+                                <TouchableHighlight
+                                    style={styles.button}
+                                    onPress={() =>
+                                        this.props.navigation.navigate(
+                                            "ResearchDescription",
+                                            {
+                                                research: item,
+                                                password: this.state.password,
+                                            },
+                                        )
+                                    }>
+                                    <Text style={styles.textButton}>
+                                        {item.name} (Nova verzija)
+                                    </Text>
+                                </TouchableHighlight>
+                            )}
+                            keyExtractor={(item, index) => item.id.toString()}
+                        />
                         <FlatList
                             data={this.state.researchPlans}
                             renderItem={({item}) => (
@@ -122,7 +153,28 @@ export default class ResearchChoice extends Component {
                                         )
                                     }>
                                     <Text style={styles.textButton}>
-                                        {item.name}
+                                        {item.name} (Internet)
+                                    </Text>
+                                </TouchableHighlight>
+                            )}
+                            keyExtractor={(item, index) => item.id.toString()}
+                        />
+                        <FlatList
+                            data={this.state.existingResearchPlans}
+                            renderItem={({item}) => (
+                                <TouchableHighlight
+                                    style={styles.button}
+                                    onPress={() =>
+                                        this.props.navigation.navigate(
+                                            "ResearchDescription",
+                                            {
+                                                research: item,
+                                                password: this.state.password,
+                                            },
+                                        )
+                                    }>
+                                    <Text style={styles.textButton}>
+                                        {item.name} (Shranjen)
                                     </Text>
                                 </TouchableHighlight>
                             )}
@@ -132,10 +184,13 @@ export default class ResearchChoice extends Component {
                     {this.getFooter()}
                 </View>
             );
-        } else {
+        } else if ((this.state.currentScreen = "internet")) {
             return (
                 <View style={styles.background}>
-                    <ScrollView>
+                    <ScrollView
+                        style={{
+                            flex: 1,
+                        }}>
                         <Text style={styles.textButton}>
                             Če želiš uporabiti drug raziskovalni načrt, potem si
                             ga lahko naložiš iz interneta. Raziskovalni načrt
@@ -155,7 +210,9 @@ export default class ResearchChoice extends Component {
                         <TouchableHighlight
                             style={styles.button}
                             onPress={() => this.getQuestions(this.state.url)}>
-                            <Text style={styles.textButton}>Get Questions</Text>
+                            <Text style={styles.textButton}>
+                                Pridobi raziskovalni načrt
+                            </Text>
                         </TouchableHighlight>
                         <Text style={styles.textButton}>
                             {this.state.success}

@@ -13,6 +13,7 @@ import {
     TouchableOpacity,
     DatePickerAndroid,
     DatePickerIOS,
+    TimePickerAndroid,
 } from "react-native";
 import PushNotification from "react-native-push-notification";
 
@@ -37,6 +38,12 @@ export default class PersonalInfo extends Component {
             passwordHash: personalInfo.passwordHash,
             emailPassword: personalInfo.emailPassword,
         });
+        if (personalInfo.time) {
+            this.setState({startTime: personalInfo.time.substring(0, 4)});
+            this.setState({endTime: personalInfo.time.slice(-4)});
+        } else {
+            this.setState({time: "0000-2359"});
+        }
         let notifications = await getDataFromStorage("notifications", password);
         notifications = notifications ? JSON.parse(notifications) : {};
         let days = [];
@@ -78,13 +85,15 @@ export default class PersonalInfo extends Component {
     };
 
     state = {
+        startHour: "0000",
+        endHour: "2359",
         email: "",
         passwordHash: "",
         time: "",
         days: [],
         currentDay: new Date(),
         emailPassword: "",
-        notifications: "No data yet", 
+        notifications: "No data yet",
 
         notifications: {},
     };
@@ -118,11 +127,123 @@ export default class PersonalInfo extends Component {
         }
     };
 
+    showAndroidTimePicker = async position => {
+        try {
+            const {action, hour, minute} = await TimePickerAndroid.open({
+                hour: 12,
+                minute: 0,
+                is24Hour: true,
+            });
+            if (action !== TimePickerAndroid.dismissedAction) {
+                let newTime =
+                    ("00" + hour).slice(-2) + ("00" + minute).slice(-2);
+                if (position === "start") {
+                    this.setState({
+                        startHour: newTime,
+                        time: newTime + "-" + this.state.endHour,
+                    });
+                } else if (position === "end") {
+                    this.setState({
+                        endHour: newTime,
+                        time: this.state.startHour + "-" + newTime,
+                    });
+                }
+            }
+        } catch ({code, message}) {
+            console.warn("Cannot open time picker", message);
+        }
+    };
+
     addNewDate = date => {
         let newDate = date.toISOString().split("T")[0];
         let dates = this.state.days;
         dates.push(newDate);
         this.setState({days: dates});
+    };
+
+    addStartTime = time => {
+        let chosenTime = date
+            .toISOString()
+            .split("T")[1]
+            .split(":");
+        let hours = ("00" + chosenTime[0]).slice(-2);
+        let minutes = ("00" + chosenTime[1]).slice(-2);
+        let newTime = hours + minutes;
+        this.setState({startHour: newTime});
+        this.setState({time: newTime + "-" + this.state.endHour});
+    };
+
+    addEndTime = time => {
+        let chosenTime = date
+            .toISOString()
+            .split("T")[1]
+            .split(":");
+        let hours = ("00" + chosenTime[0]).slice(-2);
+        let minutes = ("00" + chosenTime[1]).slice(-2);
+        let newTime = hours + minutes;
+        this.setState({endHour: newTime});
+        this.setState({time: this.state.endHour + "-" + newTime});
+    };
+
+    timePickerBasedOnOS = platform => {
+        if (platform === "ios") {
+            return (
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                    }}>
+                    <DatePickerIOS
+                        date={new Date(Date.now())}
+                        onDateChange={this.addStartTime}
+                        mode={"time"}
+                    />
+                    <DatePickerIOS
+                        date={new Date(Date.now())}
+                        onDateChange={this.addEndTime}
+                        mode={"time"}
+                    />
+                </View>
+            );
+        } else if (platform === "android") {
+            return (
+                <View
+                    style={{
+                        flexDirection: "row",
+                    }}>
+                    <TouchableOpacity
+                        style={styles.buttonTime}
+                        onPress={() => this.showAndroidTimePicker("start")}>
+                        <Text style={styles.textButton}>Začetek</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.buttonTime}
+                        onPress={() => this.showAndroidTimePicker("end")}>
+                        <Text style={styles.textButton}>Konec</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        } else {
+            return (
+                <View>
+                    <Text style={styles.textButton}>
+                        (Napiši čas v vojaškem načinu, ločeno s vejicami. Če
+                        želiš, da te beep-i motijo samo med službo, torej med 8.
+                        in 16., potem napiši 0800-1600)
+                    </Text>
+                    <TextInput
+                        style={{
+                            height: 40,
+                            borderColor: "black",
+                            borderWidth: 1,
+                            backgroundColor: "white",
+                        }}
+                        defaultValue={this.state.time}
+                        onChangeText={text => this.setState({time: text})}
+                    />
+                </View>
+            );
+        }
     };
 
     datePickerBasedOnOS = platform => {
@@ -178,22 +299,12 @@ export default class PersonalInfo extends Component {
                         defaultValue={this.state.email}
                         onChangeText={text => this.setState({email: text})}
                     />
-                    <Text style={styles.textButton}>Časi za beep-e:</Text>
+
                     <Text style={styles.textButton}>
-                        (Napiši čas v vojaškem načinu, ločeno s vejicami. Če
-                        želiš, da te beep-i motijo samo med službo, torej med 8.
-                        in 16., potem napiši 0800-1600)
+                        Časi za beep-e (trenutni {this.state.time}):
                     </Text>
-                    <TextInput
-                        style={{
-                            height: 40,
-                            borderColor: "black",
-                            borderWidth: 1,
-                            backgroundColor: "white",
-                        }}
-                        defaultValue={this.state.time}
-                        onChangeText={text => this.setState({time: text})}
-                    />
+                    {this.timePickerBasedOnOS(Platform.OS)}
+
                     <Text style={styles.textButton}>
                         Geslo za enkripcijo varnostne kopije, ki si jo lahko
                         pošlješ po emailu. Če pustiš prazno, potem datoteka ne

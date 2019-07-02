@@ -73,40 +73,7 @@ class Settings extends Component {
                             password: this.state.password,
                         })
                     }>
-                    <Text style={styles.textButton}>
-                        Spremeni osebne podatke
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("Beeps", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text style={styles.textButton}>Preglej svoje beep-e</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("Analitics", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text style={styles.textButton}>
-                        Analiziraj svoje beep-e
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() =>
-                        this.props.navigation.navigate("ResearchSwitch", {
-                            password: this.state.password,
-                        })
-                    }>
-                    <Text style={styles.textButton}>
-                        Zamenjaj raziskovalni načrt
-                    </Text>
+                    <Text style={styles.textButton}>Nastavitve</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
@@ -119,32 +86,18 @@ class Settings extends Component {
                         Izberi Raziskovalni Načrt
                     </Text>
                 </TouchableHighlight>
-                {!this.state.share ? (
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() =>
-                            this.props.navigation.navigate("ResearchModify", {
-                                password: this.state.password,
-                            })
-                        }>
-                        <Text style={styles.textButton}>
-                            Spremeni Raziskovalni Načrt
-                        </Text>
-                    </TouchableHighlight>
-                ) : (
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={() =>
-                            sendEmailToResearcher(
-                                this.state.password,
-                                this.state.research.password,
-                            )
-                        }>
-                        <Text style={styles.textButton}>
-                            Pošlji beepe raziskovalcu
-                        </Text>
-                    </TouchableHighlight>
-                )}
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() =>
+                        sendEmailToResearcher(
+                            this.state.password,
+                            this.state.research.password,
+                        )
+                    }>
+                    <Text style={styles.textButton}>
+                        Pošlji beepe raziskovalcu
+                    </Text>
+                </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={() =>
@@ -156,21 +109,6 @@ class Settings extends Component {
                     <Text style={styles.textButton}>
                         Izvozi vse svoje podatke
                     </Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={async () =>
-                        Mailer.mail(
-                            {
-                                subject: "UExperience - Report",
-                                recipients: ["sarajaksa@sarajaksa.eu"],
-                                body: "",
-                                isHTML: false,
-                            },
-                            (error, event) => {},
-                        )
-                    }>
-                    <Text style={styles.textButton}>Feedback</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}

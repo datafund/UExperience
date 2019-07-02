@@ -1,11 +1,25 @@
 import React, {Component} from "react";
-import {View, Text, TouchableHighlight, ScrollView} from "react-native";
+import {View, Text, TouchableHighlight, ScrollView, Image} from "react-native";
 
 import styles from "./Styles.js";
 
 import {getDataFromStorage} from "./functions/data.js";
 
 class Analitics extends Component {
+    static navigationOptions = ({navigation}) => ({
+        headerRight: (
+            <TouchableHighlight
+                onPress={() => {
+                    navigation.state.params.handleSetting();
+                }}>
+                <Image
+                    source={require("./ui/settings.png")}
+                    style={{flex: 0.8}}
+                />
+            </TouchableHighlight>
+        ),
+    });
+
     componentDidMount = async () => {
         let password = this.props.navigation.getParam("password", "");
         this.setState({password: password});
@@ -14,7 +28,16 @@ class Analitics extends Component {
         this.setState({beeps: beeps});
         let tags = this.getVizualizationData(beeps, "");
         this.setState({tags: tags});
+        this.props.navigation.setParams({
+            handleSetting: this.goToSettings.bind(this),
+        });
     };
+
+    goToSettings() {
+        this.props.navigation.navigate("Settings", {
+            password: this.state.password,
+        });
+    }
 
     getVizualizationData = (beeps, filter) => {
         answers = [];
@@ -73,76 +96,123 @@ class Analitics extends Component {
         tags: [],
     };
 
+    getFooter = () => {
+        return (
+            <View
+                style={{
+                    flex: 0.1,
+                    backgroundColor: "#4e4d4d",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}>
+                <TouchableHighlight
+                    onPress={async () =>
+                        this.props.navigation.navigate("Analitics", {
+                            password: this.state.password,
+                        })
+                    }>
+                    <Image
+                        source={require("./ui/tags.png")}
+                        style={{flex: 0.9, aspectRatio: 1}}
+                    />
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                    onPress={async () =>
+                        this.props.navigation.navigate("Beeps", {
+                            password: this.state.password,
+                        })
+                    }>
+                    <Image
+                        source={require("./ui/list.png")}
+                        style={{flex: 0.9, aspectRatio: 1}}
+                    />
+                </TouchableHighlight>
+
+                <TouchableHighlight onPress={async () => {}}>
+                    <Image
+                        source={require("./ui/gallery.png")}
+                        style={{flex: 0.9, aspectRatio: 1}}
+                    />
+                </TouchableHighlight>
+            </View>
+        );
+    };
+
     render() {
         return (
-            <View style={{flex: 1}}>
-                <View style={styles.background}>
-                    <View style={{flex: 0.1}} />
-                    <ScrollView style={{flex: 1}}>
-                        <View
-                            style={{
-                                alignItems: "center",
-                                justifyContent: "center",
-                                flexDirection: "row",
-                                flexWrap: "wrap",
-                            }}>
-                            {this.state.tags.map(element => {
-                                return (
-                                    <TouchableHighlight
-                                        style={{
-                                            margin: 5,
-                                        }}
-                                        key={element.label}
-                                        onPress={() => {
-                                            this.setState({
-                                                currentTag: element.label,
-                                            });
-                                            let tags = this.getVizualizationData(
-                                                this.state.beeps,
-                                                element.label,
-                                            );
-                                            this.setState({tags: tags});
-                                        }}>
-                                        <Text
-                                            style={{
-                                                fontSize: element.fontSize,
-                                            }}>
-                                            {element.label}
-                                        </Text>
-                                    </TouchableHighlight>
-                                );
-                            })}
-                        </View>
-                    </ScrollView>
+            <View style={styles.background}>
+                <ScrollView
+                    style={{
+                        flex: 1,
+                    }}>
                     <View
                         style={{
-                            borderBottomColor: "black",
-                            borderBottomWidth: 5,
-                        }}
-                    />
-                    <View style={{flex: 0.2}}>
-                        <TouchableHighlight
-                            onPress={() => {
-                                this.setState({currentTag: ""});
-                                let tags = this.getVizualizationData(
-                                    this.state.beeps,
-                                    "",
-                                );
-                                this.setState({tags: tags});
-                            }}>
-                            <Text
-                                style={{
-                                    fontSize: 30,
-                                    alignSelf: "center",
-                                    justifyContent: "center",
-                                }}>
-                                {this.state.currentTag
-                                    ? "#" + this.state.currentTag.toUpperCase()
-                                    : null}
-                            </Text>
-                        </TouchableHighlight>
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            flex: 1,
+                        }}>
+                        {this.state.tags.map(element => {
+                            return (
+                                <TouchableHighlight
+                                    style={{
+                                        margin: 5,
+                                    }}
+                                    key={element.label}
+                                    onPress={() => {
+                                        this.setState({
+                                            currentTag: element.label,
+                                        });
+                                        let tags = this.getVizualizationData(
+                                            this.state.beeps,
+                                            element.label,
+                                        );
+                                        this.setState({tags: tags});
+                                    }}>
+                                    <Text
+                                        style={{
+                                            fontSize: element.fontSize,
+                                        }}>
+                                        {element.label}
+                                    </Text>
+                                </TouchableHighlight>
+                            );
+                        })}
                     </View>
+                </ScrollView>
+
+                <View
+                    style={{
+                        borderBottomColor: "black",
+                        borderBottomWidth: 5,
+                    }}
+                />
+                <View style={{flex: 0.1}}>
+                    <TouchableHighlight
+                        onPress={() => {
+                            this.setState({currentTag: ""});
+                            let tags = this.getVizualizationData(
+                                this.state.beeps,
+                                "",
+                            );
+                            this.setState({tags: tags});
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                alignSelf: "center",
+                                justifyContent: "center",
+                            }}>
+                            {this.state.currentTag
+                                ? "#" + this.state.currentTag.toUpperCase()
+                                : null}
+                        </Text>
+                    </TouchableHighlight>
                 </View>
+                {this.getFooter()}
             </View>
         );
     }

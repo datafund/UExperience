@@ -11,6 +11,17 @@ export default StyleSheet.create({
         borderWidth: 1,
         backgroundColor: "#eaeaea",
     },
+    buttonTime: {
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+        margin: 0,
+        borderColor: "gray",
+        borderWidth: 1,
+        backgroundColor: "#eaeaea",
+        width: "50%",
+    },
     buttonQuestion: {
         flexDirection: "column",
         justifyContent: "center",
@@ -47,6 +58,13 @@ export default StyleSheet.create({
     textTags2: {fontSize: 22, fontFamily: "Gill Sans"},
     textTags: {fontSize: 18, fontFamily: "Gill Sans"},
     textButton: {fontSize: 20, textAlign: "center", fontFamily: "Gill Sans"},
+    textBeepHeader: {
+        fontSize: 22,
+        textAlign: "left",
+        fontFamily: "Gill Sans",
+        fontWeight: "bold",
+    },
+    textBeep: {fontSize: 20, textAlign: "left", fontFamily: "Gill Sans"},
     background: {
         flex: 1,
         backgroundColor: "#eaeaea",

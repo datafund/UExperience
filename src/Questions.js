@@ -26,7 +26,7 @@ class Questions extends Component {
                     navigation.state.params.handleSave();
                 }}>
                 <Image
-                    source={require("./ui/settings.png")}
+                    source={require("./ui/folder.png")}
                     style={{flex: 0.8}}
                 />
             </TouchableHighlight>
@@ -67,7 +67,7 @@ class Questions extends Component {
     saveDetails() {
         this.saveNewBeep();
         this.prepareForNewBeep();
-        this.props.navigation.navigate("Settings", {
+        this.props.navigation.navigate("Analitics", {
             password: this.state.password,
         });
     }

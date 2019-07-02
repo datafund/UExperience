@@ -23,6 +23,16 @@ class List extends Component {
         questions: [],
         picture: "",
         experience: "",
+        days: {
+            0: "nedelja",
+            1: "ponedeljek",
+            2: "torek",
+            3: "sreda",
+            4: "četrtek",
+            5: "petek",
+            6: "sobota",
+            7: "nedelja",
+        },
     };
 
     render() {
@@ -30,34 +40,69 @@ class List extends Component {
             <View style={styles.background}>
                 <ScrollView>
                     {this.state.time ? (
-                        <Text style={styles.textButton}>
-                            Čas: {this.state.time}
+                        <Text>
+                            <Text style={styles.textBeepHeader}>Čas: </Text>
+                            <Text style={styles.textBeep}>
+                                {(this.state.time.slice(8) === "0"
+                                    ? this.state.time.slice(8, 10)
+                                    : this.state.time.slice(9, 10)) +
+                                    ". " +
+                                    (this.state.time.slice(5) === "0"
+                                        ? this.state.time.slice(5, 7)
+                                        : this.state.time.slice(6, 7)) +
+                                    ". " +
+                                    this.state.time.slice(0, 4) +
+                                    " " +
+                                    this.state.time.slice(11, 13) +
+                                    ":" +
+                                    this.state.time.slice(14, 16) +
+                                    " (" +
+                                    this.state.days[
+                                        new Date(
+                                            this.state.time.slice(0, 10),
+                                        ).getDay()
+                                    ] +
+                                    ")"}
+                            </Text>
                         </Text>
                     ) : null}
                     {this.state.longitude ? (
-                        <Text style={styles.textButton}>
-                            Longitude: {this.state.longitude}
+                        <Text>
+                            <Text stlye={styles.textBeepHeader}>
+                                Longitude:{" "}
+                            </Text>
+                            <Text style={styles.textBeep}>
+                                {this.state.longitude}
+                            </Text>
                         </Text>
                     ) : null}
                     {this.state.latitude ? (
-                        <Text style={styles.textButton}>
-                            Latitude: {this.state.latitude}
+                        <Text>
+                            <Text stlye={styles.textBeepHeader}>
+                                Latitude:{" "}
+                            </Text>
+                            <Text style={styles.textBeep}>
+                                {this.state.latitude}
+                            </Text>
                         </Text>
                     ) : null}
                     {this.state.experience ? (
-                        <Text style={styles.textButton}>
-                            Doživljanje: {this.state.experience}
+                        <Text>
+                            <Text style={styles.textBeepHeader}>
+                                Doživljanje:{" "}
+                            </Text>
+                            <Text style={styles.textBeep}>
+                                {this.state.experience}
+                            </Text>
                         </Text>
                     ) : null}
 
-                    <Text style={styles.textButton}>Questions:</Text>
                     {this.state.questions.map((item, index) => (
                         <View key={index}>
-                            <Text style={styles.textButton}>
-                                Vprašanje: {item.question} ({item.type})
+                            <Text style={styles.textBeepHeader}>
+                                {item.question} ({item.type})
                             </Text>
-                            <Text style={styles.textButton}>
-                                Odgovor:{" "}
+                            <Text style={styles.textBeep}>
                                 {["TagsNoAdd", "Tags"].includes(item.type)
                                     ? item.answer.join(", ")
                                     : item.answer}
