@@ -38,7 +38,11 @@ export const modificationOfIntervals = interval => {
     }
 };
 
-export const createNotificationsOne = (day, avalableIntervals) => {
+export const createNotificationsDay = (
+    day,
+    avalableIntervals,
+    numberPerDay,
+) => {
     max = new Date(day.getTime()).setHours(0, 0, 0, 0);
     min = new Date(day.getTime()).setHours(24, 0, 0, 0);
     current = new Date();
@@ -65,29 +69,41 @@ export const createNotificationsOne = (day, avalableIntervals) => {
         }
     }
     let date = null;
-    while (date === null) {
-        let time = Math.floor(Math.random() * (max - min + 1)) + min;
-        for (index in avalableIntervals) {
-            let interval = avalableIntervals[index];
-            let minInterval = new Date(day.getTime()).setHours(
-                parseInt(interval[0].substring(0, 2)),
-                interval[0].substring(2, 4),
-                0,
-                0,
-            );
-            let maxInterval = new Date(day.getTime()).setHours(
-                parseInt(interval[1].substring(0, 2)),
-                interval[1].substring(2, 4),
-                0,
-                0,
-            );
-            if (time > minInterval && time < maxInterval && time > current) {
-                date = new Date(time);
-                let notification = createNotification(date);
-                return notification;
-            }
+    var elements = [];
+    var notificationTimes = [];
+    for (index in avalableIntervals) {
+        let interval = avalableIntervals[index];
+        let minInterval = new Date(day.getTime()).setHours(
+            parseInt(interval[0].substring(0, 2)),
+            interval[0].substring(2, 4),
+            0,
+            0,
+        );
+        let maxInterval = new Date(day.getTime()).setHours(
+            parseInt(interval[1].substring(0, 2)),
+            interval[1].substring(2, 4),
+            0,
+            0,
+        );
+        var currentTime = minInterval;
+        while (currentTime < maxInterval) {
+            elements.push(currentTime);
+            currentTime += 15000;
         }
     }
+    for (j = 0; j < numberPerDay; j++) {
+        if (elements.length > 0) {
+            let currentTime =
+                elements[[Math.floor(Math.random() * elements.length)]];
+            notificationTimes.push(currentTime);
+            elements = elements.filter(
+                e => e > currentTime + 900000 || e < currentTime - 900000,
+            );
+        } else {
+            break;
+        }
+    }
+    return notificationTimes;
 };
 
 export const createNotificationsForResearch = (
@@ -103,14 +119,16 @@ export const createNotificationsForResearch = (
             startDate.getMonth(),
             startDate.getDate() + i,
         );
-        for (j = 0; j < numberPerDay; j++) {
-            let notification = createNotificationsOne(
-                newDate,
-                avalableIntervals,
+        let allNewNotifications = createNotificationsDay(
+            newDate,
+            avalableIntervals,
+            numberPerDay,
+        );
+        for (index in allNewNotifications) {
+            let notification = createNotification(
+                new Date(allNewNotifications[index]),
             );
-            if (notification) {
-                notifications.push(notification);
-            }
+            notifications.push(notification);
         }
     }
     return notifications;

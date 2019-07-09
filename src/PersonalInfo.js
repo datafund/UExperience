@@ -22,6 +22,7 @@ import {getDataFromStorage, setDataToStorage} from "./functions/data.js";
 import {
     createNotificationsForResearch,
     modificationOfIntervals,
+    deleteTimeNotifications,
 } from "./functions/notifications.js";
 
 export default class PersonalInfo extends Component {
@@ -39,8 +40,8 @@ export default class PersonalInfo extends Component {
             emailPassword: personalInfo.emailPassword,
         });
         if (personalInfo.time) {
-            this.setState({startTime: personalInfo.time.substring(0, 4)});
-            this.setState({endTime: personalInfo.time.slice(-4)});
+            this.setState({startHour: personalInfo.time.substring(0, 4)});
+            this.setState({endHour: personalInfo.time.slice(-4)});
         } else {
             this.setState({time: "0000-2359"});
         }
@@ -93,9 +94,7 @@ export default class PersonalInfo extends Component {
         days: [],
         currentDay: new Date(),
         emailPassword: "",
-        notifications: "No data yet",
-
-        notifications: {},
+        notifications: {time: []},
     };
 
     showAndroidDatePicker = async () => {
@@ -304,7 +303,19 @@ export default class PersonalInfo extends Component {
                         Časi za beep-e (trenutni {this.state.time}):
                     </Text>
                     {this.timePickerBasedOnOS(Platform.OS)}
-
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            deleteTimeNotifications(this.state.notifications);
+                            this.setState({days: []});
+                            let not = this.state.notifications;
+                            not["time"] = [];
+                            this.setState({notifications: not});
+                        }}>
+                        <Text style={styles.textButton}>
+                            Ustavi vse časovne notifikacije
+                        </Text>
+                    </TouchableOpacity>
                     <Text style={styles.textButton}>
                         Geslo za enkripcijo varnostne kopije, ki si jo lahko
                         pošlješ po emailu. Če pustiš prazno, potem datoteka ne

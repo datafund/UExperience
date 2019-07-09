@@ -308,21 +308,19 @@ class Questions extends Component {
                     />
                 </TouchableHighlight>
 
-                {this.state.primaryDescriptive ? (
-                    <TouchableHighlight
-                        onPress={() => {
-                            if (this.state.showText === 0) {
-                                this.setState({showText: 1});
-                            } else {
-                                this.setState({showText: 0});
-                            }
-                        }}>
-                        <Image
-                            source={require("./ui/memo.png")}
-                            style={{flex: 0.9, aspectRatio: 1}}
-                        />
-                    </TouchableHighlight>
-                ) : null}
+                <TouchableHighlight
+                    onPress={() => {
+                        if (this.state.showText === 0) {
+                            this.setState({showText: 1});
+                        } else {
+                            this.setState({showText: 0});
+                        }
+                    }}>
+                    <Image
+                        source={require("./ui/memo.png")}
+                        style={{flex: 0.9, aspectRatio: 1}}
+                    />
+                </TouchableHighlight>
             </View>
         );
     };
