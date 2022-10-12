@@ -12,7 +12,7 @@
     "crypto-js": "^3.1.9-1",
     "prop-types": "^15.0.0",
     "react": "16.6.1",
-    "react-native": "0.57.5",
+    "react-native": "0.70.2",
     "react-native-fs": "^2.12.1",
     "react-native-gesture-handler": "^1.0.9",
     "react-native-image-picker": "^0.27.2",
